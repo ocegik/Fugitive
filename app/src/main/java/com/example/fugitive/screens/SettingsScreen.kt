@@ -9,7 +9,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 
 @Composable
-fun NotificationsScreen(navController: NavController) {
+fun SettingsScreen(navController: NavController) {
     Column(
         modifier = Modifier.fillMaxSize().padding(16.dp)
     ) {
