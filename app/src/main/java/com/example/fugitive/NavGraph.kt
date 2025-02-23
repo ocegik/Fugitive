@@ -13,6 +13,8 @@ import com.example.fugitive.screens.BookReaderScreen
 import com.example.fugitive.screens.NotificationsScreen
 import com.example.fugitive.screens.ProfileScreen
 import com.example.fugitive.screens.SettingsScreen
+import com.example.fugitive.screens.TermsScreen
+import com.example.fugitive.screens.ForgotPassScreen
 
 @Composable
 fun AppNavGraph(navController: NavHostController) {
@@ -26,5 +28,7 @@ fun AppNavGraph(navController: NavHostController) {
         composable(Screen.BookReader.route) { BookReaderScreen(navController) }
         composable(Screen.Notification.route) { NotificationsScreen(navController) }
         composable(Screen.Profile.route) { ProfileScreen(navController) }
+        composable(Screen.Terms.route) { TermsScreen(navController) }
+        composable(Screen.ForgotPass.route){ ForgotPassScreen(navController) }
     }
 }

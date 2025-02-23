@@ -19,6 +19,7 @@ import com.example.fugitive.ui.theme.FugitiveColors
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 
@@ -93,7 +94,9 @@ fun LoginScreen(navController: NavController) {
             }
             Text("Forgot Password?",
                 color = FugitiveColors.button,
-                modifier = Modifier.clickable{}
+                modifier = Modifier.clickable{
+                    navController.navigate(Screen.ForgotPass.route)
+                }
             )
         }
         Spacer(modifier = Modifier.height(20.dp))
@@ -107,7 +110,7 @@ fun LoginScreen(navController: NavController) {
                 .height(50.dp)
         )
         {
-            Text("Log In", color = FugitiveColors.button)
+            Text("Log In", color = FugitiveColors.buttonText)
         }
         Spacer(modifier = Modifier.height(20.dp))
 
@@ -115,12 +118,29 @@ fun LoginScreen(navController: NavController) {
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        Row(horizontalArrangement = Arrangement.SpaceEvenly, modifier = Modifier.fillMaxWidth()){
-            Icon(painterResource(id = R.drawable.ic_google), contentDescription = "Google", modifier = Modifier.size(40.dp))
-            Icon(painterResource(id = R.drawable.icons_facebook), contentDescription = "Facebook", modifier = Modifier.size(40.dp))
-            Icon(painterResource(id = R.drawable.icons_x), contentDescription = "X", modifier = Modifier.size(40.dp))
-
-
+        Row(
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ){
+            Icon(
+                painterResource(id = R.drawable.ic_google),
+                contentDescription = "Google",
+                modifier = Modifier.size(40.dp),
+                tint = Color.Unspecified
+            )
+            Icon(
+                painterResource(id = R.drawable.icons_facebook),
+                contentDescription = "Facebook",
+                modifier = Modifier.size(40.dp),
+                tint = Color.Unspecified
+            )
+            Icon(
+                painterResource(id = R.drawable.icons_x),
+                contentDescription = "X",
+                modifier = Modifier.size(40.dp),
+                tint = Color.Unspecified
+            )
         }
     }
 }
