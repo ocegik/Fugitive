@@ -7,15 +7,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.fugitive.Screen
 
 @Composable
 fun BookDetailsScreen(navController: NavController) {
     Column(
         modifier = Modifier.fillMaxSize().padding(16.dp)
     ) {
-        Text("Welcome to Fugitive!")
-        Button(onClick = { navController.navigate("home") }) {
-            Text("Go to Home")
+        Text("BookDetailsScreen")
+        Button(onClick = { navController.navigate(Screen.BookReader.route) }) {
+            Text("Read Book")
         }
     }
 }
