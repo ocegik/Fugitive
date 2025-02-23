@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.fugitive.Screen
 
 @Composable
 fun WelcomeScreen(navController: NavController) {
@@ -14,8 +15,11 @@ fun WelcomeScreen(navController: NavController) {
         modifier = Modifier.fillMaxSize().padding(16.dp)
     ) {
         Text("Welcome to Fugitive!")
-        Button(onClick = { navController.navigate("home") }) {
-            Text("Go to Home")
+        Button(onClick = { navController.navigate(Screen.Login.route) }) {
+            Text("Log In")
+        }
+        Button(onClick = { navController.navigate(Screen.SignUp.route) }) {
+            Text("Sign Up")
         }
     }
 }

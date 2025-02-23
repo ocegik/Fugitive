@@ -13,7 +13,7 @@ fun NotificationsScreen(navController: NavController) {
     Column(
         modifier = Modifier.fillMaxSize().padding(16.dp)
     ) {
-        Text("Welcome to Fugitive!")
+        Text("Notifications!")
         Button(onClick = { navController.navigate("home") }) {
             Text("Go to Home")
         }
