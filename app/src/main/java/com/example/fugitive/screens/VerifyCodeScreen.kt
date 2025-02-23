@@ -1,8 +1,6 @@
 package com.example.fugitive.screens
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -16,12 +14,12 @@ import com.example.fugitive.components.*
 
 
 @Composable
-fun ForgotPassScreen(navController: NavController) {
-    var email by remember { mutableStateOf("") }
+fun VerifyCodeScreen(navController: NavController) {
+    var otp by remember { mutableStateOf("") }
     Column(
         modifier = Modifier.fillMaxSize().padding(16.dp)
     ) {
-        EmailInputField(email = email, onEmailChange = { email = it })
-        PrimaryButton(text = "Continue", onClick = { navController.navigate(Screen.VerifyCode.route) })
+        OtpTextField(4, onOtpEntered = {otp = it})
+        PrimaryButton("Continue", onClick = {navController.navigate(Screen.ResetPass.route)})
     }
 }

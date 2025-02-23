@@ -3,25 +3,24 @@ package com.example.fugitive.screens
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.fugitive.R
 import com.example.fugitive.Screen
 import com.example.fugitive.ui.theme.FugitiveColors
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import com.example.fugitive.components.EmailInputField
+import com.example.fugitive.components.PrimaryButton
+import com.example.fugitive.components.SocialLoginRow
 
 @Composable
 fun LoginScreen(navController: NavController) {
@@ -57,17 +56,10 @@ fun LoginScreen(navController: NavController) {
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        OutlinedTextField(
-            value = email,
-            onValueChange = { email = it },
-            label = { Text("Email") },
-            placeholder = { Text("Enter your email") },
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-            modifier = Modifier.fillMaxWidth()
+        EmailInputField(email = email, onEmailChange = { email = it })
 
-        )
         Spacer(modifier = Modifier.height(12.dp))
+
         OutlinedTextField(
             value = password,
             onValueChange = { password = it },
@@ -101,47 +93,15 @@ fun LoginScreen(navController: NavController) {
         }
         Spacer(modifier = Modifier.height(20.dp))
 
-        Button(
-            onClick = { navController.navigate(Screen.Home.route) },
-            colors = ButtonDefaults.buttonColors(containerColor = FugitiveColors.button),
-            shape = RoundedCornerShape(12.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(50.dp)
-        )
-        {
-            Text("Log In", color = FugitiveColors.buttonText)
-        }
+        PrimaryButton(text = "Login", onClick = { navController.navigate(Screen.Home.route) })
+
         Spacer(modifier = Modifier.height(20.dp))
 
         Text("Or Continue With", color = FugitiveColors.subheading)
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        Row(
-            horizontalArrangement = Arrangement.SpaceEvenly,
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ){
-            Icon(
-                painterResource(id = R.drawable.ic_google),
-                contentDescription = "Google",
-                modifier = Modifier.size(40.dp),
-                tint = Color.Unspecified
-            )
-            Icon(
-                painterResource(id = R.drawable.icons_facebook),
-                contentDescription = "Facebook",
-                modifier = Modifier.size(40.dp),
-                tint = Color.Unspecified
-            )
-            Icon(
-                painterResource(id = R.drawable.icons_x),
-                contentDescription = "X",
-                modifier = Modifier.size(40.dp),
-                tint = Color.Unspecified
-            )
-        }
+        SocialLoginRow()
     }
 }
 
