@@ -17,6 +17,7 @@ import com.example.fugitive.screens.misc.TermsScreen
 import com.example.fugitive.screens.auth.ForgotPassScreen
 import com.example.fugitive.screens.misc.VerifyCodeScreen
 import com.example.fugitive.screens.auth.ResetPassScreen
+import com.example.fugitive.screens.find.SearchScreen
 
 @Composable
 fun AppNavGraph(navController: NavHostController) {
@@ -34,5 +35,6 @@ fun AppNavGraph(navController: NavHostController) {
         composable(Screen.ForgotPass.route){ ForgotPassScreen(navController) }
         composable(Screen.VerifyCode.route) { VerifyCodeScreen(navController) }
         composable(Screen.ResetPass.route) { ResetPassScreen(navController) }
+        composable(Screen.Search.route) { SearchScreen(navController) }
     }
 }

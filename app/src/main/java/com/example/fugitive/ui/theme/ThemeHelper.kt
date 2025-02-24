@@ -15,4 +15,5 @@ object FugitiveColors {
         @Composable get() = MaterialTheme.colorScheme.primary
     val buttonText: Color
         @Composable get() = MaterialTheme.colorScheme.onPrimary
+
 }

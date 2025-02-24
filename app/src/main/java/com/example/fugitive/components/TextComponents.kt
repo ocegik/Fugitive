@@ -31,7 +31,8 @@ fun HeadingText(
         modifier = modifier,
         fontSize = 32.sp,
         fontWeight = FontWeight.Bold,
-        color = FugitiveColors.heading // Uses theme-defined color
+        color = FugitiveColors.heading, // Uses theme-defined color
+        lineHeight = 40.sp
     )
 }
 

@@ -14,5 +14,6 @@ sealed class Screen(val route: String) {
     object ForgotPass : Screen("ForgotPass")
     object VerifyCode : Screen("VerifyCode")
     object ResetPass : Screen("ResetPass")
+    object Search : Screen("Search")
 
 }
