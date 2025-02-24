@@ -11,7 +11,8 @@ val DarkColorScheme = darkColorScheme(
     background = Color(0xFF121212), // Background
     onBackground = Color.White, // Headings
     onSurface = Color(0xFF999999), // Subheadings
-    onPrimary = Color.White // Text on primary buttons
+    onPrimary = Color.White, // Text on primary buttons
+
 )
 
 // Light Theme Colors

@@ -62,4 +62,5 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation(libs.ui)
     implementation(libs.material3)
+    implementation(libs.accompanist.flowlayout)
 }

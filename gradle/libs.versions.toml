@@ -1,4 +1,5 @@
 [versions]
+accompanistFlowlayout = "0.30.1"
 agp = "8.8.1"
 kotlin = "2.0.0"
 coreKtx = "1.15.0"
@@ -16,6 +17,7 @@ navigationCompose = "2.8.7"
 ui = "1.5.0"
 
 [libraries]
+accompanist-flowlayout = { module = "com.google.accompanist:accompanist-flowlayout", version.ref = "accompanistFlowlayout" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
