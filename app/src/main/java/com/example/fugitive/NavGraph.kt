@@ -4,19 +4,19 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.fugitive.screens.WelcomeScreen
-import com.example.fugitive.screens.LoginScreen
-import com.example.fugitive.screens.SignUpScreen
-import com.example.fugitive.screens.HomeScreen
-import com.example.fugitive.screens.BookDetailsScreen
-import com.example.fugitive.screens.BookReaderScreen
-import com.example.fugitive.screens.NotificationsScreen
-import com.example.fugitive.screens.ProfileScreen
-import com.example.fugitive.screens.SettingsScreen
-import com.example.fugitive.screens.TermsScreen
-import com.example.fugitive.screens.ForgotPassScreen
-import com.example.fugitive.screens.VerifyCodeScreen
-import com.example.fugitive.screens.ResetPassScreen
+import com.example.fugitive.screens.auth.WelcomeScreen
+import com.example.fugitive.screens.auth.LoginScreen
+import com.example.fugitive.screens.auth.SignUpScreen
+import com.example.fugitive.screens.home.HomeScreen
+import com.example.fugitive.screens.home.BookDetailsScreen
+import com.example.fugitive.screens.home.BookReaderScreen
+import com.example.fugitive.screens.home.NotificationsScreen
+import com.example.fugitive.screens.settings.ProfileScreen
+import com.example.fugitive.screens.settings.SettingsScreen
+import com.example.fugitive.screens.misc.TermsScreen
+import com.example.fugitive.screens.auth.ForgotPassScreen
+import com.example.fugitive.screens.misc.VerifyCodeScreen
+import com.example.fugitive.screens.auth.ResetPassScreen
 
 @Composable
 fun AppNavGraph(navController: NavHostController) {

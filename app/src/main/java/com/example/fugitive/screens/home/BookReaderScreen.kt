@@ -1,4 +1,4 @@
-package com.example.fugitive.screens
+package com.example.fugitive.screens.home
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button

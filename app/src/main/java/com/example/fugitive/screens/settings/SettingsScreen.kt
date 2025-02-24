@@ -1,4 +1,4 @@
-package com.example.fugitive.screens
+package com.example.fugitive.screens.settings
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
@@ -10,11 +10,11 @@ import androidx.navigation.NavController
 import com.example.fugitive.Screen
 
 @Composable
-fun ProfileScreen(navController: NavController) {
+fun SettingsScreen(navController: NavController) {
     Column(
         modifier = Modifier.fillMaxSize().padding(16.dp)
     ) {
-        Text("User Profile")
+        Text("Settings")
         Button(onClick = { navController.navigate(Screen.Home.route) }) {
             Text("Go to Home")
         }
