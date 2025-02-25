@@ -63,4 +63,6 @@ dependencies {
     implementation(libs.ui)
     implementation(libs.material3)
     implementation(libs.accompanist.flowlayout)
+    implementation(libs.androidx.ui.text.google.fonts)
+    implementation(libs.androidx.ui.text.google.fonts.v178)
 }
