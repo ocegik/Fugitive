@@ -15,10 +15,14 @@ material3 = "1.1.0"
 navigationRuntimeKtx = "2.8.7"
 navigationCompose = "2.8.7"
 ui = "1.5.0"
+uiTextGoogleFonts = "1.5.4"
+uiTextGoogleFontsVersion = "1.7.8"
 
 [libraries]
 accompanist-flowlayout = { module = "com.google.accompanist:accompanist-flowlayout", version.ref = "accompanistFlowlayout" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-ui-text-google-fonts = { module = "androidx.compose.ui:ui-text-google-fonts", version.ref = "uiTextGoogleFonts" }
+androidx-ui-text-google-fonts-v178 = { module = "androidx.compose.ui:ui-text-google-fonts", version.ref = "uiTextGoogleFontsVersion" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
