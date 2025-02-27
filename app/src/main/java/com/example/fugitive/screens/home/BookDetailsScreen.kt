@@ -117,7 +117,7 @@ fun BookDetailsScreen(
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            BookDetailsRow(chapters = 12, year = 2024, wordCount = 50000)
+            BookDetailsRow(chapters = chapters, year = year, wordCount = wordCount)
 
             Spacer(modifier = Modifier.height(32.dp))
 

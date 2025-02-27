@@ -1,4 +1,4 @@
-package com.example.fugitive.screens.auth
+package com.example.fugitive.screens.auth.login
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -13,6 +13,7 @@ import com.example.fugitive.Screen
 import com.example.fugitive.ui.theme.FugitiveColors
 import androidx.compose.material3.Text
 import androidx.compose.ui.zIndex
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.fugitive.components.BackButton
 import com.example.fugitive.components.EmailInputField
 import com.example.fugitive.components.PassInputField
@@ -20,12 +21,23 @@ import com.example.fugitive.components.FugitivePrimaryButton
 import com.example.fugitive.components.HeadingText
 import com.example.fugitive.components.SocialLoginRow
 import com.example.fugitive.components.SubheadingText
+import com.example.fugitive.viewmodel.AuthViewModel
+import android.widget.Toast
+import androidx.compose.ui.platform.LocalContext
+
+
+fun showToast(context: android.content.Context, message: String) {
+    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+}
 
 @Composable
-fun LoginScreen(navController: NavController) {
+fun LoginScreen(navController: NavController, authViewModel: AuthViewModel = viewModel()) {
+    val context = LocalContext.current
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var rememberMe by remember { mutableStateOf(false) }
+    var errorMessage by remember { mutableStateOf<String?>(null) }
+    var isLoading by remember { mutableStateOf(false) }
 
     Box(
         modifier = Modifier
@@ -100,11 +112,28 @@ fun LoginScreen(navController: NavController) {
             }
             Spacer(modifier = Modifier.height(20.dp))
 
-            FugitivePrimaryButton(text = "Login", onClick = {
-                navController.navigate(Screen.Home.route) {
-                    popUpTo(Screen.Login.route) { inclusive = true }
+            FugitivePrimaryButton(
+                text = if (isLoading) "Logging in..." else "Login",
+                onClick = {
+                    isLoading = true
+
+                    authViewModel.signIn(
+                        email = email,
+                        password = password,
+                        onSuccess = {
+                            isLoading = false
+                            showToast(context, "Login successful!") // Call the corrected showToast function
+                            navController.navigate(Screen.Home.route) {
+                                popUpTo(Screen.Login.route) { inclusive = true }
+                            }
+                        },
+                        onError = { errorMessageText ->
+                            isLoading = false
+                            errorMessage = errorMessageText
+                        }
+                    )
                 }
-            })
+            )
 
             Spacer(modifier = Modifier.height(20.dp))
 

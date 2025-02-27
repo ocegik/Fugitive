@@ -1,4 +1,4 @@
-package com.example.fugitive.screens.misc
+package com.example.fugitive.screens.auth.login
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -17,9 +17,10 @@ import com.example.fugitive.components.*
 import com.example.fugitive.ui.theme.FugitiveColors
 
 
+
 @Composable
-fun VerifyCodeScreen(navController: NavController) {
-    var otp by remember { mutableStateOf("") }
+fun ForgotPassScreen(navController: NavController) {
+    var email by remember { mutableStateOf("") }
 
     Box(
         modifier = Modifier
@@ -43,24 +44,26 @@ fun VerifyCodeScreen(navController: NavController) {
                 .background(FugitiveColors.background)
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
-
         ) {
+
 
             Spacer(modifier = Modifier.height(100.dp))
 
-            HeadingText("Enter Verification Code", modifier = Modifier.fillMaxWidth().align(Alignment.Start))
+            HeadingText("Forgot Password", modifier = Modifier.fillMaxWidth().align(Alignment.Start))
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            SubheadingText("We’ve sent a code to your email. Enter it below to continue.")
+            SubheadingText("Enter your email and we'll send you a verification code to reset your password.")
 
-            Spacer(modifier = Modifier.height(40.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
-            OtpTextField(4, onOtpEntered = { otp = it })
+            EmailInputField(email = email, onEmailChange = { email = it })
 
-            Spacer(modifier = Modifier.height(30.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
-            FugitivePrimaryButton("Continue", onClick = { navController.navigate(Screen.ResetPass.route) })
+            FugitivePrimaryButton(
+                text = "Continue",
+                onClick = { navController.navigate(Screen.VerifyCode.route) })
         }
     }
 }
