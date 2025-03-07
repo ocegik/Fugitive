@@ -7,7 +7,6 @@ import androidx.activity.enableEdgeToEdge
 import com.example.fugitive.ui.theme.FugitiveTheme
 
 
-
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

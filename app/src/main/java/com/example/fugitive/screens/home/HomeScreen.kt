@@ -5,29 +5,56 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.fugitive.R
 import com.example.fugitive.Screen
+import com.example.fugitive.ViewModelFactory
 import com.example.fugitive.components.BookItem
+import com.example.fugitive.components.BookPlaceholder
+import com.example.fugitive.components.FeaturedBook
 import com.example.fugitive.components.HeadingText
 import com.example.fugitive.components.SearchBar
 import com.example.fugitive.components.TopReaderItem
+import com.example.fugitive.repository.UserRepository
 import com.example.fugitive.ui.theme.FugitiveColors
+import com.example.fugitive.viewmodel.BookViewModel
+import com.example.fugitive.viewmodel.UserViewModel
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 @Composable
-fun HomeScreen(navController: NavController) {
+fun HomeScreen( navController: NavController) {
+    val firebaseAuth = remember { FirebaseAuth.getInstance() }
+    val firebaseFirestore = remember { FirebaseFirestore.getInstance() }
+    val userRepository = remember { UserRepository(firebaseAuth, firebaseFirestore) }
+    val userViewModel: UserViewModel = viewModel(factory = ViewModelFactory(userRepository))
+
+
+    val bookId = "xZnFI313LDGliqNPxNWh"
+    val bookmarks by userViewModel.bookmarks.collectAsState(initial = emptyList())
+    val isBookmarked = remember { mutableStateOf(false) }
+
+    LaunchedEffect(bookmarks) {
+        isBookmarked.value = bookmarks.contains(bookId)
+    }
 
     Column(
         modifier = Modifier
@@ -71,35 +98,43 @@ fun HomeScreen(navController: NavController) {
 
         // Heading
         HeadingText(
-            "Beyond Pages,\nInto Worlds.")
+            "Beyond Pages,\nInto Worlds."
+        )
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        SearchBar(onClick = {navController.navigate(Screen.Profile.route)})
+        SearchBar(onClick = { navController.navigate(Screen.Profile.route) })
 
         Spacer(modifier = Modifier.height(32.dp))
 
         HeadingText("Trending Books", modifier = Modifier.fillMaxWidth().align(Alignment.Start))
 
         Spacer(modifier = Modifier.height(24.dp))
-        // Featured Books
-        LazyRow(
-            modifier = Modifier.height(360.dp)
-        ) {
-            items(listOf(
-                Pair("Heredity", "Tarun Choudhary"),
-                Pair("Atomic Habits", "James Clear"),
-                Pair("The Alchemist", "Paulo Coelho")
-            )) { (title, author) ->
-                BookItem(
-                    title = title,
-                    author = author,
-                    imageWidth = 170,
-                    imageHeight = 240,
-                    onClick = { navController.navigate(Screen.BookDetail.route) }
-                )
-            }
-        }
+        /*
+
+        bookDetails?.let { book ->
+            println("Displaying Featured Book: ${book.metadata.title}, Image URI: ${book.coverImageUri}")
+            FeaturedBook(
+                title = book.metadata.title,
+                author = book.metadata.author,
+                description = book.metadata.description,
+                genres = book.metadata.genres,
+                imageUri = book.coverImageUri?.toString(),
+                isBookmarked = isBookmarked.value,
+                onReadClick = { navController.navigate(Screen.BookDetail.route) },
+                onBookmarkToggle = {
+                    if (isBookmarked.value) {
+                        userViewModel.removeBookmark(bookId)
+                    } else {
+                        userViewModel.addBookmark(bookId)
+                    }
+                }
+            )
+        } ?: BookPlaceholder()
+         */
+
+
+
 
         Spacer(modifier = Modifier.height(24.dp))
 
@@ -114,6 +149,7 @@ fun HomeScreen(navController: NavController) {
                     author = "Harriet Evans",
                     imageWidth = 120,
                     imageHeight = 160,
+                    imageUri = null,
                     onClick = { navController.navigate(Screen.BookDetail.route) } // Navigate to Book Details
                 )
             }
@@ -123,6 +159,7 @@ fun HomeScreen(navController: NavController) {
                     author = "Tara Westover",
                     imageWidth = 120,
                     imageHeight = 160,
+                    imageUri = null,
                     onClick = { navController.navigate(Screen.BookDetail.route) } // Navigate to Book Details
                 )
             }
@@ -132,6 +169,7 @@ fun HomeScreen(navController: NavController) {
                     author = "Wes Anderson",
                     imageWidth = 120,
                     imageHeight = 160,
+                    imageUri = null,
                     onClick = { navController.navigate(Screen.BookDetail.route) } // Navigate to Book Details
                 )
             }
@@ -145,10 +183,23 @@ fun HomeScreen(navController: NavController) {
         Spacer(modifier = Modifier.height(40.dp))
 
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
-            TopReaderItem(name = "Sung Jin Woo", pagesRead = 451, imageRes = R.drawable.user_placeholder)
-            TopReaderItem(name = "Son Goku", pagesRead = 231, imageRes = R.drawable.user_placeholder)
-            TopReaderItem(name = "Eren Yeager", pagesRead = 201, imageRes = R.drawable.user_placeholder)
+            TopReaderItem(
+                name = "Sung Jin Woo",
+                pagesRead = 451,
+                imageRes = R.drawable.user_placeholder
+            )
+            TopReaderItem(
+                name = "Son Goku",
+                pagesRead = 231,
+                imageRes = R.drawable.user_placeholder
+            )
+            TopReaderItem(
+                name = "Eren Yeager",
+                pagesRead = 201,
+                imageRes = R.drawable.user_placeholder
+            )
         }
         Spacer(modifier = Modifier.height(40.dp))
     }
 }
+

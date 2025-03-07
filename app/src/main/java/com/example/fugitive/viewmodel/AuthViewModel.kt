@@ -3,13 +3,13 @@ package com.example.fugitive.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.fugitive.data.remote.FirebaseAuthService
+import com.example.fugitive.repository.UserRepository
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-class AuthViewModel : ViewModel() {
-    private val authService = FirebaseAuthService()
+class AuthViewModel(private val authService: FirebaseAuthService) : ViewModel() {
 
     private val _authState = MutableStateFlow<FirebaseUser?>(authService.getCurrentUser())
     val authState: StateFlow<FirebaseUser?> = _authState

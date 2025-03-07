@@ -5,7 +5,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -17,7 +16,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -30,7 +28,6 @@ import com.example.fugitive.R
 import com.example.fugitive.Screen
 import com.example.fugitive.components.BackButton
 import com.example.fugitive.components.BookDetailsRow
-import com.example.fugitive.components.CustomBookmarkButton
 import com.example.fugitive.components.FugitivePrimaryButton
 import com.example.fugitive.components.HeadingText
 import com.example.fugitive.ui.theme.FugitiveColors
@@ -140,7 +137,7 @@ fun BookDetailsScreen(
                 ,
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ){
-                CustomBookmarkButton(isBookmarked)
+                //CustomBookmarkButton(isBookmarked)
                 FugitivePrimaryButton("Start Reading", onClick = { navController.navigate(Screen.BookReader.route) })
 
             }

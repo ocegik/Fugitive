@@ -6,43 +6,32 @@ import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 import java.util.Date
 
-class FirebaseAuthService {
-    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
-    private val firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
-
+class FirebaseAuthService(private val auth: FirebaseAuth = FirebaseAuth.getInstance(),
+                          private val firestore: FirebaseFirestore =  FirebaseFirestore.getInstance() )
+{
     suspend fun signUp(name: String, email: String, password: String): FirebaseUser? {
         return try {
             val result = auth.createUserWithEmailAndPassword(email, password).await()
             val user = result.user
 
-            if (user != null) {
-                // Update display name in Firebase Auth
-                user.updateProfile(
+            user?.let {
+                it.updateProfile(
                     com.google.firebase.auth.UserProfileChangeRequest.Builder()
-                    .setDisplayName(name)
-                    .build()
+                        .setDisplayName(name)
+                        .build()
                 ).await()
 
-                // Create user document in Firestore (Single Collection Approach)
-                try {
-                    // Create Firestore user document
-                    val userMap = mapOf(
-                        "uid" to user.uid,
-                        "name" to name,
-                        "email" to email,
-                        "createdAt" to System.currentTimeMillis(),
-                        "profilePicture" to null,
-                        "bio" to null,
-                        "phoneNumber" to null
-                    )
-
-                    firestore.collection("users").document(user.uid).set(userMap).await()
-                } catch (e: Exception) {
-                    // If Firestore fails, print error but continue
-                    println("Firestore Error: ${e.message}")
-                }
+                val userMap = mapOf(
+                    "uid" to it.uid,
+                    "name" to name,
+                    "email" to email,
+                    "createdAt" to System.currentTimeMillis(),
+                    "profilePicture" to null,
+                    "bio" to null,
+                    "phoneNumber" to null
+                )
+                firestore.collection("users").document(it.uid).set(userMap).await()
             }
-
             user // Return user object
         } catch (e: Exception) {
             throw when {
