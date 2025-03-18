@@ -13,11 +13,10 @@ import com.example.fugitive.Screen
 import com.example.fugitive.ui.theme.FugitiveColors
 import androidx.compose.material3.Text
 import androidx.compose.ui.zIndex
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.fugitive.components.BackButton
+import com.example.fugitive.components.button.BackButton
 import com.example.fugitive.components.EmailInputField
 import com.example.fugitive.components.PassInputField
-import com.example.fugitive.components.FugitivePrimaryButton
+import com.example.fugitive.components.button.FugitivePrimaryButton
 import com.example.fugitive.components.HeadingText
 import com.example.fugitive.components.SocialLoginRow
 import com.example.fugitive.components.SubheadingText
@@ -31,7 +30,7 @@ fun showToast(context: android.content.Context, message: String) {
 }
 
 @Composable
-fun LoginScreen(navController: NavController, authViewModel: AuthViewModel = viewModel()) {
+fun LoginScreen(navController: NavController, authViewModel: AuthViewModel) {
     val context = LocalContext.current
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }

@@ -26,10 +26,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.fugitive.R
 import com.example.fugitive.Screen
-import com.example.fugitive.ViewModelFactory
-import com.example.fugitive.components.BookItem
-import com.example.fugitive.components.BookPlaceholder
-import com.example.fugitive.components.FeaturedBook
+import com.example.fugitive.components.book.BookItem
+import com.example.fugitive.components.book.BookPlaceholder
+import com.example.fugitive.components.book.FeaturedBook
 import com.example.fugitive.components.HeadingText
 import com.example.fugitive.components.SearchBar
 import com.example.fugitive.components.TopReaderItem
@@ -41,12 +40,10 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 @Composable
-fun HomeScreen( navController: NavController) {
+fun HomeScreen( navController: NavController, userViewModel: UserViewModel) {
     val firebaseAuth = remember { FirebaseAuth.getInstance() }
     val firebaseFirestore = remember { FirebaseFirestore.getInstance() }
     val userRepository = remember { UserRepository(firebaseAuth, firebaseFirestore) }
-    val userViewModel: UserViewModel = viewModel(factory = ViewModelFactory(userRepository))
-
 
     val bookId = "xZnFI313LDGliqNPxNWh"
     val bookmarks by userViewModel.bookmarks.collectAsState(initial = emptyList())

@@ -22,7 +22,7 @@ fun TopReaderItem(name: String, pagesRead: Int, imageRes: Int) {
             painter = painterResource(id = imageRes),
             contentDescription = name,
             modifier = Modifier
-                .size(50.dp)
+                .size(40.dp)
                 .clip(CircleShape)
         )
         Spacer(modifier = Modifier.height(24.dp))

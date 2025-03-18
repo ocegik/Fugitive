@@ -26,9 +26,9 @@ import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import com.example.fugitive.R
 import com.example.fugitive.Screen
-import com.example.fugitive.components.BackButton
+import com.example.fugitive.components.button.BackButton
 import com.example.fugitive.components.BookDetailsRow
-import com.example.fugitive.components.FugitivePrimaryButton
+import com.example.fugitive.components.button.FugitivePrimaryButton
 import com.example.fugitive.components.HeadingText
 import com.example.fugitive.ui.theme.FugitiveColors
 

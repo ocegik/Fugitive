@@ -13,7 +13,7 @@ import androidx.navigation.NavController
 import com.example.fugitive.Screen
 import com.example.fugitive.ui.theme.FugitiveColors
 import com.example.fugitive.viewmodel.AuthViewModel
-import com.example.fugitive.components.FugitivePrimaryButton
+import com.example.fugitive.components.button.FugitivePrimaryButton
 
 @Composable
 fun ProfileScreen(navController: NavController, authViewModel: AuthViewModel = viewModel()) {

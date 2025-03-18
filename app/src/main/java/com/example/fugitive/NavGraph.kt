@@ -18,15 +18,21 @@ import com.example.fugitive.screens.auth.login.ForgotPassScreen
 import com.example.fugitive.screens.auth.login.ResetPassScreen
 import com.example.fugitive.screens.find.SearchScreen
 import com.example.fugitive.data.remote.FirebaseAuthService
+import com.example.fugitive.viewmodel.AuthViewModel
+import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.koinInject
 
 @Composable
 fun AppNavGraph(navController: NavHostController) {
-    val authService = FirebaseAuthService()
+    val authService: FirebaseAuthService = koinInject()
     val startDestination = if (authService.isUserLoggedIn()) Screen.Home.route else Screen.Welcome.route
 
     NavHost(navController = navController, startDestination = startDestination) {
         composable(Screen.Welcome.route) { WelcomeScreen(navController) }
-        composable(Screen.Login.route) { LoginScreen(navController) }
+        composable(Screen.Login.route) {
+            val authViewModel: AuthViewModel = koinViewModel()
+            LoginScreen(navController, authViewModel)
+        }
         composable(Screen.SignUp.route) { SignUpScreen(navController) }
         composable(Screen.Home.route) { HomeScreen(navController) }
         composable(Screen.BookDetail.route) { BookDetailsScreen(navController) }

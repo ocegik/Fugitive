@@ -28,6 +28,8 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.zIndex
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.fugitive.components.*
+import com.example.fugitive.components.button.BackButton
+import com.example.fugitive.components.button.FugitivePrimaryButton
 import com.example.fugitive.viewmodel.AuthViewModel
 
 @Composable

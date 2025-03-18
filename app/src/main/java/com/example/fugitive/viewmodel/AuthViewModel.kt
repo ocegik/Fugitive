@@ -8,8 +8,12 @@ import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
-class AuthViewModel(private val authService: FirebaseAuthService) : ViewModel() {
+class AuthViewModel : ViewModel(), KoinComponent {
+
+    private val authService: FirebaseAuthService by inject()
 
     private val _authState = MutableStateFlow<FirebaseUser?>(authService.getCurrentUser())
     val authState: StateFlow<FirebaseUser?> = _authState

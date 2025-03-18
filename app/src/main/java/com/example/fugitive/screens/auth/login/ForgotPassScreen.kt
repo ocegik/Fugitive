@@ -14,6 +14,8 @@ import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import com.example.fugitive.Screen
 import com.example.fugitive.components.*
+import com.example.fugitive.components.button.BackButton
+import com.example.fugitive.components.button.FugitivePrimaryButton
 import com.example.fugitive.ui.theme.FugitiveColors
 
 
