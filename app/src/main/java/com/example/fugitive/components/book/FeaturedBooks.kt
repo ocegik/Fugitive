@@ -35,7 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.fugitive.R
-import com.example.fugitive.components.CustomBookmarkButton
+import com.example.fugitive.components.button.CustomBookmarkButton
 import com.example.fugitive.components.button.FugitivePrimaryButton
 
 @OptIn(ExperimentalLayoutApi::class)

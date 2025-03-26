@@ -4,4 +4,6 @@ plugins {
     alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.kotlin.compose) apply false
     alias(libs.plugins.google.gms.google.services) apply false
+    id("com.google.devtools.ksp") version "2.1.10-1.0.31" apply false
+
 }

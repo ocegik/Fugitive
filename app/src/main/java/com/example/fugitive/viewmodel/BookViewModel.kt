@@ -7,12 +7,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.fugitive.data.remote.BookMetadata
 import com.example.fugitive.data.remote.FirestoreService
-import com.google.firebase.firestore.FirebaseFirestore
+import com.example.fugitive.repository.UserRepository
 import kotlinx.coroutines.launch
 
-class BookViewModel : ViewModel() {
-
-    private val firestoreService = FirestoreService(FirebaseFirestore.getInstance())
+class BookViewModel(private val userRepository: UserRepository,
+                    private val firestoreService: FirestoreService  ) : ViewModel() {
 
     private val _bookDetails = MutableLiveData<BookDetails?>()
     val bookDetails: LiveData<BookDetails?> get() = _bookDetails

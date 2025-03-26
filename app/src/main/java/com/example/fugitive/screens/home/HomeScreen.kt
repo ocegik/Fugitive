@@ -38,20 +38,14 @@ import com.example.fugitive.viewmodel.BookViewModel
 import com.example.fugitive.viewmodel.UserViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun HomeScreen( navController: NavController, userViewModel: UserViewModel) {
-    val firebaseAuth = remember { FirebaseAuth.getInstance() }
-    val firebaseFirestore = remember { FirebaseFirestore.getInstance() }
-    val userRepository = remember { UserRepository(firebaseAuth, firebaseFirestore) }
 
     val bookId = "xZnFI313LDGliqNPxNWh"
-    val bookmarks by userViewModel.bookmarks.collectAsState(initial = emptyList())
     val isBookmarked = remember { mutableStateOf(false) }
 
-    LaunchedEffect(bookmarks) {
-        isBookmarked.value = bookmarks.contains(bookId)
-    }
 
     Column(
         modifier = Modifier

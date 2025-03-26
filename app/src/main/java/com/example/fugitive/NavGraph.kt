@@ -19,6 +19,7 @@ import com.example.fugitive.screens.auth.login.ResetPassScreen
 import com.example.fugitive.screens.find.SearchScreen
 import com.example.fugitive.data.remote.FirebaseAuthService
 import com.example.fugitive.viewmodel.AuthViewModel
+import com.example.fugitive.viewmodel.UserViewModel
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 
@@ -34,7 +35,10 @@ fun AppNavGraph(navController: NavHostController) {
             LoginScreen(navController, authViewModel)
         }
         composable(Screen.SignUp.route) { SignUpScreen(navController) }
-        composable(Screen.Home.route) { HomeScreen(navController) }
+        composable(Screen.Home.route) {
+            val userViewModel: UserViewModel = koinViewModel()
+            HomeScreen(navController, userViewModel)
+        }
         composable(Screen.BookDetail.route) { BookDetailsScreen(navController) }
         composable(Screen.Settings.route) { SettingsScreen(navController) }
         composable(Screen.BookReader.route) { BookReaderScreen(navController) }
@@ -42,9 +46,9 @@ fun AppNavGraph(navController: NavHostController) {
         composable(Screen.Profile.route) { ProfileScreen(navController) }
         composable(Screen.Terms.route) { TermsScreen(navController) }
         composable(Screen.ForgotPass.route){ ForgotPassScreen(navController) }
-
         composable(Screen.ResetPass.route) { ResetPassScreen(navController) }
         composable(Screen.Search.route) { SearchScreen(navController) }
 
     }
 }
+

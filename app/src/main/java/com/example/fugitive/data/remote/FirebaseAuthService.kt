@@ -4,7 +4,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
-import java.util.Date
 
 class FirebaseAuthService(private val auth: FirebaseAuth = FirebaseAuth.getInstance(),
                           private val firestore: FirebaseFirestore =  FirebaseFirestore.getInstance() )

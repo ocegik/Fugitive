@@ -2,26 +2,26 @@ package com.example.fugitive.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.fugitive.data.remote.FirebaseAuthService
+import com.example.fugitive.data.local.CachedUser
 import com.example.fugitive.repository.UserRepository
-import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
-class AuthViewModel : ViewModel(), KoinComponent {
+class AuthViewModel( private val userRepository: UserRepository) : ViewModel(){
 
-    private val authService: FirebaseAuthService by inject()
-
-    private val _authState = MutableStateFlow<FirebaseUser?>(authService.getCurrentUser())
-    val authState: StateFlow<FirebaseUser?> = _authState
+    private val _authState = MutableStateFlow<CachedUser?>(null)
+    val authState: StateFlow<CachedUser?> = _authState
+    init{
+        viewModelScope.launch {
+            _authState.value = userRepository.getCurrentUser()
+        }
+    }
 
     fun signUp(name: String, email: String, password: String, onSuccess: () -> Unit, onError: (String) -> Unit) {
         viewModelScope.launch {
             try {
-                val user = authService.signUp(name, email, password)
+                val user = userRepository.signUp(name, email, password)
                 if (user!= null) {
                     _authState.value = user
                     onSuccess()
@@ -38,7 +38,7 @@ class AuthViewModel : ViewModel(), KoinComponent {
     fun signIn(email: String, password: String, onSuccess: () -> Unit, onError: (String) -> Unit) {
         viewModelScope.launch {
             try {
-                val user = authService.signIn(email, password)
+                val user = userRepository.signIn(email, password)
                 if (user != null) {
                     _authState.value = user
                     onSuccess() // Call success callback
@@ -52,7 +52,9 @@ class AuthViewModel : ViewModel(), KoinComponent {
     }
 
     fun signOut() {
-        authService.signOut()
-        _authState.value = null
+        viewModelScope.launch {
+            userRepository.logout()  // ✅ Use repository instead of authService
+            _authState.value = null
+        }
     }
 }

@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.google.gms.google.services)
+    id("com.google.devtools.ksp")
 }
 
 
@@ -95,6 +96,10 @@ dependencies {
     implementation(libs.accompanist.flowlayout)
     implementation(libs.koin.android) // Koin for Android
     implementation(libs.koin.androidx.compose) // Koin for Jetpack Compose
+
+    implementation(libs.androidx.room.runtime)
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx)
 
 }
 

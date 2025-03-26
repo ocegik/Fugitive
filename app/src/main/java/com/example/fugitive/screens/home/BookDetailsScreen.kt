@@ -7,8 +7,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
@@ -38,7 +36,6 @@ fun BookDetailsScreen(
     navController: NavController,
 ) {
     val backgroundColor = FugitiveColors.background
-    val isBookmarked = remember { mutableStateOf(false) }
     val title = "Tales Under a Purple Sky"
     val author = "By Samira Hadid"
     val chapters = 12
@@ -76,13 +73,11 @@ fun BookDetailsScreen(
         Box(modifier = Modifier
             .fillMaxSize()
             .padding(WindowInsets.statusBars.asPaddingValues()) // Prevents overlapping with status bar
-            .padding(16.dp)) // General padding)
+            .padding(start = 15.dp, top = 15.dp)) // General padding)
         {
             BackButton(
                 modifier = Modifier
-                    .size(50.dp)  // Bigger and easier to tap
                     .align(Alignment.TopStart) // Ensures it's on the top-left
-                    .padding(start = 16.dp, top = 16.dp)
                     .zIndex(2f) // Makes sure it stays on top
             ) {
                 navController.popBackStack()
