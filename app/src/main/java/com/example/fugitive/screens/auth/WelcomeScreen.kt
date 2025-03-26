@@ -8,9 +8,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.fugitive.Screen
-import com.example.fugitive.components.FugitiveOutlineButton
+import com.example.fugitive.components.button.FugitiveOutlineButton
 import com.example.fugitive.components.HeadingText
-import com.example.fugitive.components.FugitivePrimaryButton
+import com.example.fugitive.components.button.FugitivePrimaryButton
 import com.example.fugitive.components.SubheadingText
 import com.example.fugitive.ui.theme.FugitiveColors
 

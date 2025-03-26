@@ -1,4 +1,4 @@
-package com.example.fugitive.screens.auth
+package com.example.fugitive.screens.auth.login
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -14,13 +14,15 @@ import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import com.example.fugitive.Screen
 import com.example.fugitive.components.*
-import com.example.fugitive.ui.theme.FugitiveColors
-
+import com.example.fugitive.components.button.BackButton
+import com.example.fugitive.components.button.FugitivePrimaryButton
+import com.example.fugitive.ui.theme.*
 
 
 @Composable
-fun ForgotPassScreen(navController: NavController) {
-    var email by remember { mutableStateOf("") }
+fun ResetPassScreen(navController: NavController) {
+    var password by remember { mutableStateOf("") }
+    var confirmPassword by remember { mutableStateOf("") }
 
     Box(
         modifier = Modifier
@@ -38,6 +40,7 @@ fun ForgotPassScreen(navController: NavController) {
             navController.popBackStack()
         }
 
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -46,24 +49,44 @@ fun ForgotPassScreen(navController: NavController) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-
             Spacer(modifier = Modifier.height(100.dp))
 
-            HeadingText("Forgot Password", modifier = Modifier.fillMaxWidth().align(Alignment.Start))
+            HeadingText("Set a New Password", modifier = Modifier.fillMaxWidth().align(Alignment.Start))
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            SubheadingText("Enter your email and we'll send you a verification code to reset your password.")
+
+            SubheadingText("Enter a strong password to secure your account.")
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            EmailInputField(email = email, onEmailChange = { email = it })
+            PassInputField(
+                password = password,
+                onPasswordChange = { password = it },
+                label = "New Password",
+                placeholder = "Enter your new password"
+            )
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(16.dp))
+
+            PassInputField(
+                password = confirmPassword,
+                onPasswordChange = { confirmPassword = it },
+                label = "Confirm Password",
+                placeholder = "Confirm your new password"
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
 
             FugitivePrimaryButton(
                 text = "Continue",
-                onClick = { navController.navigate(Screen.VerifyCode.route) })
+                onClick = {
+                    navController.navigate(Screen.Login.route) {
+                        popUpTo(Screen.ResetPass.route) {
+                            inclusive = true
+                        }
+                    }
+                })
         }
     }
 }

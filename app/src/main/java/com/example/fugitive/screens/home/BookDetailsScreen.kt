@@ -5,11 +5,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
@@ -17,7 +14,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -28,10 +24,9 @@ import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import com.example.fugitive.R
 import com.example.fugitive.Screen
-import com.example.fugitive.components.BackButton
+import com.example.fugitive.components.button.BackButton
 import com.example.fugitive.components.BookDetailsRow
-import com.example.fugitive.components.CustomBookmarkButton
-import com.example.fugitive.components.FugitivePrimaryButton
+import com.example.fugitive.components.button.FugitivePrimaryButton
 import com.example.fugitive.components.HeadingText
 import com.example.fugitive.ui.theme.FugitiveColors
 
@@ -41,7 +36,6 @@ fun BookDetailsScreen(
     navController: NavController,
 ) {
     val backgroundColor = FugitiveColors.background
-    val isBookmarked = remember { mutableStateOf(false) }
     val title = "Tales Under a Purple Sky"
     val author = "By Samira Hadid"
     val chapters = 12
@@ -79,13 +73,11 @@ fun BookDetailsScreen(
         Box(modifier = Modifier
             .fillMaxSize()
             .padding(WindowInsets.statusBars.asPaddingValues()) // Prevents overlapping with status bar
-            .padding(16.dp)) // General padding)
+            .padding(start = 15.dp, top = 15.dp)) // General padding)
         {
             BackButton(
                 modifier = Modifier
-                    .size(50.dp)  // Bigger and easier to tap
                     .align(Alignment.TopStart) // Ensures it's on the top-left
-                    .padding(start = 16.dp, top = 16.dp)
                     .zIndex(2f) // Makes sure it stays on top
             ) {
                 navController.popBackStack()
@@ -117,7 +109,7 @@ fun BookDetailsScreen(
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            BookDetailsRow(chapters = 12, year = 2024, wordCount = 50000)
+            BookDetailsRow(chapters = chapters, year = year, wordCount = wordCount)
 
             Spacer(modifier = Modifier.height(32.dp))
 
@@ -140,7 +132,7 @@ fun BookDetailsScreen(
                 ,
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ){
-                CustomBookmarkButton(isBookmarked)
+                //CustomBookmarkButton(isBookmarked)
                 FugitivePrimaryButton("Start Reading", onClick = { navController.navigate(Screen.BookReader.route) })
 
             }
