@@ -1,4 +1,4 @@
-package com.example.fugitive
+package com.example.fugitive.navigation
 
 
 sealed class Screen(val route: String) {
@@ -16,5 +16,12 @@ sealed class Screen(val route: String) {
     data object VerifyCode : Screen("VerifyCode")
     data object ResetPass : Screen("ResetPass")
     data object Search : Screen("Search")
+    data object Preferences : Screen("Preferences")
+    data object AboutUs : Screen("AboutUs")
+    data object MyStats : Screen("MyStats")
+    data object SavedQuotes : Screen("SavedQuotes")
+    data object Help : Screen("Help")
+    data object EditProfile : Screen("EditProfile")
+
 
 }

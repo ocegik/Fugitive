@@ -1,4 +1,4 @@
-package com.example.fugitive.viewmodel
+package com.example.fugitive.viewmodels
 
 import android.net.Uri
 import androidx.lifecycle.LiveData
@@ -17,13 +17,15 @@ class BookViewModel(private val userRepository: UserRepository,
     val bookDetails: LiveData<BookDetails?> get() = _bookDetails
 
     fun loadBookData(bookId: String) {
+        _bookDetails.value = null
+
         viewModelScope.launch {
             try {
                 val result = firestoreService.getBookDetails(bookId) // ✅ Fetch Result<BookMetadata>
 
                 result.fold(
                     onSuccess = { book ->  // ✅ Unwrap success case
-                        val coverUri = Uri.parse(book.coverImageURL).takeIf { it.toString().isNotBlank() }
+                        val coverUri = book.coverImageURL.takeIf { it.isNotBlank() }?.let { Uri.parse(it) }
                         _bookDetails.postValue(BookDetails(book, coverUri))
                     },
                     onFailure = { exception ->  // ✅ Handle failure case

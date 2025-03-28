@@ -1,10 +1,7 @@
 package com.example.fugitive.screens.auth.signup
 
-import android.widget.Toast
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -12,49 +9,49 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.fugitive.Screen
 import com.example.fugitive.ui.theme.FugitiveColors
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.zIndex
-import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.fugitive.navigation.Screen
 import com.example.fugitive.components.*
 import com.example.fugitive.components.button.BackButton
 import com.example.fugitive.components.button.FugitivePrimaryButton
-import com.example.fugitive.viewmodel.AuthViewModel
+import com.example.fugitive.components.inputs.EmailInputField
+import com.example.fugitive.components.inputs.PassInputField
+import com.example.fugitive.components.inputs.TermsCheckbox
+import com.example.fugitive.viewmodels.AuthViewModel
 
 @Composable
-fun SignUpScreen(navController: NavController, authViewModel: AuthViewModel = viewModel()) {
+fun SignUpScreen(navController: NavController, authViewModel: AuthViewModel) {
     val context = LocalContext.current
-    var name by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var termsCond by remember { mutableStateOf(false) }
-    var isLoading by remember { mutableStateOf(false) }
-    var errorMessage by remember { mutableStateOf("") }
+    val authState by authViewModel.authState.collectAsState()
 
-
+    // ✅ Automatically navigate when user is signed up
+    LaunchedEffect(authState) {
+        authState?.let {
+            navController.navigate(Screen.Home.route) {
+                popUpTo(Screen.Login.route) { inclusive = true }
+            }
+        }
+    }
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(FugitiveColors.background)
+            .padding(WindowInsets.statusBars.asPaddingValues())
     ) {
         // Back Button - Ensuring it's visible and on top
         BackButton(
             modifier = Modifier
-                .size(85.dp)  // Bigger and easier to tap
                 .align(Alignment.TopStart) // Ensures it's on the top-left
-                .padding(start = 0.dp, top = 30.dp)
-                .zIndex(1f) // Makes sure it stays on top
+                .padding(start = 15.dp, top = 15.dp)
+                .zIndex(2f) // Makes sure it stays on top
         ) {
             navController.popBackStack()
         }
@@ -85,8 +82,8 @@ fun SignUpScreen(navController: NavController, authViewModel: AuthViewModel = vi
             Spacer(modifier = Modifier.height(24.dp))
 
             OutlinedTextField(
-                value = name,
-                onValueChange = { name = it },
+                value = authViewModel.name,
+                onValueChange = { authViewModel.name = it },
                 label = { Text("Name") },
                 placeholder = { Text("Enter your name") },
                 singleLine = true,
@@ -99,121 +96,50 @@ fun SignUpScreen(navController: NavController, authViewModel: AuthViewModel = vi
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            EmailInputField(email = email, onEmailChange = { email = it })
+            EmailInputField(email = authViewModel.email, onEmailChange = { authViewModel.email = it })
 
             Spacer(modifier = Modifier.height(12.dp))
 
             PassInputField(
-                password = password,
-                onPasswordChange = { password = it }
+                password = authViewModel.password,
+                onPasswordChange = { authViewModel.password = it }
             )
 
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .fillMaxWidth()
-            ) {
-                Checkbox(
-                    checked = termsCond,
-                    onCheckedChange = { termsCond = it }
-                )
+            TermsCheckbox(
+                isChecked = authViewModel.termsCond,
+                onCheckedChange = { authViewModel.termsCond = it },
+                navController = navController
+            )
 
-
-                val annotatedString = buildAnnotatedString {
-                    withStyle(
-                        style = SpanStyle(
-                            color = FugitiveColors.subheading
-                        )
-                    ) {
-                        append("Agree With ")
-                    }
-                    pushStringAnnotation(
-                        tag = "Terms & Conditions",
-                        annotation = "Terms & Conditions"
-                    )
-                    withStyle(
-                        style = SpanStyle(
-                            color = FugitiveColors.button,
-                            textDecoration = TextDecoration.Underline
-                        )
-                    ) {
-                        append("Terms & Conditions")
-                    }
-                    pop()
-                }
-
-                Text(
-                    text = annotatedString,
-                    modifier = Modifier.clickable {
-                        navController.navigate(Screen.Terms.route)
-                    }
-                        .padding(start = 8.dp)
-                )
-            }
-
-
-            Spacer(modifier = Modifier.height(20.dp))
-
-            if (errorMessage.isNotEmpty()) {
-                Text(text = errorMessage, color = Color.Red, fontSize = 14.sp)
-                Spacer(modifier = Modifier.height(8.dp))
-            }
-
-            if (isLoading) {
+            if (authViewModel.isLoading) {
                 CircularProgressIndicator()
             } else {
-                FugitivePrimaryButton(text = "Sign Up", onClick = {
-                    errorMessage = "" // Reset error before validation
-
-                    if (name.isBlank() || email.isBlank() || password.isBlank()) {
-                        errorMessage = "All fields are required."
-                        return@FugitivePrimaryButton
+                FugitivePrimaryButton(
+                    text = "Sign Up",
+                    onClick = {
+                        authViewModel.signUp(
+                            navController = navController,
+                            context = context
+                        )
                     }
+                )
+            }
 
-                    if (!termsCond) {
-                        errorMessage = "You must agree to the Terms & Conditions."
-                        return@FugitivePrimaryButton
-                    }
+            Spacer(modifier = Modifier.height(30.dp))
 
-                    if (password.length < 6) {
-                        errorMessage = "Password must be at least 6 characters long."
-                        return@FugitivePrimaryButton
-                    }
+            Text("Or Sign Up With", color = FugitiveColors.subheading)
 
-                    authViewModel.signUp(
-                        name, email, password,  // ✅ Added name
-                        onSuccess = {
-                            isLoading = false  // ✅ Changed location
-                            Toast.makeText(context, "Sign-up successful!", Toast.LENGTH_SHORT)
-                                .show()
-                            navController.navigate(Screen.Home.route) {
-                                popUpTo(Screen.Login.route) { inclusive = true }
-                            }
-                        },
-                        onError = { error ->
-                            isLoading = false  // ✅ Changed location
-                            errorMessage = error
-                        }
-                    )
+            Spacer(modifier = Modifier.height(12.dp))
 
-                    isLoading = true  // ✅ Moved this after signUp call
-                })
-
-                Spacer(modifier = Modifier.height(30.dp))
-
-                Text("Or Sign Up With", color = FugitiveColors.subheading)
-
-                Spacer(modifier = Modifier.height(12.dp))
-
-                SocialLoginRow()
+            SocialLoginRow()
 
             }
         }
     }
-}
+
 
 
 

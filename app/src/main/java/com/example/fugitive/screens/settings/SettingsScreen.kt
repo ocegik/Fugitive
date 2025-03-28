@@ -7,12 +7,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.fugitive.Screen
+import com.example.fugitive.navigation.Screen
 
 @Composable
 fun SettingsScreen(navController: NavController) {
     Column(
-        modifier = Modifier.fillMaxSize().padding(16.dp)
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
     ) {
         Text("Settings")
         Button(onClick = { navController.navigate(Screen.Home.route) }) {

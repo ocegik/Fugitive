@@ -1,4 +1,4 @@
-package com.example.fugitive
+package com.example.fugitive.app
 
 import android.app.Application
 import org.koin.android.ext.koin.androidContext

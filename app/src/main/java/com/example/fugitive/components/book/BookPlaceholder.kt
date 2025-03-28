@@ -1,56 +1,117 @@
 package com.example.fugitive.components.book
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.example.fugitive.components.effects.ShimmerEffect
 
 
 @Composable
 fun BookPlaceholder() {
-    Column(
+    Row(
         modifier = Modifier
-            .padding(8.dp)
-            .width(170.dp)
+            .fillMaxWidth()
+            .padding(10.dp),
+        verticalAlignment = Alignment.Top
     ) {
         Box(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(240.dp)
-                .clip(RoundedCornerShape(10.dp))
-                .background(brush = Brush.linearGradient(
-                    colors = listOf(Color.LightGray, Color.Gray),
-                    start = Offset(0f, 0f),
-                    end = Offset(100f, 100f)
-                ))
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        Box(
+                .width(160.dp)
+                .height(230.dp)
+                .clip(RoundedCornerShape(12.dp))
+                .background(Color(0xFF2A2A2A))
+        ) {
+            ShimmerEffect(widthFraction = 1f, height = 230.dp)
+        }
+        Spacer(modifier = Modifier.width(14.dp))
+        // Book Details Placeholder (Right Side)
+        Column(
             modifier = Modifier
-                .width(100.dp)
-                .height(16.dp)
-                .background(Color.Gray, shape = RoundedCornerShape(4.dp))
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        Box(
-            modifier = Modifier
-                .width(80.dp)
-                .height(12.dp)
-                .background(Color.Gray, shape = RoundedCornerShape(4.dp))
-        )
+                .weight(1f)
+                .fillMaxHeight(),
+            verticalArrangement = Arrangement.Top
+        ) {
+            // Shimmer Title Placeholder
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth(0.6f)
+                    .height(22.dp)
+                    .clip(RoundedCornerShape(4.dp))
+                    .background(Color(0xFF2A2A2A))
+            ) {
+                ShimmerEffect(widthFraction = 0.6f, height = 22.dp)
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // Shimmer Author Placeholder
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth(0.4f)
+                    .height(14.dp)
+                    .clip(RoundedCornerShape(4.dp))
+                    .background(Color(0xFF2A2A2A))
+            ) {
+                ShimmerEffect(widthFraction = 0.4f, height = 14.dp)
+            }
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+            // Shimmer Description Placeholder (3 lines)
+            repeat(3) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth(0.9f - it * 0.2f) // Shrinking width effect
+                        .height(14.dp)
+                        .clip(RoundedCornerShape(4.dp))
+                        .background(Color(0xFF2A2A2A))
+                ) {
+                    ShimmerEffect(widthFraction = 0.9f - it * 0.2f, height = 14.dp)
+                }
+                Spacer(modifier = Modifier.height(4.dp))
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Buttons Placeholder
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Box(
+                    modifier = Modifier
+                        .width(40.dp)
+                        .height(40.dp)
+                        .clip(RoundedCornerShape(8.dp))
+                        .background(Color(0xFF2A2A2A))
+                ) {
+                    ShimmerEffect(widthFraction = 1f, height = 40.dp)
+                }
+
+                Spacer(modifier = Modifier.width(8.dp))
+
+                Box(
+                    modifier = Modifier
+                        .width(100.dp)
+                        .height(40.dp)
+                        .clip(RoundedCornerShape(8.dp))
+                        .background(Color(0xFF2A2A2A))
+                ) {
+                    ShimmerEffect(widthFraction = 1f, height = 40.dp)
+                }
+            }
+        }
     }
 }
-
-

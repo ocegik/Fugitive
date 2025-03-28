@@ -1,7 +1,8 @@
-package com.example.fugitive
+package com.example.fugitive.app
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.rememberNavController
+import com.example.fugitive.navigation.AppNavGraph
 
 @Composable
 fun MyApp(){

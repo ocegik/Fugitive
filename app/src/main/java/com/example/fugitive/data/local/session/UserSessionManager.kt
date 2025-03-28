@@ -1,4 +1,4 @@
-package com.example.fugitive.session
+package com.example.fugitive.data.local.session
 
 import android.content.Context
 import android.content.SharedPreferences

@@ -1,4 +1,4 @@
-package com.example.fugitive.components
+package com.example.fugitive.components.cards
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -22,7 +22,7 @@ fun TopReaderItem(name: String, pagesRead: Int, imageRes: Int) {
             painter = painterResource(id = imageRes),
             contentDescription = name,
             modifier = Modifier
-                .size(40.dp)
+                .size(32.dp)
                 .clip(CircleShape)
         )
         Spacer(modifier = Modifier.height(24.dp))

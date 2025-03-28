@@ -4,16 +4,14 @@ import com.example.fugitive.data.local.CachedUser
 import com.example.fugitive.data.local.UserDao
 import com.example.fugitive.data.remote.FirebaseAuthService
 import com.example.fugitive.data.remote.FirestoreService
-import com.example.fugitive.session.UserSessionManager
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
+import com.example.fugitive.data.local.session.UserSessionManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class UserRepository(
     private val userDao: UserDao,  // ✅ Local Database
-    private val firestoreService: FirestoreService,  // ✅ Firebase
-    private val authService: FirebaseAuthService,  // ✅ FirebaseAuth for current user
+    private val firestoreService: FirestoreService,  // ✅ Firebase Firestore
+    private val authService: FirebaseAuthService,  // ✅ Firebase Authentication
     private val sessionManager: UserSessionManager
 ) {
 
@@ -36,38 +34,47 @@ class UserRepository(
         }
     }
 
-    suspend fun signIn(email: String, password: String): CachedUser? {
+    suspend fun signIn(email: String, password: String): Result<CachedUser> {
         return withContext(Dispatchers.IO) {
-            val firebaseUser = authService.signIn(email, password)
-            firebaseUser?.let { user ->
+            try {
+                val firebaseUser = authService.signIn(email, password)
+                    ?: return@withContext Result.failure(Exception("Invalid email or password."))
+
                 val cachedUser = CachedUser(
-                    userId = user.uid,
-                    name = user.displayName ?: "Unknown",
-                    email = user.email ?: "",
-                    profilePicUrl = user.photoUrl?.toString()
+                    userId = firebaseUser.uid,
+                    name = firebaseUser.displayName ?: "Unknown",
+                    email = firebaseUser.email ?: "",
+                    profilePicUrl = firebaseUser.photoUrl?.toString()
                 )
                 userDao.saveUser(cachedUser)  // Save user locally
-                sessionManager.saveUser(user)  // Save session data
-                return@withContext cachedUser
+                sessionManager.saveUser(firebaseUser)  // Save session data
+
+                return@withContext Result.success(cachedUser)
+            } catch (e: Exception) {
+                return@withContext Result.failure(e)  // Pass error message
             }
-            return@withContext null
         }
     }
-    suspend fun signUp(name: String, email: String, password: String): CachedUser? {
+
+    suspend fun signUp(name: String, email: String, password: String): Result<CachedUser> {
         return withContext(Dispatchers.IO) {
-            val firebaseUser = authService.signUp(name, email, password)  // ✅ Ensure authService has signUp()
-            firebaseUser?.let { user ->
+            try {
+                val firebaseUser = authService.signUp(name, email, password)
+                    ?: return@withContext Result.failure(Exception("Sign-up failed. Please try again."))
+
                 val cachedUser = CachedUser(
-                    userId = user.uid,
+                    userId = firebaseUser.uid,
                     name = name,
                     email = email,
-                    profilePicUrl = user.photoUrl?.toString()
+                    profilePicUrl = firebaseUser.photoUrl?.toString()
                 )
                 userDao.saveUser(cachedUser)  // ✅ Save user locally
-                sessionManager.saveUser(user)  // ✅ Store in session manager
-                return@withContext cachedUser
+                sessionManager.saveUser(firebaseUser)  // ✅ Store in session manager
+
+                return@withContext Result.success(cachedUser)
+            } catch (e: Exception) {
+                return@withContext Result.failure(e)  // Pass error message
             }
-            return@withContext null
         }
     }
 
