@@ -73,7 +73,10 @@ fun AppNavGraph(navController: NavHostController) {
         composable(Screen.SavedQuotes.route){ SavedQuotesScreen(navController) }
         composable(Screen.EditProfile.route) { EditProfileScreen(navController) }
         composable(Screen.Help.route) { HelpScreen(navController) }
-        composable(Screen.Preferences.route) { PreferencesScreen(navController) }
+        composable(Screen.Preferences.route) {
+            val userViewModel: UserViewModel = koinViewModel()
+            PreferencesScreen(navController, userViewModel)
+        }
 
     }
 }

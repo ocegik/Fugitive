@@ -2,19 +2,29 @@ package com.example.fugitive.screens.settings
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
+import com.example.fugitive.components.FontSelector
+import com.example.fugitive.components.FontSizeSelector
+import com.example.fugitive.components.ReaderThemeSelector
+import com.example.fugitive.components.ThemeSelector
 import com.example.fugitive.components.button.BackButton
+import com.example.fugitive.components.layout.ScreenTitle
+import com.example.fugitive.components.layout.SectionHeader
 import com.example.fugitive.ui.theme.FugitiveColors
+import com.example.fugitive.viewmodels.UserViewModel
 
 @Composable
-fun PreferencesScreen(navController: NavController) {
+fun PreferencesScreen(navController: NavController, userViewModel: UserViewModel) {
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -23,31 +33,81 @@ fun PreferencesScreen(navController: NavController) {
     ) {
         Column(
             modifier = Modifier
-                .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .fillMaxSize()
+                .padding(horizontal = 20.dp)
+                .verticalScroll(rememberScrollState()),
+            horizontalAlignment = Alignment.Start
         ) {
-            Box(
-                modifier = Modifier.fillMaxWidth(),
-                contentAlignment = Alignment.TopStart
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 15.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                BackButton(
-                    modifier = Modifier
-                        .padding(start = 15.dp, top = 15.dp)
-                        .zIndex(2f) // Ensures it's above other content
-                ) {
-                    navController.popBackStack()
-                }
+                BackButton { navController.popBackStack() }
+                Spacer(modifier = Modifier.width(15.dp))
+                ScreenTitle("Preferences")
             }
 
-            Spacer(modifier = Modifier.height(40.dp)) // More spacing after the button
+            SectionHeader("App Customization")
+            Spacer(modifier = Modifier.height(15.dp))
 
-            Text(text = "No New Notifications", color = FugitiveColors.heading)
+            Text(
+                text = "Theme",
+                style = MaterialTheme.typography.bodyMedium,
+                color = FugitiveColors.heading
+            )
+            Spacer(modifier = Modifier.height(20.dp))
+
+            ThemeSelector(userViewModel)
+            Spacer(modifier = Modifier.height(30.dp))
+
+            SectionHeader("Reading Experience")
 
             Spacer(modifier = Modifier.height(20.dp))
+
+            Text(
+                text = "Font Size",
+                style = MaterialTheme.typography.bodyMedium,
+                color = FugitiveColors.heading
+            )
+            Spacer(modifier = Modifier.height(20.dp))
+            FontSizeSelector(userViewModel)
+
+            Spacer(modifier = Modifier.height(20.dp))
+            Text(
+                text = "Font",
+                style = MaterialTheme.typography.bodyMedium,
+                color = FugitiveColors.heading
+            )
+            Spacer(modifier = Modifier.height(20.dp))
+
+            FontSelector(userViewModel)
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            Text(
+                text = "Reader Theme",
+                style = MaterialTheme.typography.bodyMedium,
+                color = FugitiveColors.heading
+            )
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            ReaderThemeSelector(userViewModel)
+
+            Spacer(modifier = Modifier.height(30.dp))
+
+            SectionHeader("General Settings")
+            Spacer(modifier = Modifier.height(20.dp))
+
+
 
             Button(onClick = { /* Do something */ }) {
                 Text(text = "Refresh")
             }
+            Spacer(modifier = Modifier.height(50.dp))
         }
     }
 }
+

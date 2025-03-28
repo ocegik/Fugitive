@@ -22,4 +22,21 @@ class UserViewModel(private val userRepository: UserRepository, private val user
     fun getFontSize(): Int {
         return userPreferences.getFontSize()
     }
+
+    // 🚀 Reader-specific settings (store them but don't use them yet)
+    fun saveReaderTheme(theme: String) {
+        userPreferences.setReaderTheme(theme)
+    }
+
+    fun getReaderTheme(): String {
+        return userPreferences.getReaderTheme()
+    }
+
+    fun saveFontStyle(style: String) {
+        userPreferences.setFontStyle(style)
+    }
+
+    fun getFontStyle(): String {
+        return userPreferences.getFontStyle()
+    }
 }
