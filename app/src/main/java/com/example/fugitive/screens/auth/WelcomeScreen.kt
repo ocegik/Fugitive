@@ -7,7 +7,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.fugitive.Screen
+import com.example.fugitive.navigation.Screen
 import com.example.fugitive.components.button.FugitiveOutlineButton
 import com.example.fugitive.components.HeadingText
 import com.example.fugitive.components.button.FugitivePrimaryButton

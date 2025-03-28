@@ -11,7 +11,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -22,29 +21,29 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.fugitive.R
-import com.example.fugitive.Screen
+import com.example.fugitive.navigation.Screen
 import com.example.fugitive.components.book.BookItem
 import com.example.fugitive.components.book.BookPlaceholder
 import com.example.fugitive.components.book.FeaturedBook
 import com.example.fugitive.components.HeadingText
-import com.example.fugitive.components.SearchBar
-import com.example.fugitive.components.TopReaderItem
-import com.example.fugitive.repository.UserRepository
+import com.example.fugitive.components.inputs.SearchBar
+import com.example.fugitive.components.cards.TopReaderItem
 import com.example.fugitive.ui.theme.FugitiveColors
-import com.example.fugitive.viewmodel.BookViewModel
-import com.example.fugitive.viewmodel.UserViewModel
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
-import org.koin.androidx.compose.koinViewModel
+import com.example.fugitive.viewmodels.BookViewModel
+import com.example.fugitive.viewmodels.UserViewModel
 
 @Composable
-fun HomeScreen( navController: NavController, userViewModel: UserViewModel) {
+fun HomeScreen( navController: NavController, userViewModel: UserViewModel, bookViewModel: BookViewModel) {
 
     val bookId = "xZnFI313LDGliqNPxNWh"
     val isBookmarked = remember { mutableStateOf(false) }
+    val bookDetails by bookViewModel.bookDetails.observeAsState()
+    
+    LaunchedEffect(bookId) {
+        bookViewModel.loadBookData(bookId)
+    }
 
 
     Column(
@@ -98,33 +97,19 @@ fun HomeScreen( navController: NavController, userViewModel: UserViewModel) {
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        HeadingText("Trending Books", modifier = Modifier.fillMaxWidth().align(Alignment.Start))
-
-        Spacer(modifier = Modifier.height(24.dp))
-        /*
-
         bookDetails?.let { book ->
-            println("Displaying Featured Book: ${book.metadata.title}, Image URI: ${book.coverImageUri}")
             FeaturedBook(
                 title = book.metadata.title,
                 author = book.metadata.author,
                 description = book.metadata.description,
-                genres = book.metadata.genres,
                 imageUri = book.coverImageUri?.toString(),
                 isBookmarked = isBookmarked.value,
                 onReadClick = { navController.navigate(Screen.BookDetail.route) },
-                onBookmarkToggle = {
-                    if (isBookmarked.value) {
-                        userViewModel.removeBookmark(bookId)
-                    } else {
-                        userViewModel.addBookmark(bookId)
-                    }
-                }
+                onBookmarkToggle = {}
             )
-        } ?: BookPlaceholder()
-         */
-
-
+        } ?: run {
+            BookPlaceholder()
+        }
 
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -173,7 +158,10 @@ fun HomeScreen( navController: NavController, userViewModel: UserViewModel) {
 
         Spacer(modifier = Modifier.height(40.dp))
 
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
+        Row(modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+            horizontalArrangement = Arrangement.SpaceEvenly) {
             TopReaderItem(
                 name = "Sung Jin Woo",
                 pagesRead = 451,

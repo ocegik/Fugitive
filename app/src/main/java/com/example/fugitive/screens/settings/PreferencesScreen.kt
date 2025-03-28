@@ -1,4 +1,4 @@
-package com.example.fugitive.screens.home
+package com.example.fugitive.screens.settings
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -12,8 +12,9 @@ import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import com.example.fugitive.components.button.BackButton
 import com.example.fugitive.ui.theme.FugitiveColors
+
 @Composable
-fun NotificationsScreen(navController: NavController) {
+fun PreferencesScreen(navController: NavController) {
     Box(
         modifier = Modifier
             .fillMaxSize()

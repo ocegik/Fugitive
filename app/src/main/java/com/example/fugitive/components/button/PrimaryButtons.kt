@@ -41,19 +41,20 @@ fun FugitivePrimaryButton(
     text: String,
     colors: ButtonColors = ButtonDefaults.buttonColors(
         containerColor = FugitiveColors.button,
-        contentColor = FugitiveColors.buttonText // Default text color
+        contentColor = FugitiveColors.buttonText
     ),
     shape: Shape = RoundedCornerShape(12.dp),
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+        .fillMaxWidth()  // Full width
+        .height(60.dp)   // Bigger button
 ) {
     Button(
         onClick = onClick,
         colors = colors,
         shape = shape,
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(50.dp)
+        modifier = modifier
     ) {
-        Text(text, color = colors.contentColor) // ✅ Fix: Use colors.contentColor
+        Text(text, color = colors.contentColor)
     }
 }

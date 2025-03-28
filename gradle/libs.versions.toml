@@ -1,6 +1,7 @@
 [versions]
 accompanistFlowlayout = "0.30.1"
 accompanistFlowlayoutVersion = "0.31.1-alpha"
+accompanistNavigationAnimation = "0.32.0"
 accompanistPlaceholder = "0.32.0"
 accompanistPlaceholderMaterial3 = "0.31.2-alpha"
 agp = "8.8.2"
@@ -54,6 +55,7 @@ androidx-ui-text-google-fonts-v178 = { module = "androidx.compose.ui:ui-text-goo
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
 firebase-storage-ktx = { module = "com.google.firebase:firebase-storage-ktx", version.ref = "firebaseStorageKtx" }
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
+google-accompanist-navigation-animation = { module = "com.google.accompanist:accompanist-navigation-animation", version.ref = "accompanistNavigationAnimation" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }

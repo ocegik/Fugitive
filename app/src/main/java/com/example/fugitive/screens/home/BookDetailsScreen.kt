@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import com.example.fugitive.R
-import com.example.fugitive.Screen
+import com.example.fugitive.navigation.Screen
 import com.example.fugitive.components.button.BackButton
 import com.example.fugitive.components.BookDetailsRow
 import com.example.fugitive.components.button.FugitivePrimaryButton
@@ -48,6 +48,7 @@ fun BookDetailsScreen(
             .fillMaxSize()
             .background(FugitiveColors.background)
             .verticalScroll(rememberScrollState())
+            .navigationBarsPadding()
     ) {
         Image(
             painter = painterResource(id = R.drawable.book_cover_placeholder),
@@ -99,7 +100,7 @@ fun BookDetailsScreen(
                     .clip(shape = androidx.compose.foundation.shape.RoundedCornerShape(8.dp))
 
             )
-            Spacer(modifier = Modifier.height(60.dp))
+            Spacer(modifier = Modifier.height(40.dp))
 
             HeadingText(title, fontSize = 24)
 
@@ -107,11 +108,11 @@ fun BookDetailsScreen(
 
             Text(text = author, color = FugitiveColors.heading, fontSize = 16.sp, fontWeight = FontWeight.Bold)
 
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(28.dp))
 
             BookDetailsRow(chapters = chapters, year = year, wordCount = wordCount)
 
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(28.dp))
 
             Text(
                 text = description,
@@ -129,7 +130,8 @@ fun BookDetailsScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 12.dp)
-                ,
+                    .navigationBarsPadding() // Prevents overlap with nav bar
+                    .imePadding(),  // Extra padding for soft keyboard or nav bar
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ){
                 //CustomBookmarkButton(isBookmarked)
@@ -138,7 +140,7 @@ fun BookDetailsScreen(
             }
 
 
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(40.dp))
 
         }
     }

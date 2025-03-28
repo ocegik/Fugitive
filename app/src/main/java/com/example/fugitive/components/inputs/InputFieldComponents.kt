@@ -1,4 +1,4 @@
-package com.example.fugitive.components
+package com.example.fugitive.components.inputs
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardOptions

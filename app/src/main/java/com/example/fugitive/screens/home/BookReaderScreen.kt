@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.fugitive.Screen
+import com.example.fugitive.navigation.Screen
 import com.example.fugitive.ui.theme.FugitiveColors
 
 @Composable
