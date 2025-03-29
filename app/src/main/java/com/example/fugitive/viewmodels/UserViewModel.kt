@@ -3,9 +3,13 @@ package com.example.fugitive.viewmodels
 import androidx.lifecycle.ViewModel
 import com.example.fugitive.data.local.UserPreferences
 import com.example.fugitive.repository.UserRepository
+import kotlinx.coroutines.flow.StateFlow
 
 
 class UserViewModel(private val userRepository: UserRepository, private val userPreferences: UserPreferences) : ViewModel() {
+
+    val userTheme: StateFlow<String> = userPreferences.themeFlow
+
 
     fun saveUserTheme(mode: String) {
         userPreferences.setThemeMode(mode)

@@ -18,7 +18,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.zIndex
-import com.example.fugitive.navigation.Screen
 import com.example.fugitive.components.*
 import com.example.fugitive.components.button.BackButton
 import com.example.fugitive.components.button.FugitivePrimaryButton
@@ -30,16 +29,6 @@ import com.example.fugitive.viewmodels.AuthViewModel
 @Composable
 fun SignUpScreen(navController: NavController, authViewModel: AuthViewModel) {
     val context = LocalContext.current
-    val authState by authViewModel.authState.collectAsState()
-
-    // ✅ Automatically navigate when user is signed up
-    LaunchedEffect(authState) {
-        authState?.let {
-            navController.navigate(Screen.Home.route) {
-                popUpTo(Screen.Login.route) { inclusive = true }
-            }
-        }
-    }
     Box(
         modifier = Modifier
             .fillMaxSize()

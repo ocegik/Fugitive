@@ -22,6 +22,10 @@ sealed class Screen(val route: String) {
     data object SavedQuotes : Screen("SavedQuotes")
     data object Help : Screen("Help")
     data object EditProfile : Screen("EditProfile")
+    data object OnBoardingIntro : Screen("OnBoardingIntro")
+    data object OnBoardingFeatures : Screen("OnBoardingFeatures")
+    data object OnBoardingFinal : Screen("OnBoardingFinal")
+
 
 
 }

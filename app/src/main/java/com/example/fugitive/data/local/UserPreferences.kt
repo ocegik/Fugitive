@@ -1,6 +1,9 @@
 package com.example.fugitive.data.local
 
 import android.content.SharedPreferences
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 class UserPreferences(private val sharedPreferences: SharedPreferences) {
 
@@ -10,9 +13,12 @@ class UserPreferences(private val sharedPreferences: SharedPreferences) {
         private const val KEY_READER_THEME = "reader_theme"
         private const val KEY_FONT_STYLE = "font_style"
     }
+    private val _themeFlow = MutableStateFlow(getThemeMode())
+    val themeFlow: StateFlow<String> = _themeFlow.asStateFlow()
 
     fun setThemeMode(mode: String) {
         sharedPreferences.edit().putString(KEY_THEME_MODE, mode).apply()
+        _themeFlow.value = mode // Notify observers about the change
     }
 
     fun getThemeMode(): String {
