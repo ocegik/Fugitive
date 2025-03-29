@@ -10,8 +10,11 @@ import com.example.fugitive.data.local.UserPreferences
 fun FugitiveTheme(content: @Composable () -> Unit) {
     val userPreferences: UserPreferences = koinInject()
 
-    val darkTheme by produceState(initialValue = isSystemInDarkTheme()) {
-        value = userPreferences.getThemeMode() == "dark"
+    val themeMode by userPreferences.themeFlow.collectAsState()
+    val darkTheme = when (themeMode) {
+        "dark" -> true
+        "light" -> false
+        else -> isSystemInDarkTheme() // "system" or any invalid value
     }
 
     val colors = if (darkTheme) DarkColorScheme else LightColorScheme

@@ -63,14 +63,14 @@ fun ProfileScreen(navController: NavController) {
         Spacer(modifier = Modifier.height(20.dp))
         Row(
             modifier = Modifier.
-            padding(15.dp),
+            padding(horizontal = 30.dp, vertical = 5.dp),
             horizontalArrangement = Arrangement.spacedBy(20.dp)
         ){
             Image(
                 painter = painterResource(id = R.drawable.user_placeholder),
                 contentDescription = "Profile Picture",
                 modifier = Modifier
-                    .size(100.dp)
+                    .size(80.dp)
                     .clip(CircleShape)
 
             )
@@ -78,10 +78,10 @@ fun ProfileScreen(navController: NavController) {
         }
 
 
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(20.dp))
         Row(
-            modifier = Modifier.
-            padding(15.dp),
+            modifier = Modifier
+                .padding(10.dp),
             horizontalArrangement = Arrangement.spacedBy(20.dp)
         ){
             StatCard(icon = Icons.Default.Star, value = "10", label = "Books Finished")

@@ -19,6 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+
 @Composable
 fun StatCard(icon: ImageVector, value: String, label: String) {
     Column(
@@ -28,7 +29,7 @@ fun StatCard(icon: ImageVector, value: String, label: String) {
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
+            horizontalArrangement = Arrangement.Center,
         ){
             Icon(
                 imageVector = icon,
@@ -36,7 +37,8 @@ fun StatCard(icon: ImageVector, value: String, label: String) {
                 tint = Color.White,
                 modifier = Modifier.size(24.dp)
             )
-            Spacer(modifier = Modifier.width(12.dp))
+            Spacer(modifier = Modifier.width(8.dp))
+
             Text(
                 text = value,
                 fontSize = 24.sp,

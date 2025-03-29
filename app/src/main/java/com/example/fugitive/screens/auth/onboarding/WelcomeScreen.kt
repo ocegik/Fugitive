@@ -1,4 +1,4 @@
-package com.example.fugitive.screens.auth
+package com.example.fugitive.screens.auth.onboarding
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*

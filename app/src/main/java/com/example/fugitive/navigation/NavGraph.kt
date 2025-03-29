@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.fugitive.screens.auth.WelcomeScreen
+import com.example.fugitive.screens.auth.onboarding.WelcomeScreen
 import com.example.fugitive.screens.auth.login.LoginScreen
 import com.example.fugitive.screens.auth.signup.SignUpScreen
 import com.example.fugitive.screens.home.HomeScreen
@@ -22,6 +22,9 @@ import com.example.fugitive.screens.auth.login.ForgotPassScreen
 import com.example.fugitive.screens.auth.login.ResetPassScreen
 import com.example.fugitive.screens.find.SearchScreen
 import com.example.fugitive.data.remote.FirebaseAuthService
+import com.example.fugitive.screens.auth.onboarding.OnBoardingIntroScreen
+import com.example.fugitive.screens.auth.onboarding.OnBoardingFeaturesScreen
+import com.example.fugitive.screens.auth.onboarding.OnBoardingFinalScreen
 import com.example.fugitive.screens.settings.AboutUsScreen
 import com.example.fugitive.screens.settings.EditProfileScreen
 import com.example.fugitive.screens.settings.HelpScreen
@@ -73,7 +76,14 @@ fun AppNavGraph(navController: NavHostController) {
         composable(Screen.SavedQuotes.route){ SavedQuotesScreen(navController) }
         composable(Screen.EditProfile.route) { EditProfileScreen(navController) }
         composable(Screen.Help.route) { HelpScreen(navController) }
-        composable(Screen.Preferences.route) { PreferencesScreen(navController) }
+        composable(Screen.Preferences.route) {
+            val userViewModel: UserViewModel = koinViewModel()
+            PreferencesScreen(navController, userViewModel)
+        }
+        composable(Screen.OnBoardingIntro.route) {OnBoardingIntroScreen(navController) }
+        composable(Screen.OnBoardingFeatures.route) {OnBoardingFeaturesScreen(navController) }
+        composable(Screen.OnBoardingFinal.route) {OnBoardingFinalScreen(navController) }
+
 
     }
 }

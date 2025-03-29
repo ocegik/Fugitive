@@ -55,7 +55,7 @@ class AuthViewModel(private val userRepository: UserRepository) : ViewModel() {
                 .onSuccess { user ->
                     _authState.value = user
                     Toast.makeText(context, "Sign-up successful!", Toast.LENGTH_SHORT).show()
-                    navController.navigate(Screen.Home.route) {
+                    navController.navigate(Screen.OnBoardingIntro.route) {
                         popUpTo(Screen.Login.route) { inclusive = true }
                     }
                 }
