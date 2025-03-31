@@ -33,63 +33,117 @@ class AuthViewModel(private val userRepository: UserRepository) : ViewModel() {
         }
     }
 
-    fun signUp(
-        navController: NavController,
-        context: Context
-    ) {
-        errorMessage = "" // Reset error
-
-        when {
-            name.isBlank() -> errorMessage = "Name cannot be empty."
-            email.isBlank() -> errorMessage = "Email cannot be empty."
-            password.isBlank() -> errorMessage = "Password cannot be empty."
-            password.length < 6 -> errorMessage = "Password must be at least 6 characters long."
-            !termsCond -> errorMessage = "You must agree to the Terms & Conditions."
-        }
-        if (errorMessage.isNotEmpty()) return
-
-        isLoading = true
-
-        viewModelScope.launch {
-            userRepository.signUp(name, email, password)
-                .onSuccess { user ->
-                    _authState.value = user
-                    Toast.makeText(context, "Sign-up successful!", Toast.LENGTH_SHORT).show()
-                    navController.navigate(Screen.OnBoardingIntro.route) {
-                        popUpTo(Screen.Login.route) { inclusive = true }
-                    }
-                }
-                .onFailure { e ->
-                    errorMessage = e.message ?: "Sign-up failed. Please try again."
-                }
-            isLoading = false
+    private fun validateInputs(checkName: Boolean = true): String {
+        return when {
+            checkName && name.isBlank() -> "Name cannot be empty."
+            email.isBlank() -> "Email cannot be empty."
+            password.isBlank() -> "Password cannot be empty."
+            password.length < 6 -> "Password must be at least 6 characters long."
+            checkName && !termsCond -> "You must agree to the Terms & Conditions."
+            else -> ""
         }
     }
 
-    fun signIn(
+        fun signUp(
+            navController: NavController,
+            context: Context
+        ) {
+            errorMessage = validateInputs()
+            if (errorMessage.isNotEmpty()) return
+
+            isLoading = true
+            viewModelScope.launch {
+                userRepository.signUp(name, email, password)
+                    .onSuccess { user ->
+                        _authState.value = user
+                        Toast.makeText(context, "Sign-up successful!", Toast.LENGTH_SHORT).show()
+                        navController.navigate(Screen.OnBoardingIntro.route) {
+                            popUpTo(Screen.Login.route) { inclusive = true }
+                        }
+                    }
+                    .onFailure { errorMessage = it.message ?: "Sign-up failed. Please try again." }
+                isLoading = false
+            }
+        }
+
+        fun signIn(
+            onSuccess: () -> Unit,
+            onError: (String) -> Unit
+        ) {
+            errorMessage = validateInputs(checkName = false)
+            if (errorMessage.isNotEmpty()) return
+
+            isLoading = true
+            viewModelScope.launch {
+                userRepository.signIn(email, password)
+                    .onSuccess { user ->
+                        _authState.value = user
+                        onSuccess()
+                    }
+                    .onFailure { onError(it.message ?: "Login failed. Please try again.") }
+                isLoading = false
+            }
+        }
+
+        fun signOut() {
+            viewModelScope.launch {
+                userRepository.logout()
+                _authState.value = null
+            }
+        }
+
+        fun signInWithGoogle(
+            idToken: String,
+            onSuccess: () -> Unit,
+            onError: (String) -> Unit
+        ) {
+            viewModelScope.launch {
+                userRepository.signInWithGoogle(idToken)
+                    .onSuccess { user ->
+                        _authState.value = user
+                        onSuccess()
+                    }
+                    .onFailure { e ->
+                        onError(e.message ?: "Google sign-in failed.")
+                    }
+            }
+        }
+        /*
+
+    fun signInWithFacebook(
+        accessToken: AccessToken,
         onSuccess: () -> Unit,
         onError: (String) -> Unit
     ) {
-        isLoading = true
-        errorMessage = ""
-
         viewModelScope.launch {
-            userRepository.signIn(email, password)
-                .onSuccess { user ->
-                    _authState.value = user
+            userRepository.signInWithFacebook(accessToken)
+                .onSuccess {
+                    _authState.value = it
                     onSuccess()
                 }
                 .onFailure { e ->
-                    onError(e.message ?: "Login failed. Please try again.")
+                    onError(e.message ?: "Facebook sign-in failed.")
                 }
-            isLoading = false
         }
     }
 
-    fun signOut() {
+    fun signInWithX(
+        accessToken: AccessToken,
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ){
         viewModelScope.launch {
-            userRepository.logout()
-            _authState.value = null
+            userRepository.signInWithX(accessToken)
+                .onSuccess {
+                    _authState.value = it
+                    onSuccess()
+                }
+                .onFailure { e ->
+                    onError(e.message ?: "X sign-in failed.")
+                }
         }
     }
+     */
+
+
 }

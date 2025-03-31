@@ -123,7 +123,7 @@ fun SignUpScreen(navController: NavController, authViewModel: AuthViewModel) {
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            SocialLoginRow()
+            SocialLoginRow(authViewModel)
 
             }
         }

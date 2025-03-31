@@ -37,7 +37,7 @@ import com.example.fugitive.viewmodels.UserViewModel
 @Composable
 fun HomeScreen( navController: NavController, userViewModel: UserViewModel, bookViewModel: BookViewModel) {
 
-    val bookId = "xZnFI313LDGliqNPxNWh"
+    val bookId = "V1hlHR4CvtPeoHEv6vWT"
     val isBookmarked = remember { mutableStateOf(false) }
     val bookDetails by bookViewModel.bookDetails.observeAsState()
     

@@ -8,6 +8,10 @@ agp = "8.8.2"
 coilCompose = "2.1.0"
 coilComposeVersion = "2.2.2"
 daggerCompiler = "2.50"
+facebookAndroidSdk = "[VERSION]"
+facebookLogin = "latest_version"
+firebaseAuthVersion = "22.3.0"
+firebaseBom = "33.11.0"
 firebaseStorageKtx = "21.0.1"
 glide = "4.14.2"
 hiltAndroid = "2.51.1"
@@ -36,6 +40,8 @@ r2Shared = "2.3.0"
 r2Streamer = "2.3.0"
 roomRuntime = "2.6.1"
 runtimeLivedata = "<compose_version>"
+twitter = "3.3.0"
+twitterCore = "3.3.0"
 ui = "1.7.8"
 uiTextGoogleFonts = "1.7.8"
 uiTextGoogleFontsVersion = "1.7.8"
@@ -53,6 +59,12 @@ androidx-runtime-livedata = { module = "androidx.compose.runtime:runtime-livedat
 androidx-ui-text-google-fonts = { module = "androidx.compose.ui:ui-text-google-fonts", version.ref = "uiTextGoogleFonts" }
 androidx-ui-text-google-fonts-v178 = { module = "androidx.compose.ui:ui-text-google-fonts", version.ref = "uiTextGoogleFontsVersion" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
+facebook-android-sdk = { module = "com.facebook.android:facebook-android-sdk", version.ref = "facebookAndroidSdk" }
+facebook-login = { module = "com.facebook.android:facebook-login", version.ref = "facebookLogin" }
+firebase-auth-ktx = { module = "com.google.firebase:firebase-auth-ktx" }
+firebase-auth-v2230 = { module = "com.google.firebase:firebase-auth", version.ref = "firebaseAuthVersion" }
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
+firebase-perf = { module = "com.google.firebase:firebase-perf" }
 firebase-storage-ktx = { module = "com.google.firebase:firebase-storage-ktx", version.ref = "firebaseStorageKtx" }
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
 google-accompanist-navigation-animation = { module = "com.google.accompanist:accompanist-navigation-animation", version.ref = "accompanistNavigationAnimation" }
@@ -76,6 +88,9 @@ koin-android = { module = "io.insert-koin:koin-android", version.ref = "koinAndr
 koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koinAndroidxCompose" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesAndroid" }
 material3 = { module = "androidx.compose.material3:material3", version.ref = "material3" }
+play-services-auth = { module = "com.google.android.gms:play-services-auth" }
+twitter = { module = "com.twitter.sdk.android:twitter", version.ref = "twitter" }
+twitter-core = { module = "com.twitter.sdk.android:twitter-core", version.ref = "twitterCore" }
 ui = { module = "androidx.compose.ui:ui", version.ref = "ui" }
 firebase-firestore-ktx = { group = "com.google.firebase", name = "firebase-firestore-ktx", version.ref = "firebaseFirestoreKtx" }
 androidx-tools-core = { group = "androidx.privacysandbox.tools", name = "tools-core", version.ref = "toolsCore" }

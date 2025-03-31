@@ -1,11 +1,23 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.google.gms.google.services)
     id("com.google.devtools.ksp")
+    id("com.google.firebase.firebase-perf")
+
 }
 
+val localProperties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.inputStream().use { localProperties.load(it) }
+}
+
+val webClientId: String = localProperties.getProperty("WEB_CLIENT_ID", "")
 
 android {
     namespace = "com.example.fugitive"
@@ -19,6 +31,7 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "WEB_CLIENT_ID", "\"$webClientId\"") // ✅ Add to BuildConfig
     }
 
     buildTypes {
@@ -28,6 +41,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            buildConfigField("String", "WEB_CLIENT_ID", "\"$webClientId\"")
         }
     }
     compileOptions {
@@ -39,6 +53,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 dependencies {
@@ -54,14 +69,13 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview) // Preview support in Compose
     implementation(libs.androidx.material3) // Material Design 3 components
     implementation(libs.ui) // Additional UI components
-    implementation(libs.material3) // Another reference for Material 3 (possible duplicate)
 
     // Navigation
     implementation(libs.androidx.navigation.runtime.ktx) // Navigation runtime support
     implementation(libs.androidx.navigation.compose) // Jetpack Compose navigation
 
     // Firebase Services
-    implementation(libs.firebase.auth) // Firebase Authentication (if needed)
+    implementation(libs.firebase.auth.ktx)
     implementation(libs.firebase.firestore.ktx) // Firestore database integration
     implementation(libs.firebase.storage.ktx) // Firebase Storage for EPUB files
 
@@ -93,7 +107,6 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.androidx.runtime.livedata)
     implementation(libs.accompanist.placeholder)
-    implementation(libs.accompanist.flowlayout)
     implementation(libs.koin.android) // Koin for Android
     implementation(libs.koin.androidx.compose) // Koin for Jetpack Compose
 
@@ -101,6 +114,15 @@ dependencies {
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
     implementation(libs.google.accompanist.navigation.animation)
+    implementation(platform(libs.firebase.bom))
+
+    // Add the dependency for the Performance Monitoring library
+    // When using the BoM, you don't specify versions in Firebase library dependencies
+    implementation(libs.firebase.perf)
+
+    implementation(libs.play.services.auth)
+
+
 }
 
 
