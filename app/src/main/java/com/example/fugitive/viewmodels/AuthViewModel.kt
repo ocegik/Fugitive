@@ -9,13 +9,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.example.fugitive.navigation.Screen
-import com.example.fugitive.data.local.CachedUser
+import com.example.fugitive.data.local.LocalUser
+import com.example.fugitive.repository.AuthRepository
 import com.example.fugitive.repository.UserRepository
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 
-class AuthViewModel(private val userRepository: UserRepository) : ViewModel() {
+class AuthViewModel(private val authRepository: AuthRepository, private val userRepository: UserRepository) : ViewModel() {
     var name by mutableStateOf("")
     var email by mutableStateOf("")
     var password by mutableStateOf("")
@@ -24,8 +24,7 @@ class AuthViewModel(private val userRepository: UserRepository) : ViewModel() {
     var isLoading by mutableStateOf(false)
     var errorMessage by mutableStateOf("")
 
-    private val _authState = MutableStateFlow<CachedUser?>(null)
-    val authState: StateFlow<CachedUser?> = _authState
+    private val _authState = MutableStateFlow<LocalUser?>(null)
 
     init {
         viewModelScope.launch {
@@ -53,7 +52,7 @@ class AuthViewModel(private val userRepository: UserRepository) : ViewModel() {
 
             isLoading = true
             viewModelScope.launch {
-                userRepository.signUp(name, email, password)
+                authRepository.signUp(name, email, password)
                     .onSuccess { user ->
                         _authState.value = user
                         Toast.makeText(context, "Sign-up successful!", Toast.LENGTH_SHORT).show()
@@ -67,38 +66,42 @@ class AuthViewModel(private val userRepository: UserRepository) : ViewModel() {
         }
 
         fun signIn(
-            onSuccess: () -> Unit,
-            onError: (String) -> Unit
+            navController: NavController,
+            context: Context
         ) {
             errorMessage = validateInputs(checkName = false)
             if (errorMessage.isNotEmpty()) return
 
             isLoading = true
             viewModelScope.launch {
-                userRepository.signIn(email, password)
+                authRepository.signIn(email, password)
                     .onSuccess { user ->
                         _authState.value = user
-                        onSuccess()
+                        Toast.makeText(context, "Sign-up successful!", Toast.LENGTH_SHORT).show()
+                        navController.navigate(Screen.OnBoardingIntro.route) {
+                            popUpTo(Screen.Login.route) { inclusive = true }
+                        }
                     }
-                    .onFailure { onError(it.message ?: "Login failed. Please try again.") }
+                    .onFailure {errorMessage = it.message ?: "Login failed. Please try again." }
                 isLoading = false
             }
         }
 
-        fun signOut() {
-            viewModelScope.launch {
-                userRepository.logout()
-                _authState.value = null
+    fun signOut(context: Context) {
+        viewModelScope.launch {
+            authRepository.logout(context) {
+                _authState.value = null // Clear user state after logout
             }
         }
+    }
 
-        fun signInWithGoogle(
+    fun signInWithGoogle(
             idToken: String,
             onSuccess: () -> Unit,
             onError: (String) -> Unit
         ) {
             viewModelScope.launch {
-                userRepository.signInWithGoogle(idToken)
+                authRepository.signInWithGoogle(idToken)
                     .onSuccess { user ->
                         _authState.value = user
                         onSuccess()
@@ -108,42 +111,4 @@ class AuthViewModel(private val userRepository: UserRepository) : ViewModel() {
                     }
             }
         }
-        /*
-
-    fun signInWithFacebook(
-        accessToken: AccessToken,
-        onSuccess: () -> Unit,
-        onError: (String) -> Unit
-    ) {
-        viewModelScope.launch {
-            userRepository.signInWithFacebook(accessToken)
-                .onSuccess {
-                    _authState.value = it
-                    onSuccess()
-                }
-                .onFailure { e ->
-                    onError(e.message ?: "Facebook sign-in failed.")
-                }
-        }
-    }
-
-    fun signInWithX(
-        accessToken: AccessToken,
-        onSuccess: () -> Unit,
-        onError: (String) -> Unit
-    ){
-        viewModelScope.launch {
-            userRepository.signInWithX(accessToken)
-                .onSuccess {
-                    _authState.value = it
-                    onSuccess()
-                }
-                .onFailure { e ->
-                    onError(e.message ?: "X sign-in failed.")
-                }
-        }
-    }
-     */
-
-
 }

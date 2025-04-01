@@ -6,12 +6,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import com.example.fugitive.viewmodels.UserViewModel
+import com.example.fugitive.viewmodels.SettingsViewModel
 import java.util.Locale
 
 @Composable
-fun ThemeSelector(userViewModel: UserViewModel) {
-    val currentTheme by userViewModel.userTheme.collectAsState() // Get saved theme
+fun ThemeSelector(settingsViewModel: SettingsViewModel) {
+    val currentTheme by settingsViewModel.userTheme.collectAsState() // Get saved theme
 
     var selectedTheme by remember { mutableStateOf(currentTheme.replaceFirstChar {
         if (it.isLowerCase()) it.titlecase(
@@ -24,7 +24,7 @@ fun ThemeSelector(userViewModel: UserViewModel) {
         selectedOption = selectedTheme,
         onOptionSelected = { newTheme ->
             selectedTheme = newTheme
-            userViewModel.saveUserTheme(newTheme.lowercase()) // Save preference
+            settingsViewModel.saveUserTheme(newTheme.lowercase()) // Save preference
         }
     )
 }

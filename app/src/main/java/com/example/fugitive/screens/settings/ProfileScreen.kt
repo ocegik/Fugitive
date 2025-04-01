@@ -17,14 +17,18 @@ import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import com.example.fugitive.R
 import com.example.fugitive.navigation.Screen
 import com.example.fugitive.components.HeadingText
@@ -34,11 +38,38 @@ import com.example.fugitive.components.button.BackButton
 import com.example.fugitive.ui.theme.FugitiveColors
 import com.example.fugitive.viewmodels.AuthViewModel
 import com.example.fugitive.components.button.FugitivePrimaryButton
+import com.example.fugitive.viewmodels.UserViewModel
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun ProfileScreen(navController: NavController) {
+fun ProfileScreen(navController: NavController, userViewModel: UserViewModel) {
+
+    val user by userViewModel.user
     val authViewModel: AuthViewModel = koinViewModel()
+    val context = LocalContext.current
+    val userId = user?.uid
+
+    val animalToDrawableMap = mapOf(
+        "Lion" to R.drawable.lion,
+        "Owl" to R.drawable.owl,
+        "Sale" to R.drawable.sale,
+        "Koala" to R.drawable.koala,
+        "Zebra" to R.drawable.zebra,
+        "Dog" to R.drawable.dog,
+        "Camel" to R.drawable.camel,
+        "Hippo" to R.drawable.hippo
+    )
+
+    val profileImage = user?.let {
+        animalToDrawableMap[it.profilePicture] ?: R.drawable.user_placeholder
+    } ?: R.drawable.user_placeholder // Fallback to placeholder if user is null
+
+    LaunchedEffect(userId) {
+        userId?.let {
+            userViewModel.fetchUser(it) // ✅ Fetch only if userId is not null
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -66,15 +97,15 @@ fun ProfileScreen(navController: NavController) {
             padding(horizontal = 30.dp, vertical = 5.dp),
             horizontalArrangement = Arrangement.spacedBy(20.dp)
         ){
-            Image(
-                painter = painterResource(id = R.drawable.user_placeholder),
+            AsyncImage(
+                model = profileImage,
                 contentDescription = "Profile Picture",
                 modifier = Modifier
                     .size(80.dp)
                     .clip(CircleShape)
 
             )
-            HeadingText("Tarun Choudhary")
+            HeadingText(user?.name ?: "Guest")
         }
 
 
@@ -146,8 +177,8 @@ fun ProfileScreen(navController: NavController) {
                     .width(150.dp)
                     .height(45.dp),
                 onClick = {
-                    authViewModel.signOut()
-                    navController.navigate(Screen.Login.route) {
+                    authViewModel.signOut(context)
+                    navController.navigate(Screen.Welcome.route) {
                         popUpTo(Screen.Home.route) { inclusive = true } // Clears navigation stack
                     }
                 }

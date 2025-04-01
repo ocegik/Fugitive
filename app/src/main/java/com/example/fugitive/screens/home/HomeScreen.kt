@@ -1,6 +1,5 @@
 package com.example.fugitive.screens.home
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -22,6 +21,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import com.example.fugitive.R
 import com.example.fugitive.navigation.Screen
 import com.example.fugitive.components.book.BookItem
@@ -38,11 +38,31 @@ import com.example.fugitive.viewmodels.UserViewModel
 fun HomeScreen( navController: NavController, userViewModel: UserViewModel, bookViewModel: BookViewModel) {
 
     val bookId = "V1hlHR4CvtPeoHEv6vWT"
+    val user by userViewModel.user
     val isBookmarked = remember { mutableStateOf(false) }
     val bookDetails by bookViewModel.bookDetails.observeAsState()
+    val userId = user?.uid
+
+    val animalToDrawableMap = mapOf(
+        "Lion" to R.drawable.lion,
+        "Owl" to R.drawable.owl,
+        "Sale" to R.drawable.sale,
+        "Koala" to R.drawable.koala,
+        "Zebra" to R.drawable.zebra,
+        "Dog" to R.drawable.dog,
+        "Camel" to R.drawable.camel,
+        "Hippo" to R.drawable.hippo
+    )
+
+    val profileImage = user?.let {
+        animalToDrawableMap[it.profilePicture] ?: R.drawable.user_placeholder
+    } ?: R.drawable.user_placeholder // Fallback to placeholder if user is null
     
-    LaunchedEffect(bookId) {
+    LaunchedEffect(bookId, userId) {
         bookViewModel.loadBookData(bookId)
+        userId?.let {
+            userViewModel.fetchUser(it) // ✅ Fetch only if userId is not null
+        }
     }
 
 
@@ -62,8 +82,8 @@ fun HomeScreen( navController: NavController, userViewModel: UserViewModel, book
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.user_placeholder),
+            AsyncImage(
+                model = profileImage,
                 contentDescription = "Profile Picture",
                 modifier = Modifier
                     .size(32.dp)

@@ -25,6 +25,7 @@ sealed class Screen(val route: String) {
     data object OnBoardingIntro : Screen("OnBoardingIntro")
     data object OnBoardingFeatures : Screen("OnBoardingFeatures")
     data object OnBoardingFinal : Screen("OnBoardingFinal")
+    data object PfpSelect : Screen("PfpSelect")
 
 
 

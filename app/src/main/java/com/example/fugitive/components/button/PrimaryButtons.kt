@@ -29,7 +29,7 @@ fun FugitiveOutlineButton(
         shape = shape,
         modifier = Modifier
             .fillMaxWidth()
-            .height(50.dp),
+            .height(60.dp),
         border = BorderStroke(2.dp, borderColor) // Explicit border definition
     ) {
         Text(text = text, color = textColor)

@@ -1,4 +1,3 @@
 package com.example.fugitive.viewmodels
 
-class NetworkViewModel {
-}
+class NetworkViewModel

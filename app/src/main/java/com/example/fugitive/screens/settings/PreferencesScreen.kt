@@ -20,10 +20,10 @@ import com.example.fugitive.components.button.BackButton
 import com.example.fugitive.components.layout.ScreenTitle
 import com.example.fugitive.components.layout.SectionHeader
 import com.example.fugitive.ui.theme.FugitiveColors
-import com.example.fugitive.viewmodels.UserViewModel
+import com.example.fugitive.viewmodels.SettingsViewModel
 
 @Composable
-fun PreferencesScreen(navController: NavController, userViewModel: UserViewModel) {
+fun PreferencesScreen(navController: NavController, settingsViewModel: SettingsViewModel) {
 
     Box(
         modifier = Modifier
@@ -59,7 +59,7 @@ fun PreferencesScreen(navController: NavController, userViewModel: UserViewModel
             )
             Spacer(modifier = Modifier.height(20.dp))
 
-            ThemeSelector(userViewModel)
+            ThemeSelector(settingsViewModel)
             Spacer(modifier = Modifier.height(30.dp))
 
             SectionHeader("Reading Experience")
@@ -72,7 +72,7 @@ fun PreferencesScreen(navController: NavController, userViewModel: UserViewModel
                 color = FugitiveColors.heading
             )
             Spacer(modifier = Modifier.height(20.dp))
-            FontSizeSelector(userViewModel)
+            FontSizeSelector(settingsViewModel)
 
             Spacer(modifier = Modifier.height(20.dp))
             Text(
@@ -82,7 +82,7 @@ fun PreferencesScreen(navController: NavController, userViewModel: UserViewModel
             )
             Spacer(modifier = Modifier.height(20.dp))
 
-            FontSelector(userViewModel)
+            FontSelector(settingsViewModel)
 
             Spacer(modifier = Modifier.height(20.dp))
 
@@ -94,7 +94,7 @@ fun PreferencesScreen(navController: NavController, userViewModel: UserViewModel
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            ReaderThemeSelector(userViewModel)
+            ReaderThemeSelector(settingsViewModel)
 
             Spacer(modifier = Modifier.height(30.dp))
 

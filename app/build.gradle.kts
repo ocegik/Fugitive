@@ -1,4 +1,3 @@
-import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
@@ -7,17 +6,7 @@ plugins {
     alias(libs.plugins.google.gms.google.services)
     id("com.google.devtools.ksp")
     id("com.google.firebase.firebase-perf")
-
 }
-
-val localProperties = Properties()
-val localPropertiesFile = rootProject.file("local.properties")
-
-if (localPropertiesFile.exists()) {
-    localPropertiesFile.inputStream().use { localProperties.load(it) }
-}
-
-val webClientId: String = localProperties.getProperty("WEB_CLIENT_ID", "")
 
 android {
     namespace = "com.example.fugitive"
@@ -31,7 +20,6 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField("String", "WEB_CLIENT_ID", "\"$webClientId\"") // ✅ Add to BuildConfig
     }
 
     buildTypes {
@@ -41,7 +29,6 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            buildConfigField("String", "WEB_CLIENT_ID", "\"$webClientId\"")
         }
     }
     compileOptions {
@@ -53,7 +40,6 @@ android {
     }
     buildFeatures {
         compose = true
-        buildConfig = true
     }
 }
 dependencies {
@@ -81,7 +67,6 @@ dependencies {
 
     // Fonts & Styling
     implementation(libs.androidx.ui.text.google.fonts) // Google Fonts integration
-    implementation(libs.androidx.ui.text.google.fonts.v178) // Specific version of Google Fonts
     implementation(libs.accompanist.flowlayout) // Accompanist Flow Layout for Compose
 
     // Coroutines for Asynchronous Tasks
@@ -119,8 +104,10 @@ dependencies {
     // Add the dependency for the Performance Monitoring library
     // When using the BoM, you don't specify versions in Firebase library dependencies
     implementation(libs.firebase.perf)
-
-    implementation(libs.play.services.auth)
+    implementation(libs.gms.play.services.auth)
+    implementation(libs.androidx.credentials)
+    implementation(libs.credentials.play.services.auth)
+    implementation(libs.googleid)
 
 
 }

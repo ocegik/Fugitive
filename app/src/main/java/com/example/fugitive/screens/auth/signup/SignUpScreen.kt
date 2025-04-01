@@ -54,10 +54,14 @@ fun SignUpScreen(navController: NavController, authViewModel: AuthViewModel) {
         )
         {
 
-            Spacer(modifier = Modifier.height(100.dp))
+            Spacer(modifier = Modifier.height(60.dp))
 
 
-            HeadingText("Create Account", modifier = Modifier.fillMaxWidth().align(Alignment.Start))
+            HeadingText("Create Account",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.Start)
+            )
 
             Spacer(modifier = Modifier.height(8.dp))
 
@@ -83,11 +87,11 @@ fun SignUpScreen(navController: NavController, authViewModel: AuthViewModel) {
                 modifier = Modifier.fillMaxWidth()
             )
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
             EmailInputField(email = authViewModel.email, onEmailChange = { authViewModel.email = it })
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
             PassInputField(
                 password = authViewModel.password,
@@ -95,13 +99,15 @@ fun SignUpScreen(navController: NavController, authViewModel: AuthViewModel) {
             )
 
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
             TermsCheckbox(
                 isChecked = authViewModel.termsCond,
                 onCheckedChange = { authViewModel.termsCond = it },
                 navController = navController
             )
+
+            Spacer(modifier = Modifier.height(20.dp))
 
             if (authViewModel.isLoading) {
                 CircularProgressIndicator()
@@ -117,11 +123,9 @@ fun SignUpScreen(navController: NavController, authViewModel: AuthViewModel) {
                 )
             }
 
-            Spacer(modifier = Modifier.height(30.dp))
 
-            Text("Or Sign Up With", color = FugitiveColors.subheading)
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
             SocialLoginRow(authViewModel)
 

@@ -47,7 +47,7 @@ fun OnBoardingFeaturesScreen(navController: NavController) {
             FugitivePrimaryButton(
                 text = "Get Started",
                 onClick = {
-                    navController.navigate(Screen.OnBoardingFinal.route)
+                    navController.navigate(Screen.PfpSelect.route)
                 }
             )
             Spacer(modifier = Modifier.height(50.dp))

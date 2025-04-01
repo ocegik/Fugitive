@@ -1,4 +1,3 @@
 package com.example.fugitive.data.local.session
 
-class NetworkManager {
-}
+class NetworkManager

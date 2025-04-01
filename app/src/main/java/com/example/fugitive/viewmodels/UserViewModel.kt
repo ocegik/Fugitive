@@ -1,46 +1,43 @@
 package com.example.fugitive.viewmodels
 
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import com.example.fugitive.data.local.UserPreferences
+import androidx.lifecycle.viewModelScope
+import com.example.fugitive.data.remote.UserMetadata
 import com.example.fugitive.repository.UserRepository
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 
 
-class UserViewModel(private val userRepository: UserRepository, private val userPreferences: UserPreferences) : ViewModel() {
+class UserViewModel(private val userRepository: UserRepository) : ViewModel() {
 
-    val userTheme: StateFlow<String> = userPreferences.themeFlow
+    private val _user = mutableStateOf<UserMetadata?>(null)
+    val user: State<UserMetadata?> get() = _user
 
-
-    fun saveUserTheme(mode: String) {
-        userPreferences.setThemeMode(mode)
+    fun fetchUser(userId: String) {
+        viewModelScope.launch {
+            val userData = userRepository.getUserData(userId).getOrNull()
+            _user.value = userData // ✅ Store in ViewModel (avoids re-fetching)
+        }
     }
 
-    fun getUserTheme(): String {
-        return userPreferences.getThemeMode()
+    // 🔹 Update both Name & Profile Picture (Firestore)
+    fun updateUserData(userId: String, name: String? = null, profilePic: String? = null) {
+        viewModelScope.launch {
+            userRepository.updateUserData(userId, name, profilePic)
+
+            // ✅ Update UI immediately for smoother UX
+            _user.value = _user.value?.copy(
+                name = name ?: _user.value?.name?: "",
+                profilePicture = profilePic ?: _user.value?.profilePicture?: ""
+            )
+        }
+    }
+    suspend fun getUserId(): String? {
+        return userRepository.getCurrentUser()?.userId
     }
 
-    fun saveFontSize(size: Int) {
-        userPreferences.setFontSize(size)
-    }
-
-    fun getFontSize(): Int {
-        return userPreferences.getFontSize()
-    }
-
-    // 🚀 Reader-specific settings (store them but don't use them yet)
-    fun saveReaderTheme(theme: String) {
-        userPreferences.setReaderTheme(theme)
-    }
-
-    fun getReaderTheme(): String {
-        return userPreferences.getReaderTheme()
-    }
-
-    fun saveFontStyle(style: String) {
-        userPreferences.setFontStyle(style)
-    }
-
-    fun getFontStyle(): String {
-        return userPreferences.getFontStyle()
-    }
+    // 🔹 Get Safe Values for UI
+    fun getUserName(): String = _user.value?.name ?: "Guest"
+    fun getUserPfp(): String = _user.value?.profilePicture ?: "lion"
 }

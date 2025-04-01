@@ -1,7 +1,7 @@
 package com.example.fugitive.data.remote
 
-import com.example.fugitive.data.local.CachedUser
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 import kotlinx.coroutines.tasks.await
 
 class FirestoreService(private val firestore: FirebaseFirestore) {
@@ -22,20 +22,32 @@ class FirestoreService(private val firestore: FirebaseFirestore) {
             Result.failure(e)
         }
     }
-    suspend fun getUserData(userId: String): Result<CachedUser> {
+    suspend fun getUserData(userId: String): Result<UserMetadata> {
         return try {
             val document = firestore.collection("users").document(userId).get().await()
-            val user = document.toObject(CachedUser::class.java)
-            if (user != null) {
-                Result.success(user)
+            if (document.exists()) {
+                document.toObject(UserMetadata::class.java)?.let { user ->
+                    println("Parsed UserMetadata: $user")
+                    Result.success(user)
+                } ?: Result.failure(Exception("User data is missing or invalid"))
             } else {
-                Result.failure(Exception("User not found"))
+                Result.failure(Exception("User document does not exist"))
             }
         } catch (e: Exception) {
+            println("Failed to fetch user data: ${e.message}")
             Result.failure(e)
         }
     }
+
+    suspend fun updateUserData(userId: String, userMetadata: UserMetadata) {
+        firestore.collection("users").document(userId)
+            .set(userMetadata, SetOptions.merge())
+            .await()
+    }
+
+
 }
+
 
 data class BookMetadata(
     val title: String = "",
@@ -46,4 +58,11 @@ data class BookMetadata(
     val language: String = "",
     val publishYear: Int = 0,
     val genres: List<String> = emptyList()
+)
+
+data class UserMetadata(
+    val uid: String = "",
+    val name: String = "",
+    val email: String = "",
+    val profilePicture: String = "",
 )

@@ -1,19 +1,15 @@
 package com.example.fugitive.components
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import com.example.fugitive.viewmodels.UserViewModel
+import com.example.fugitive.viewmodels.SettingsViewModel
 
 @Composable
-fun ReaderThemeSelector(userViewModel: UserViewModel) {
-    var selectedTheme by remember { mutableStateOf(userViewModel.getReaderTheme()) }
+fun ReaderThemeSelector(settingsViewModel: SettingsViewModel) {
+    var selectedTheme by remember { mutableStateOf(settingsViewModel.getReaderTheme()) }
 
     SegmentedControl(
         options = listOf("Light", "Dark", "Sepia"
@@ -21,7 +17,7 @@ fun ReaderThemeSelector(userViewModel: UserViewModel) {
         selectedOption = selectedTheme,
         onOptionSelected = { newTheme ->
             selectedTheme = newTheme
-            userViewModel.saveReaderTheme(newTheme.lowercase()) // Save preference
+            settingsViewModel.saveReaderTheme(newTheme.lowercase()) // Save preference
         }
     )
 }

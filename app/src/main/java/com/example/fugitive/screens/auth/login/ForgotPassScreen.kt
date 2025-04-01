@@ -29,14 +29,14 @@ fun ForgotPassScreen(navController: NavController) {
         modifier = Modifier
             .fillMaxSize()
             .background(FugitiveColors.background)
+            .padding(WindowInsets.statusBars.asPaddingValues())
     ) {
         // Back Button - Ensuring it's visible and on top
         BackButton(
             modifier = Modifier
-                .size(85.dp)  // Bigger and easier to tap
                 .align(Alignment.TopStart) // Ensures it's on the top-left
-                .padding(start = 0.dp, top = 30.dp)
-                .zIndex(1f) // Makes sure it stays on top
+                .padding(start = 15.dp, top = 15.dp)
+                .zIndex(2f) // Makes sure it stays on top
         ) {
             navController.popBackStack()
         }

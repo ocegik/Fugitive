@@ -1,13 +1,9 @@
 package com.example.fugitive.data.remote
 
 import android.content.Context
-import android.content.Intent
-import com.example.fugitive.R
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.firebase.auth.FacebookAuthProvider
+import android.util.Log
+import com.example.fugitive.utils.getGoogleSignInClient
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
@@ -44,7 +40,16 @@ class FirebaseAuthService(
         auth.signInWithEmailAndPassword(email, password).await().user
     }.getOrElse { throw mapAuthException(it) }
 
-    fun signOut() = auth.signOut()
+    fun signOut(context: Context, onSignOutComplete: () -> Unit) {
+        val googleSignInClient = getGoogleSignInClient(context)
+
+        googleSignInClient.signOut().addOnCompleteListener {
+            FirebaseAuth.getInstance().signOut() // Firebase sign out
+            onSignOutComplete() // Callback to update UI
+        }.addOnFailureListener { e ->
+            Log.e("Auth", "Google Sign-Out failed: ${e.message}")
+        }
+    }
 
     fun getCurrentUser(): FirebaseUser? = auth.currentUser
 
@@ -63,51 +68,28 @@ class FirebaseAuthService(
         return Exception(errorMessages.entries.find { e.message?.contains(it.key) == true }?.value ?: "An error occurred.")
     }
 
-
-
-    fun getGoogleSignInIntent(context: Context): Intent {
-        val googleSignInClient = GoogleSignIn.getClient(
-            context,
-            GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(context.getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build()
-        )
-        return googleSignInClient.signInIntent
-    }
-
     suspend fun firebaseAuthWithGoogle(idToken: String): FirebaseUser? {
         return try {
             val credential = GoogleAuthProvider.getCredential(idToken, null)
             val result = auth.signInWithCredential(credential).await()
-            result.user
+            val user = result.user
+
+            user?.let {
+                val userDoc = firestore.collection("users").document(it.uid).get().await()
+                if (!userDoc.exists()) { // Check if user already exists
+                    val userMap = mapOf(
+                        "uid" to it.uid,
+                        "name" to (it.displayName ?: "New User"),
+                        "email" to (it.email ?: ""),
+                        "createdAt" to System.currentTimeMillis()
+                    )
+                    firestore.collection("users").document(it.uid).set(userMap).await()
+                }
+            }
+
+            user
         } catch (e: Exception) {
             throw Exception("Google sign-in failed.")
         }
     }
-    /*
-
-    suspend fun firebaseAuthWithFacebook(accessToken: AccessToken): FirebaseUser? {
-        return try {
-            val credential = FacebookAuthProvider.getCredential(accessToken.token)
-            val result = auth.signInWithCredential(credential).await()
-            result.user
-        } catch (e: Exception) {
-            throw Exception("Facebook sign-in failed.")
-        }
-    }
-
-
-    suspend fun firebaseAuthWithX(accessToken: AccessToken): FirebaseUser? {
-        return try {
-            val credential = FacebookAuthProvider.getCredential(accessToken.token)
-            val result = auth.signInWithCredential(credential).await()
-            result.user
-        } catch (e: Exception){
-            throw Exception("X sign-in failed.")
-        }
-    }
-
-     */
-
 }

@@ -5,8 +5,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.fugitive.navigation.AppNavGraph
 
 @Composable
-fun MyApp(){
+fun MyApp() {
     val navController = rememberNavController()
     AppNavGraph(navController)
-
 }

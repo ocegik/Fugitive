@@ -1,10 +1,11 @@
 package com.example.fugitive.repository
 
-import com.example.fugitive.data.local.CachedUser
+import com.example.fugitive.data.local.LocalUser
 import com.example.fugitive.data.local.UserDao
 import com.example.fugitive.data.remote.FirebaseAuthService
 import com.example.fugitive.data.remote.FirestoreService
 import com.example.fugitive.data.local.session.UserSessionManager
+import com.example.fugitive.data.remote.UserMetadata
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -13,90 +14,106 @@ class UserRepository(
     private val userDao: UserDao,  // ✅ Local Database
     private val firestoreService: FirestoreService,  // ✅ Firebase Firestore
     private val authService: FirebaseAuthService,  // ✅ Firebase Authentication
-    private val sessionManager: UserSessionManager
+    private val sessionManager: UserSessionManager,
 ) {
-    private fun FirebaseUser.toCachedUser(nameOverride: String? = null): CachedUser {
-        return CachedUser(
+
+
+    private fun FirebaseUser.toLocalUser(nameOverride: String? = null): LocalUser {
+        return LocalUser(
             userId = uid,
             name = nameOverride ?: displayName ?: "Unknown",
-            email = email ?: "",
-            profilePicUrl = photoUrl?.toString()
+            email = email ?: "no_email",
+            profilePicture = "lion"
         )
     }
 
-    suspend fun getCurrentUser(): CachedUser? = withContext(Dispatchers.IO) {
-        authService.getCurrentUser()?.toCachedUser()
-            ?: sessionManager.getUserId()?.let { userDao.getUser(it) }
+    private suspend fun saveUserData(user: LocalUser) = withContext(Dispatchers.IO) {
+        userDao.saveUser(user)  // ✅ Saves user in Room DB
+        sessionManager.setUserId(user.userId)  // ✅ Updates session
     }
 
-    suspend fun signIn(email: String, password: String): Result<CachedUser> =
+    suspend fun getLocalUser(): LocalUser? = withContext(Dispatchers.IO) {
+        sessionManager.getUserId()?.let { userDao.getUser(it) }
+    }
+
+    suspend fun createAndSaveLocalUser(
+        firebaseUser: FirebaseUser,
+        name: String? = null
+    ): LocalUser {
+        val localUser = firebaseUser.toLocalUser(name)
+        saveUserData(localUser)
+        return localUser
+    }
+
+    suspend fun getCurrentUser(): LocalUser? = withContext(Dispatchers.IO) {
+        val firebaseUser = authService.getCurrentUser()
+        if (firebaseUser != null) {
+            return@withContext firebaseUser.toLocalUser()
+        }
+
+        // Check local database
+        val userId = sessionManager.getUserId()
+        if (userId != null) {
+            return@withContext userDao.getUser(userId)
+        }
+
+        return@withContext null
+    }
+
+
+    suspend fun getUserData(userId: String): Result<UserMetadata> = withContext(Dispatchers.IO) {
+        val localUser = userDao.getUser(userId)
+        if (localUser != null) {
+            return@withContext Result.success(
+                UserMetadata(
+                    uid = localUser.userId,
+                    name = localUser.name,
+                    email = localUser.email,
+                    profilePicture = localUser.profilePicture
+                )
+            )
+        }
+
+        // Fetch from Firestore if local DB is empty
+        return@withContext firestoreService.getUserData(userId).onSuccess { userMetadata ->
+            val updatedUser = LocalUser(
+                userId = userMetadata.uid,
+                name = userMetadata.name,
+                email = userMetadata.email,
+                profilePicture = userMetadata.profilePicture
+            )
+            userDao.saveUser(updatedUser)  // ✅ Keep local database updated
+        }
+    }
+
+
+    // Update the user metadata object directly
+    suspend fun updateUserData(userId: String, name: String? = null, profilePic: String? = null) {
         withContext(Dispatchers.IO) {
-            runCatching {
-                val firebaseUser = authService.signIn(email, password)
-                    ?: throw Exception("Invalid email or password.")
+            val existingUser = userDao.getUser(userId) ?: return@withContext
 
-                firebaseUser.toCachedUser().also {
-                    userDao.saveUser(it)
-                    sessionManager.saveUser(firebaseUser)
-                }
-            }
-        }
+            // 🔥 Only update the changed fields
+            val updatedUser = LocalUser(
+                userId = userId,
+                name = name ?: existingUser.name,
+                email = existingUser.email,
+                profilePicture = profilePic ?: existingUser.profilePicture
+            )
 
-    suspend fun signUp(name: String, email: String, password: String): Result<CachedUser> =
-        withContext(Dispatchers.IO) {
-            runCatching {
-                val firebaseUser = authService.signUp(name, email, password)
-                    ?: throw Exception("Sign-up failed. Please try again.")
-
-                firebaseUser.toCachedUser(name).also {
-                    userDao.saveUser(it)
-                    sessionManager.saveUser(firebaseUser)
-                }
-            }
-        }
-
-    /**
-     * ✅ Logs out the user, clears session and local cache.
-     */
-    suspend fun logout() = withContext(Dispatchers.IO) {
-        authService.signOut()
-        sessionManager.logout()
-        userDao.clearUser()
-    }
-
-    suspend fun signInWithGoogle(idToken: String): Result<CachedUser> {
-        return withContext(Dispatchers.IO) {
-            runCatching {
-                val firebaseUser = authService.firebaseAuthWithGoogle(idToken)
-                    ?: throw Exception("Google sign-in failed.")
-
-                firebaseUser.toCachedUser().also {
-                    userDao.saveUser(it)
-                    sessionManager.saveUser(firebaseUser)
-                }
-            }
+            userDao.updateUser(
+                userId,
+                updatedUser.name,
+                updatedUser.profilePicture
+            )  // ✅ Update local DB
+            firestoreService.updateUserData(
+                userId,
+                UserMetadata(
+                    updatedUser.userId,
+                    updatedUser.name,
+                    updatedUser.email,
+                    updatedUser.profilePicture
+                )
+            )  // ✅ Update Firestore
         }
     }
-        /*
-
-    suspend fun signInWithFacebook(accessToken: AccessToken): Result<FirebaseUser> {
-        return try {
-            val user = firebaseAuthService.firebaseAuthWithFacebook(accessToken)
-            Result.success(user)
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
-    }
-
-    suspend fun signInWithX(accessToken: AccessToken): Result<FirebaseUser> {
-        return try {
-            val user = firebaseAuthService.firebaseAuthWithX(accessToken)
-            Result.success(user)
-        } catch (e: Exception){
-            Result.failure(e)
-        }
-    }
-     */
-
-
 }

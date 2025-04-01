@@ -1,6 +1,5 @@
 package com.example.fugitive.screens.auth.login
 
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -26,15 +25,6 @@ import com.example.fugitive.viewmodels.AuthViewModel
 @Composable
 fun LoginScreen(navController: NavController, authViewModel: AuthViewModel) {
     val context = LocalContext.current
-    val authState by authViewModel.authState.collectAsState()
-
-    LaunchedEffect(authState) {
-        authState?.let {
-            navController.navigate(Screen.Home.route) {
-                popUpTo(Screen.Login.route) { inclusive = true }
-            }
-        }
-    }
 
     Box(
         modifier = Modifier
@@ -59,7 +49,7 @@ fun LoginScreen(navController: NavController, authViewModel: AuthViewModel) {
                 .padding(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.height(100.dp))
+            Spacer(modifier = Modifier.height(60.dp))
 
             HeadingText(
                 "Welcome Back",
@@ -68,25 +58,25 @@ fun LoginScreen(navController: NavController, authViewModel: AuthViewModel) {
                     .align(Alignment.Start)
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(40.dp))
 
             SubheadingText("Enter your details below or continue with your social account")
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(30.dp))
 
             EmailInputField(
                 email = authViewModel.email,
                 onEmailChange = { authViewModel.email = it }
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
             PassInputField(
                 password = authViewModel.password,
                 onPasswordChange = { authViewModel.password = it }
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -123,22 +113,14 @@ fun LoginScreen(navController: NavController, authViewModel: AuthViewModel) {
                     text = "Login",
                     onClick = {
                         authViewModel.signIn(
-                            onSuccess = {
-                                Toast.makeText(context, "Login successful!", Toast.LENGTH_SHORT).show()
-                            },
-                            onError = { errorMessage ->
-                                authViewModel.errorMessage = errorMessage
-                            }
+                            navController = navController,
+                            context = context
                         )
                     }
                 )
             }
 
             Spacer(modifier = Modifier.height(20.dp))
-
-            Text("Or Continue With", color = FugitiveColors.subheading)
-
-            Spacer(modifier = Modifier.height(12.dp))
 
             SocialLoginRow(authViewModel)
         }

@@ -2,10 +2,8 @@ package com.example.fugitive.data.local.session
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.example.fugitive.data.local.CachedUser
 import com.example.fugitive.data.local.UserDao
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -17,38 +15,26 @@ class UserSessionManager(
 
     private val prefs: SharedPreferences = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
 
-    fun isUserLoggedIn(): Boolean {
-        return getUserId() != null
-    }
+    @Volatile  // Ensures thread safety
+    private var localUserId: String? = null
+
+    fun isUserLoggedIn(): Boolean = getUserId() != null
 
     fun getUserId(): String? {
-        return prefs.getString("user_id", null) ?: auth.currentUser?.uid
-    }
-
-    suspend fun saveUser(user: FirebaseUser) {
-        prefs.edit().putString("user_id", user.uid).apply()
-
-        val cachedUser = CachedUser(
-            userId = user.uid,
-            name = user.displayName ?: "Unknown",
-            email = user.email ?: "",
-            profilePicUrl = user.photoUrl?.toString()
-        )
-
-        withContext(Dispatchers.IO) {
-            userDao.saveUser(cachedUser)  // ✅ Save in Room DB
+        return localUserId ?: prefs.getString("user_id", null) ?: auth.currentUser?.uid.also {
+            localUserId = it  // Cache result to avoid repeated lookups
         }
     }
 
-    suspend fun getCachedUser(): CachedUser? {
-        return withContext(Dispatchers.IO) {
-            getUserId()?.let { userDao.getUser(it) }
-        }
+    fun setUserId(userId: String) {
+        localUserId = userId
+        prefs.edit().putString("user_id", userId).apply()
     }
 
     suspend fun logout() {
         auth.signOut()
+        localUserId = null  // Clear memory cache
         prefs.edit().remove("user_id").apply()
-        withContext(Dispatchers.IO) { userDao.clearUser() }  // ✅ Clear cached user
+        withContext(Dispatchers.IO) { userDao.clearUser() }  // Clear Room DB
     }
 }

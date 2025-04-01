@@ -5,11 +5,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import com.example.fugitive.viewmodels.SettingsViewModel
 import com.example.fugitive.viewmodels.UserViewModel
 
 @Composable
-fun FontSelector(userViewModel: UserViewModel) {
-    var selectedSize by remember { mutableStateOf(userViewModel.getFontSize().toString()) }
+fun FontSelector(settingsViewModel: SettingsViewModel) {
+    var selectedSize by remember { mutableStateOf(settingsViewModel.getFontSize().toString()) }
 
     SegmentedControl(
         options = listOf(
@@ -24,7 +25,7 @@ fun FontSelector(userViewModel: UserViewModel) {
                 "Large" -> 20
                 else -> 16
             }
-            userViewModel.saveFontSize(fontSize)
+            settingsViewModel.saveFontSize(fontSize)
         }
     )
 }

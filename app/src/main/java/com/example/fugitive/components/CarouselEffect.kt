@@ -108,7 +108,7 @@ fun DotsIndicator(size: Int, listState: LazyListState) {
         repeat(size) { index ->
             Box(
                 modifier = Modifier
-                    .size(12.dp) // Current dot is bigger
+                    .size(12.dp)
                     .background(
                         if (index == currentPage.value) Color.DarkGray else Color.LightGray,
                         shape = RoundedCornerShape(50)
