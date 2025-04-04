@@ -70,6 +70,11 @@ androidx-navigation-compose = { group = "androidx.navigation", name = "navigatio
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koinAndroid" }
 koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koinAndroidxCompose" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesAndroid" }
+readium-lcp = { module = "org.readium.kotlin-toolkit:readium-lcp" }
+readium-navigator = { module = "org.readium.kotlin-toolkit:readium-navigator" }
+readium-opds = { module = "org.readium.kotlin-toolkit:readium-opds" }
+readium-shared = { module = "org.readium.kotlin-toolkit:readium-shared" }
+readium-streamer = { module = "org.readium.kotlin-toolkit:readium-streamer" }
 ui = { module = "androidx.compose.ui:ui", version.ref = "ui" }
 firebase-firestore-ktx = { group = "com.google.firebase", name = "firebase-firestore-ktx", version.ref = "firebaseFirestoreKtx" }
 androidx-tools-core = { group = "androidx.privacysandbox.tools", name = "tools-core", version.ref = "toolsCore" }

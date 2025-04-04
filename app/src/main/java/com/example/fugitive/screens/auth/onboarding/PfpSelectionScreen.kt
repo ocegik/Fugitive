@@ -3,7 +3,6 @@ package com.example.fugitive.screens.auth.onboarding
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -26,13 +25,9 @@ fun PfpSelectScreen(navController: NavController, userViewModel: UserViewModel) 
 
     var selectedPfp by remember { mutableStateOf<String?>(null) }
     val coroutineScope = rememberCoroutineScope()
-
-    var userId by remember { mutableStateOf<String?>(null) }
+    val user by userViewModel.user
 
     // Launch a coroutine to fetch the cached user and update the userId
-    LaunchedEffect(Unit) {
-        userId = userViewModel.getUserId()
-    }
 
     Box(
         modifier = Modifier
@@ -54,20 +49,17 @@ fun PfpSelectScreen(navController: NavController, userViewModel: UserViewModel) 
 
             Spacer(modifier = Modifier.height(30.dp))
 
-
             FugitivePrimaryButton("Confirm & Continue", onClick = {
                 coroutineScope.launch {
-                    userId?.let { uid -> // ✅ Ensure userId is not null
+                    user?.let { currentUser -> // ✅ Ensure userId is not null
                         val profilePicture = selectedPfp ?: "default_pfp"
-                        userViewModel.updateUserData(uid, profilePicture)
+                        userViewModel.updateUserData(currentUser.uid, profilePic = profilePicture)
                     }
                 }
                 navController.navigate(Screen.OnBoardingFinal.route)
             })
             Spacer(modifier = Modifier.height(16.dp)) // Added spacing
-
         }
         Spacer(modifier = Modifier.height(50.dp))
-
     }
 }

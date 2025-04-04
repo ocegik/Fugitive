@@ -8,14 +8,18 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
+import com.example.fugitive.data.local.AuthPreferences
 import com.example.fugitive.navigation.Screen
 import com.example.fugitive.data.local.LocalUser
-import com.example.fugitive.repository.AuthRepository
-import com.example.fugitive.repository.UserRepository
+import com.example.fugitive.data.repository.AuthRepository
+import com.example.fugitive.data.repository.UserRepository
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.MutableStateFlow
 
-class AuthViewModel(private val authRepository: AuthRepository, private val userRepository: UserRepository) : ViewModel() {
+class AuthViewModel(private val authRepository: AuthRepository,
+                    private val userRepository: UserRepository,
+                    private val authPreferences: AuthPreferences, ) : ViewModel()
+    {
     var name by mutableStateOf("")
     var email by mutableStateOf("")
     var password by mutableStateOf("")
@@ -26,11 +30,18 @@ class AuthViewModel(private val authRepository: AuthRepository, private val user
 
     private val _authState = MutableStateFlow<LocalUser?>(null)
 
-    init {
-        viewModelScope.launch {
-            _authState.value = userRepository.getCurrentUser()
+        init {
+            viewModelScope.launch {
+                val userId = authPreferences.getUserId()
+                if (userId != null) {
+                    userRepository.getUserData(userId).onSuccess {
+                        _authState.value = LocalUser(it.uid, it.name, it.email, it.profilePicture)
+                    }.onFailure {
+                        authPreferences.clearLoginState() // 🔥 Clear if invalid
+                    }
+                }
+            }
         }
-    }
 
     private fun validateInputs(checkName: Boolean = true): String {
         return when {
@@ -55,6 +66,7 @@ class AuthViewModel(private val authRepository: AuthRepository, private val user
                 authRepository.signUp(name, email, password)
                     .onSuccess { user ->
                         _authState.value = user
+                        authPreferences.setLoggedIn(user.uid)
                         Toast.makeText(context, "Sign-up successful!", Toast.LENGTH_SHORT).show()
                         navController.navigate(Screen.OnBoardingIntro.route) {
                             popUpTo(Screen.Login.route) { inclusive = true }
@@ -77,6 +89,7 @@ class AuthViewModel(private val authRepository: AuthRepository, private val user
                 authRepository.signIn(email, password)
                     .onSuccess { user ->
                         _authState.value = user
+                        authPreferences.setLoggedIn(user.uid)
                         Toast.makeText(context, "Sign-up successful!", Toast.LENGTH_SHORT).show()
                         navController.navigate(Screen.OnBoardingIntro.route) {
                             popUpTo(Screen.Login.route) { inclusive = true }
@@ -91,6 +104,7 @@ class AuthViewModel(private val authRepository: AuthRepository, private val user
         viewModelScope.launch {
             authRepository.logout(context) {
                 _authState.value = null // Clear user state after logout
+                authPreferences.clearLoginState()
             }
         }
     }
@@ -104,6 +118,7 @@ class AuthViewModel(private val authRepository: AuthRepository, private val user
                 authRepository.signInWithGoogle(idToken)
                     .onSuccess { user ->
                         _authState.value = user
+                        authPreferences.setLoggedIn(user.uid)
                         onSuccess()
                     }
                     .onFailure { e ->

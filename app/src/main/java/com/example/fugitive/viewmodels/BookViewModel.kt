@@ -1,32 +1,32 @@
 package com.example.fugitive.viewmodels
 
-import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.fugitive.data.remote.BookMetadata
-import com.example.fugitive.data.remote.FirestoreService
-import com.example.fugitive.repository.UserRepository
+import com.example.fugitive.data.models.BookDetails
+import com.example.fugitive.data.repository.BookRepository
 import kotlinx.coroutines.launch
 
-class BookViewModel(private val userRepository: UserRepository,
-                    private val firestoreService: FirestoreService  ) : ViewModel() {
+class BookViewModel(private val bookRepository: BookRepository) : ViewModel() {
 
     private val _bookDetails = MutableLiveData<BookDetails?>()
     val bookDetails: LiveData<BookDetails?> get() = _bookDetails
+
+    private val _books = MutableLiveData<List<BookDetails>>()  // ✅ Added this
+    val books: LiveData<List<BookDetails>> get() = _books      // ✅ Exposed LiveData
 
     fun loadBookData(bookId: String) {
         _bookDetails.value = null
 
         viewModelScope.launch {
             try {
-                val result = firestoreService.getBookDetails(bookId) // ✅ Fetch Result<BookMetadata>
+                val result = bookRepository.getBookDetails(bookId) // ✅ Fetch Result<BookMetadata>
 
                 result.fold(
-                    onSuccess = { book ->  // ✅ Unwrap success case
-                        val coverUri = book.coverImageURL.takeIf { it.isNotBlank() }?.let { Uri.parse(it) }
-                        _bookDetails.postValue(BookDetails(book, coverUri))
+                    onSuccess = { book ->
+                        _bookDetails.postValue(book)
                     },
                     onFailure = { exception ->  // ✅ Handle failure case
                         println("Error fetching book details: ${exception.message}")
@@ -39,10 +39,20 @@ class BookViewModel(private val userRepository: UserRepository,
             }
         }
     }
-}
+    fun loadMultipleBooks(bookIds: List<String>) {
+        _books.value = emptyList()  // Clear previous books
 
-data class BookDetails(
-    val metadata: BookMetadata,
-    val coverImageUri: Uri?
-)
+        viewModelScope.launch {
+            val fetchedBooks = mutableListOf<BookDetails>()
+            bookIds.forEach { bookId ->
+                val result = bookRepository.getBookDetails(bookId)
+                result.fold(
+                    onSuccess = { book -> fetchedBooks.add(book) },
+                    onFailure = { Log.e("BookViewModel", "Error fetching book: $bookId") }
+                )
+            }
+            _books.postValue(fetchedBooks)  // ✅ Update the UI with multiple books
+        }
+    }
+}
 

@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "local_user")
 data class LocalUser(
-    @PrimaryKey val userId: String,
+    @PrimaryKey val uid: String,
     val name: String,
     val email: String,
     val profilePicture: String

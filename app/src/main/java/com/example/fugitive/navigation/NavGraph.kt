@@ -64,11 +64,18 @@ fun AppNavGraph(navController: NavHostController) {
 
         composable(Screen.Home.route) { HomeScreen(navController, userViewModel, bookViewModel) }
 
-        composable(Screen.BookDetail.route) { BookDetailsScreen(navController) }
+        composable("bookDetail/{bookId}") {
+            backStackEntry ->
+            val bookId = backStackEntry.arguments?.getString("bookId")?: return@composable
+            BookDetailsScreen(navController, bookViewModel, bookId) }
 
         composable(Screen.Settings.route) { SettingsScreen(navController) }
 
-        composable(Screen.BookReader.route) { BookReaderScreen(navController) }
+        composable("bookReader/{bookId}") {
+            backStackEntry ->
+            val bookId = backStackEntry.arguments?.getString("bookId")?: return@composable
+            BookReaderScreen(navController, bookViewModel, bookId)
+        }
 
         composable(Screen.Notification.route) { NotificationsScreen(navController) }
 

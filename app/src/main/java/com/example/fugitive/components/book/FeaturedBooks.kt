@@ -35,9 +35,7 @@ fun FeaturedBook(
     author: String,
     description: String,
     imageUri: String?,
-    isBookmarked: Boolean,
-    onReadClick: () -> Unit,
-    onBookmarkToggle: () -> Unit
+    onReadClick: () -> Unit
 ) {
 
     Row(
@@ -74,60 +72,53 @@ fun FeaturedBook(
                 .weight(1f)
                 .fillMaxHeight()
                 .padding(end = 8.dp),
-            verticalArrangement = Arrangement.Top
+            verticalArrangement = Arrangement.SpaceBetween
 
         ) {
-            Text(
-                text = title,
-                fontSize = 22.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.White,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Text(
-                text = "By $author",
-                fontSize = 12.sp,
-                fontWeight = FontWeight.Medium,
-                color = Color.Gray
-            )
-
-            Spacer(modifier = Modifier.height(6.dp))
-
-            // Description
-            Text(
-                text = description,
-                fontSize = 14.sp,
-                color = Color.White,
-                minLines = 2,
-                maxLines = 3,
-                style = TextStyle(lineHeight = 20.sp),
-                overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            Spacer(modifier = Modifier.height(14.dp))
-
-            // Bookmark & Read Button
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                CustomBookmarkButton(
-                    isBookmarked = isBookmarked,
-                    onBookmarkToggle = onBookmarkToggle
+                Text(
+                    text = title,
+                    fontSize = 22.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
                 )
 
-                Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = Modifier.height(8.dp))
 
-                FugitivePrimaryButton(
-                    text = "Start Reading",
-                    modifier = Modifier
-                        .width(100.dp)
-                        .height(40.dp),
-                    onClick = onReadClick
+                Text(
+                    text = "By $author",
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = Color.Gray
                 )
+
+                Spacer(modifier = Modifier.height(10.dp))
+
+                // Description
+                Text(
+                    text = description,
+                    fontSize = 14.sp,
+                    color = Color.White,
+                    minLines = 2,
+                    maxLines = 3,
+                    style = TextStyle(lineHeight = 20.sp),
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                Spacer(modifier = Modifier.height(14.dp))
+
+
+            //  Read Button
+            FugitivePrimaryButton(
+                text = "Start Reading",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(50.dp)
+                ,
+                onClick = onReadClick
+            )
             }
         }
     }
-}

@@ -8,9 +8,6 @@ import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -19,24 +16,28 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun ShimmerEffect(
+fun ShimmerContainer(
+    isLoading: Boolean,
     modifier: Modifier = Modifier,
-    widthFraction: Float = 1f,
-    height: Dp = 0.dp,
-    cornerRadius: Dp = 6.dp
+    content: @Composable () -> Unit
 ) {
+    if (isLoading) {
+        Box(
+            modifier = modifier
+                .shimmerEffect() // Apply shimmer effect to everything inside
+        )
+    } else {
+        content() // Show actual content once loading is done
+    }
+}
+
+// Extension function for the shimmer effect
+@Composable
+fun Modifier.shimmerEffect(): Modifier {
     val transition = rememberInfiniteTransition()
-
-    val shimmerColors = listOf(
-        Color(0xFF2A2A2A),
-        Color(0xFF3A3A3A),
-        Color(0xFF2A2A2A)
-    )
-
     val shimmerTranslate by transition.animateFloat(
         initialValue = 0f,
         targetValue = 1000f,
@@ -47,16 +48,10 @@ fun ShimmerEffect(
     )
 
     val brush = Brush.linearGradient(
-        colors = shimmerColors,
+        colors = listOf(Color(0xFF2A2A2A), Color(0xFF3A3A3A), Color(0xFF2A2A2A)),
         start = Offset(shimmerTranslate, shimmerTranslate),
         end = Offset(shimmerTranslate + 300f, shimmerTranslate + 300f)
     )
 
-    Box(
-        modifier = modifier
-            .fillMaxWidth(widthFraction)
-            .then(if (height > 0.dp) Modifier.height(height) else Modifier.fillMaxSize()) // Supports both text & full-size shimmer
-            .clip(RoundedCornerShape(cornerRadius))
-            .background(brush)
-    )
+    return this.background(brush).clip(RoundedCornerShape(6.dp))
 }

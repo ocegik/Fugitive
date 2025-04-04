@@ -1,6 +1,5 @@
 package com.example.fugitive.components.book
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,7 +15,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.fugitive.components.effects.ShimmerEffect
 
@@ -34,7 +32,6 @@ fun BookPlaceholder() {
                 .width(160.dp)
                 .height(230.dp)
                 .clip(RoundedCornerShape(12.dp))
-                .background(Color(0xFF2A2A2A))
         ) {
             ShimmerEffect(widthFraction = 1f, height = 230.dp)
         }
@@ -50,11 +47,10 @@ fun BookPlaceholder() {
             Box(
                 modifier = Modifier
                     .fillMaxWidth(0.6f)
-                    .height(22.dp)
+                    .height(24.dp)
                     .clip(RoundedCornerShape(4.dp))
-                    .background(Color(0xFF2A2A2A))
             ) {
-                ShimmerEffect(widthFraction = 0.6f, height = 22.dp)
+                ShimmerEffect(widthFraction = 0.6f, height = 24.dp)
             }
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -65,7 +61,6 @@ fun BookPlaceholder() {
                     .fillMaxWidth(0.4f)
                     .height(14.dp)
                     .clip(RoundedCornerShape(4.dp))
-                    .background(Color(0xFF2A2A2A))
             ) {
                 ShimmerEffect(widthFraction = 0.4f, height = 14.dp)
             }
@@ -77,41 +72,25 @@ fun BookPlaceholder() {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth(0.9f - it * 0.2f) // Shrinking width effect
-                        .height(14.dp)
+                        .height(20.dp)
                         .clip(RoundedCornerShape(4.dp))
-                        .background(Color(0xFF2A2A2A))
                 ) {
-                    ShimmerEffect(widthFraction = 0.9f - it * 0.2f, height = 14.dp)
+                    ShimmerEffect(widthFraction = 0.9f - it * 0.2f, height = 20.dp)
                 }
                 Spacer(modifier = Modifier.height(4.dp))
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(14.dp))
 
             // Buttons Placeholder
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Box(
-                    modifier = Modifier
-                        .width(40.dp)
-                        .height(40.dp)
-                        .clip(RoundedCornerShape(8.dp))
-                        .background(Color(0xFF2A2A2A))
-                ) {
-                    ShimmerEffect(widthFraction = 1f, height = 40.dp)
-                }
-
-                Spacer(modifier = Modifier.width(8.dp))
-
-                Box(
-                    modifier = Modifier
-                        .width(100.dp)
-                        .height(40.dp)
-                        .clip(RoundedCornerShape(8.dp))
-                        .background(Color(0xFF2A2A2A))
-                ) {
-                    ShimmerEffect(widthFraction = 1f, height = 40.dp)
-                }
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(50.dp)
+            ) {
+                ShimmerEffect(widthFraction = 1f, height = 50.dp)
             }
+
         }
     }
 }

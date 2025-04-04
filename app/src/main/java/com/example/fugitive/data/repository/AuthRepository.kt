@@ -1,9 +1,9 @@
-package com.example.fugitive.repository
+package com.example.fugitive.data.repository
 
 import android.content.Context
+import com.example.fugitive.data.local.AuthPreferences
 import com.example.fugitive.data.local.LocalUser
 import com.example.fugitive.data.local.UserDao
-import com.example.fugitive.data.local.session.UserSessionManager
 import com.example.fugitive.data.remote.FirebaseAuthService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -11,8 +11,8 @@ import kotlinx.coroutines.withContext
 class AuthRepository(
     private val userDao: UserDao,  // ✅ Local Database
     private val authService: FirebaseAuthService,  // ✅ Firebase Authentication
-    private val sessionManager: UserSessionManager,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val authPreferences: AuthPreferences
 ) {
     suspend fun signIn(email: String, password: String): Result<LocalUser> =
         withContext(Dispatchers.IO) {
@@ -20,7 +20,9 @@ class AuthRepository(
                 val firebaseUser = authService.signIn(email, password)
                     ?: throw Exception("Invalid email or password.")
 
-                userRepository.createAndSaveLocalUser(firebaseUser)
+                val localUser = userRepository.initializeNewUser(firebaseUser)
+                authPreferences.setLoggedIn(localUser.uid)
+                localUser
             }
         }
 
@@ -30,7 +32,12 @@ class AuthRepository(
                 val firebaseUser = authService.signUp(name, email, password)
                     ?: throw Exception("Sign-up failed. Please try again.")
 
-                userRepository.createAndSaveLocalUser(firebaseUser)
+                val localUser = userRepository.initializeNewUser(firebaseUser)
+
+                // ✅ Save session state
+                authPreferences.setLoggedIn(localUser.uid)
+
+                localUser
             }
         }
 
@@ -39,7 +46,7 @@ class AuthRepository(
      */
     suspend fun logout(context: Context, onSignOutComplete: () -> Unit) = withContext(Dispatchers.IO) {
         authService.signOut(context, onSignOutComplete) // Pass context & callback
-        sessionManager.logout()
+        authPreferences.clearLoginState()
         userDao.clearUser()
     }
 
@@ -49,7 +56,12 @@ class AuthRepository(
                 val firebaseUser = authService.firebaseAuthWithGoogle(idToken)
                     ?: throw Exception("Google sign-in failed.")
 
-                userRepository.createAndSaveLocalUser(firebaseUser)
+                val localUser = userRepository.initializeNewUser(firebaseUser)
+
+                // ✅ Save session state
+                authPreferences.setLoggedIn(localUser.uid)
+
+                localUser
             }
         }
     }

@@ -1,5 +1,6 @@
 package com.example.fugitive.screens.home
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -12,8 +13,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -30,40 +29,43 @@ import com.example.fugitive.components.book.FeaturedBook
 import com.example.fugitive.components.HeadingText
 import com.example.fugitive.components.inputs.SearchBar
 import com.example.fugitive.components.cards.TopReaderItem
+import com.example.fugitive.components.effects.ShimmerContainer
+import com.example.fugitive.components.getDrawableResourceId
 import com.example.fugitive.ui.theme.FugitiveColors
 import com.example.fugitive.viewmodels.BookViewModel
 import com.example.fugitive.viewmodels.UserViewModel
 
 @Composable
-fun HomeScreen( navController: NavController, userViewModel: UserViewModel, bookViewModel: BookViewModel) {
+fun HomeScreen( navController: NavController,
+                userViewModel: UserViewModel,
+                bookViewModel: BookViewModel
+) {
 
-    val bookId = "V1hlHR4CvtPeoHEv6vWT"
-    val user by userViewModel.user
-    val isBookmarked = remember { mutableStateOf(false) }
-    val bookDetails by bookViewModel.bookDetails.observeAsState()
-    val userId = user?.uid
-
-    val animalToDrawableMap = mapOf(
-        "Lion" to R.drawable.lion,
-        "Owl" to R.drawable.owl,
-        "Sale" to R.drawable.sale,
-        "Koala" to R.drawable.koala,
-        "Zebra" to R.drawable.zebra,
-        "Dog" to R.drawable.dog,
-        "Camel" to R.drawable.camel,
-        "Hippo" to R.drawable.hippo
+    val bookIds = listOf(
+        "V1hlHR4CvtPeoHEv6vWT",
+        "8pVgBTyCVs3CK0RPvW0T",
+        "eWQSyNveoFEVl6v9Se1h"
     )
 
-    val profileImage = user?.let {
-        animalToDrawableMap[it.profilePicture] ?: R.drawable.user_placeholder
-    } ?: R.drawable.user_placeholder // Fallback to placeholder if user is null
-    
-    LaunchedEffect(bookId, userId) {
-        bookViewModel.loadBookData(bookId)
+    val books by bookViewModel.books.observeAsState(emptyList())
+    val isLoading = books.isEmpty()
+    val user by userViewModel.user
+    val userId = user?.uid
+
+    val profileImageResId = user?.profilePicture?.let {
+        getDrawableResourceId(it)
+    } ?: R.drawable.owl
+
+
+    LaunchedEffect(bookIds, userId) {
+        Log.d("HomeScreen", "Fetching books for IDs: $bookIds, userId: $userId")
+        bookViewModel.loadMultipleBooks(bookIds)
         userId?.let {
-            userViewModel.fetchUser(it) // ✅ Fetch only if userId is not null
+            Log.d("HomeScreen", "Fetching user data for userId: $it")
+            userViewModel.fetchUserDetails(it)  // 🔥 Fetch user details on demand
         }
     }
+
 
 
     Column(
@@ -82,11 +84,12 @@ fun HomeScreen( navController: NavController, userViewModel: UserViewModel, book
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically
         ) {
+
             AsyncImage(
-                model = profileImage,
+                model = profileImageResId,
                 contentDescription = "Profile Picture",
                 modifier = Modifier
-                    .size(32.dp)
+                    .size(48.dp)
                     .clip(CircleShape)
                     .clickable { navController.navigate(Screen.Profile.route) }, // Navigate to Profile Screen
 
@@ -117,88 +120,119 @@ fun HomeScreen( navController: NavController, userViewModel: UserViewModel, book
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        bookDetails?.let { book ->
+        if (books.size >= 3) {  // ✅ Check if we have at least 3 books
+            val firstBook = books[0]
+            val secondBook = books[1]
+            val thirdBook = books[2]
+
             FeaturedBook(
-                title = book.metadata.title,
-                author = book.metadata.author,
-                description = book.metadata.description,
-                imageUri = book.coverImageUri?.toString(),
-                isBookmarked = isBookmarked.value,
-                onReadClick = { navController.navigate(Screen.BookDetail.route) },
-                onBookmarkToggle = {}
+                title = firstBook.title,
+                author = firstBook.author,
+                description = firstBook.description,
+                imageUri = firstBook.coverImageUri?.toString(),
+                onReadClick = { navController.navigate(Screen.BookDetail.createRoute(firstBook.bookId)) },
             )
-        } ?: run {
-            BookPlaceholder()
+
+
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            // Continue Reading Section
+            HeadingText(
+                "Continue Reading",
+                modifier = Modifier.fillMaxWidth().align(Alignment.Start)
+            )
+
+            Spacer(modifier = Modifier.height(32.dp))
+            LazyRow(
+                contentPadding = PaddingValues(horizontal = 16.dp),
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                item {
+                    ShimmerContainer(isLoading) {
+                        BookItem(
+                            title = secondBook.title,
+                            author = secondBook.author,
+                            imageUri = secondBook.coverImageUri?.toString(),
+                            onClick = {
+                                navController.navigate(
+                                    Screen.BookDetail.createRoute(
+                                        secondBook.bookId
+                                    )
+                                )
+                            } // Navigate to Book Details
+                        )
+                    }
+                }
+                    item {
+                        ShimmerContainer(isLoading) {
+                        BookItem(
+                            title = thirdBook.title,
+                            author = thirdBook.author,
+                            imageUri = thirdBook.coverImageUri?.toString(),
+                            onClick = {
+                                navController.navigate(
+                                    Screen.BookDetail.createRoute(
+                                        thirdBook.bookId
+                                    )
+                                )
+                            } // Navigate to Book Details
+                        )
+                    }
+                }
+
+                    item {
+                        ShimmerContainer(isLoading) {
+                        BookItem(
+                            title = firstBook.title,
+                            author = firstBook.author,
+                            imageUri = firstBook.coverImageUri?.toString(),
+                            onClick = {
+                                navController.navigate(
+                                    Screen.BookDetail.createRoute(
+                                        firstBook.bookId
+                                    )
+                                )
+                            } // Navigate to Book Details
+                        )
+                    }
+                }
+            }
+        } else {
+            BookPlaceholder() // Show a placeholder until books load
         }
 
 
-        Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(60.dp))
 
-        // Continue Reading Section
-        HeadingText("Continue Reading", modifier = Modifier.fillMaxWidth().align(Alignment.Start))
+            // Top Readers Section
+            HeadingText("Top Readers")
 
-        Spacer(modifier = Modifier.height(32.dp))
-        LazyRow {
-            item {
-                BookItem(
-                    title = "The Beloved",
-                    author = "Harriet Evans",
-                    imageWidth = 120,
-                    imageHeight = 160,
-                    imageUri = null,
-                    onClick = { navController.navigate(Screen.BookDetail.route) } // Navigate to Book Details
+            Spacer(modifier = Modifier.height(40.dp))
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                TopReaderItem(
+                    name = "Naruto",
+                    pagesRead = 451,
+                    imageRes = R.drawable.dog
+                )
+                TopReaderItem(
+                    name = "Goku",
+                    pagesRead = 231,
+                    imageRes = R.drawable.camel
+                )
+                TopReaderItem(
+                    name = "Ichigo",
+                    pagesRead = 201,
+                    imageRes = R.drawable.sale
                 )
             }
-            item {
-                BookItem(
-                    title = "Educated",
-                    author = "Tara Westover",
-                    imageWidth = 120,
-                    imageHeight = 160,
-                    imageUri = null,
-                    onClick = { navController.navigate(Screen.BookDetail.route) } // Navigate to Book Details
-                )
-            }
-            item {
-                BookItem(
-                    title = "Blocking",
-                    author = "Wes Anderson",
-                    imageWidth = 120,
-                    imageHeight = 160,
-                    imageUri = null,
-                    onClick = { navController.navigate(Screen.BookDetail.route) } // Navigate to Book Details
-                )
-            }
+            Spacer(modifier = Modifier.height(40.dp))
         }
-
-        Spacer(modifier = Modifier.height(60.dp))
-
-        // Top Readers Section
-        HeadingText("Top Readers")
-
-        Spacer(modifier = Modifier.height(40.dp))
-
-        Row(modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
-            horizontalArrangement = Arrangement.SpaceEvenly) {
-            TopReaderItem(
-                name = "Sung Jin Woo",
-                pagesRead = 451,
-                imageRes = R.drawable.user_placeholder
-            )
-            TopReaderItem(
-                name = "Son Goku",
-                pagesRead = 231,
-                imageRes = R.drawable.user_placeholder
-            )
-            TopReaderItem(
-                name = "Eren Yeager",
-                pagesRead = 201,
-                imageRes = R.drawable.user_placeholder
-            )
-        }
-        Spacer(modifier = Modifier.height(40.dp))
     }
-}
+
 

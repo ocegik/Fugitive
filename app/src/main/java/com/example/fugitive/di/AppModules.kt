@@ -4,13 +4,14 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.room.Room
 import com.example.fugitive.data.local.AppDatabase
+import com.example.fugitive.data.local.AuthPreferences
 import com.example.fugitive.data.local.UserDao
 import com.example.fugitive.data.local.UserPreferences
 import com.example.fugitive.data.remote.FirebaseAuthService
 import com.example.fugitive.data.remote.FirestoreService
-import com.example.fugitive.repository.UserRepository
-import com.example.fugitive.data.local.session.UserSessionManager
-import com.example.fugitive.repository.AuthRepository
+import com.example.fugitive.data.repository.UserRepository
+import com.example.fugitive.data.repository.AuthRepository
+import com.example.fugitive.data.repository.BookRepository
 import com.example.fugitive.viewmodels.AuthViewModel
 import com.example.fugitive.viewmodels.BookViewModel
 import com.example.fugitive.viewmodels.SettingsViewModel
@@ -36,6 +37,7 @@ val preferenceModule = module {
         androidContext().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
     }
     single { UserPreferences(get()) }
+    single { AuthPreferences(get()) }
 }
 
 
@@ -45,24 +47,26 @@ val repositoryModule = module {
         UserRepository(
             get<UserDao>(),
             get<FirestoreService>(),
-            get<FirebaseAuthService>(),
-            get<UserSessionManager>()
+            get<AuthPreferences>()
         )
     }
     single {
         AuthRepository(
             get<UserDao>(),
             get<FirebaseAuthService>(),
-            get<UserSessionManager>(),
-            get<UserRepository>()
+            get<UserRepository>(),
+            get<AuthPreferences>()
         )
+    }
+    single {
+        BookRepository(get<FirestoreService>())
     }
 }
 
 // ViewModel Module
 val viewModelModule = module {
-    viewModel { AuthViewModel(get(), get()) } // ViewModel for handling authentication
-    viewModel { BookViewModel(get(), get()) } // ViewModel for handling book-related functionality
+    viewModel { AuthViewModel(get(), get(), get()) } // ViewModel for handling authentication
+    viewModel { BookViewModel(get()) } // ViewModel for handling book-related functionality
     viewModel { UserViewModel(get()) }  // ViewModel for handling user profile data (user data like name, email, etc.)
     viewModel { SettingsViewModel(get()) }  // ViewModel for handling user preferences (themes, fonts, etc.)
 }
@@ -79,14 +83,10 @@ val databaseModule = module {
     single { get<AppDatabase>().userDao() }  // ✅ Provides UserDao
 }
 
-val sessionModule = module {
-    single { UserSessionManager(get(), get<FirebaseAuth>(), get<UserDao>()) }
-}
 
 // Combine all modules into one list
 val appModules = listOf(
     databaseModule,
-    sessionModule,
     repositoryModule,
     viewModelModule,
     preferenceModule,

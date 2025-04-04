@@ -51,8 +51,6 @@ class FirebaseAuthService(
         }
     }
 
-    fun getCurrentUser(): FirebaseUser? = auth.currentUser
-
     fun isUserLoggedIn(): Boolean = auth.currentUser != null
 
     private fun mapAuthException(e: Throwable): Exception {

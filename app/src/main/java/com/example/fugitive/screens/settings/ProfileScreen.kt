@@ -47,7 +47,6 @@ fun ProfileScreen(navController: NavController, userViewModel: UserViewModel) {
     val user by userViewModel.user
     val authViewModel: AuthViewModel = koinViewModel()
     val context = LocalContext.current
-    val userId = user?.uid
 
     val animalToDrawableMap = mapOf(
         "Lion" to R.drawable.lion,
@@ -61,14 +60,8 @@ fun ProfileScreen(navController: NavController, userViewModel: UserViewModel) {
     )
 
     val profileImage = user?.let {
-        animalToDrawableMap[it.profilePicture] ?: R.drawable.user_placeholder
-    } ?: R.drawable.user_placeholder // Fallback to placeholder if user is null
-
-    LaunchedEffect(userId) {
-        userId?.let {
-            userViewModel.fetchUser(it) // ✅ Fetch only if userId is not null
-        }
-    }
+        animalToDrawableMap[it.profilePicture]
+    } ?: R.drawable.owl // Fallback to placeholder if user is null
 
     Column(
         modifier = Modifier
@@ -101,7 +94,7 @@ fun ProfileScreen(navController: NavController, userViewModel: UserViewModel) {
                 model = profileImage,
                 contentDescription = "Profile Picture",
                 modifier = Modifier
-                    .size(80.dp)
+                    .size(125.dp)
                     .clip(CircleShape)
 
             )
