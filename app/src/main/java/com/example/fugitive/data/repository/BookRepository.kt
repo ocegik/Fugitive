@@ -3,6 +3,7 @@ package com.example.fugitive.data.repository
 import android.net.Uri
 import com.example.fugitive.data.remote.FirestoreService
 import com.example.fugitive.data.models.BookDetails
+import com.example.fugitive.data.remote.Chapter
 
 class BookRepository(private val firestoreService: FirestoreService) {
 
@@ -17,11 +18,11 @@ class BookRepository(private val firestoreService: FirestoreService) {
                         title = bookMetadata.title,
                         author = bookMetadata.author,
                         description = bookMetadata.description,
-                        fileURL = bookMetadata.fileURL,
                         coverImageUri = bookMetadata.coverImageURL.takeIf { it.isNotBlank() }?.let { Uri.parse(it) },
                         language = bookMetadata.language,
                         publishYear = bookMetadata.publishYear,
-                        genres = bookMetadata.genres
+                        genres = bookMetadata.genres,
+                        totalChapters =  bookMetadata.totalChapters
                     )
                     Result.success(bookDetails) // Convert to BookDetails
                 },
@@ -33,5 +34,9 @@ class BookRepository(private val firestoreService: FirestoreService) {
         } catch (e: Exception) {
             Result.failure(e)
         }
+    }
+
+    suspend fun getBookChapters(bookId: String): Result<List<Chapter>> {
+        return firestoreService.getBookChapters(bookId)
     }
 }

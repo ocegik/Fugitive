@@ -1,5 +1,6 @@
 package com.example.fugitive.data.remote
 
+import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import kotlinx.coroutines.tasks.await
@@ -27,8 +28,23 @@ class FirestoreService(private val firestore: FirebaseFirestore) {
             Result.failure(e)
         }
     }
-    suspend fun getBook(bookId: String){
 
+    suspend fun getBookChapters(bookId: String): Result<List<Chapter>> {
+        return try {
+            val chaptersSnapshot = firestore
+                .collection("books")
+                .document(bookId)
+                .collection("chapters")
+                .orderBy("title") // Optional: Or use "index" if you have it
+                .get()
+                .await()
+
+            val chapters = chaptersSnapshot.documents.mapNotNull { it.toObject(Chapter::class.java) }
+            Result.success(chapters)
+        } catch (e: Exception) {
+            Log.d("FirestoreService", "Failed to fetch chapters: ${e.message}")
+            Result.failure(e)
+        }
     }
 
     suspend fun getUserData(uid: String): Result<UserMetadata> {
@@ -52,16 +68,21 @@ class FirestoreService(private val firestore: FirebaseFirestore) {
 }
 
 
+data class Chapter(
+    val title: String = "",
+    val content: String = ""
+)
+
 data class BookMetadata(
     val bookId: String = "",
     val title: String = "",
     val author: String = "",
     val description: String = "",
-    val fileURL: String = "",
     val coverImageURL: String = "",
     val language: String = "",
     val publishYear: Int = 0,
-    val genres: List<String> = emptyList()
+    val genres: List<String> = emptyList(),
+    val totalChapters: Int = 0
 )
 
 data class UserMetadata(

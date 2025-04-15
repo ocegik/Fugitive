@@ -31,6 +31,7 @@ import com.example.fugitive.components.button.BackButton
 import com.example.fugitive.components.BookDetailsRow
 import com.example.fugitive.components.button.FugitivePrimaryButton
 import com.example.fugitive.components.HeadingText
+import com.example.fugitive.components.cards.ChapterList
 import com.example.fugitive.ui.theme.FugitiveColors
 import com.example.fugitive.viewmodels.BookViewModel
 
@@ -145,23 +146,36 @@ fun BookDetailsScreen(
                 )
 
                 Spacer(modifier = Modifier.height(24.dp))
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 12.dp)
-                        .navigationBarsPadding() // Prevents overlap with nav bar
-                        .imePadding(),  // Extra padding for soft keyboard or nav bar
-                    horizontalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    //CustomBookmarkButton(isBookmarked)
-                    FugitivePrimaryButton(
-                        "Start Reading",
-                        onClick = { navController.navigate(Screen.BookReader.route) })
 
-                }
-
+                //CustomBookmarkButton(isBookmarked)
+                FugitivePrimaryButton(
+                    "Start Reading",
+                    onClick = { navController.navigate(Screen.BookReader.createRoute(book.bookId, chapterNumber = 1)) })
 
                 Spacer(modifier = Modifier.height(40.dp))
+
+                HeadingText("Read by Chapters")
+                Text(
+                    text = "Total Chapters: ${book.totalChapters}",
+                    style = TextStyle(
+                        fontSize = 16.sp,
+                        color = FugitiveColors.heading,
+                        fontWeight = FontWeight.Medium
+                    ),
+                    modifier = Modifier.padding(bottom = 16.dp)
+                )
+
+                // Chapter List Composable
+                ChapterList(
+                    chapterCount = book.totalChapters,
+                    onChapterClick = { chapterNumber ->
+                        // You can route to a screen like: BookReader/{bookId}/{chapterNumber}
+                        navController.navigate(Screen.BookReader.createRoute(book.bookId, chapterNumber))
+                    }
+                )
+
+                Spacer(modifier = Modifier.height(100.dp))
+
 
             }
         } ?: run {

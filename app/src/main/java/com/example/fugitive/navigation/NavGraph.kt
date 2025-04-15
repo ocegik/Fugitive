@@ -71,10 +71,11 @@ fun AppNavGraph(navController: NavHostController) {
 
         composable(Screen.Settings.route) { SettingsScreen(navController) }
 
-        composable("bookReader/{bookId}") {
+        composable("bookReader/{bookId}/{chapterNumber}") {
             backStackEntry ->
             val bookId = backStackEntry.arguments?.getString("bookId")?: return@composable
-            BookReaderScreen(navController, bookViewModel, bookId)
+            val chapterNumber = backStackEntry.arguments?.getString("chapterNumber")?.toIntOrNull() ?: 1
+            BookReaderScreen(navController, bookViewModel, bookId, chapterNumber)
         }
 
         composable(Screen.Notification.route) { NotificationsScreen(navController) }
