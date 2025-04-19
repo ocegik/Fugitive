@@ -152,19 +152,19 @@ fun BookDetailsScreen(
                     "Start Reading",
                     onClick = { navController.navigate(Screen.BookReader.createRoute(book.bookId, chapterNumber = 1)) })
 
-                Spacer(modifier = Modifier.height(40.dp))
+                Spacer(modifier = Modifier.height(60.dp))
 
                 HeadingText("Read by Chapters")
+                Spacer(modifier = Modifier.height(20.dp))
                 Text(
                     text = "Total Chapters: ${book.totalChapters}",
                     style = TextStyle(
                         fontSize = 16.sp,
                         color = FugitiveColors.heading,
                         fontWeight = FontWeight.Medium
-                    ),
-                    modifier = Modifier.padding(bottom = 16.dp)
+                    )
                 )
-
+                Spacer(modifier = Modifier.height(30.dp))
                 // Chapter List Composable
                 ChapterList(
                     chapterCount = book.totalChapters,

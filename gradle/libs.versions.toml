@@ -2,6 +2,7 @@
 accompanistFlowlayout = "0.30.1"
 accompanistNavigationAnimation = "0.32.0"
 accompanistPlaceholder = "0.32.0"
+accompanistScrollbarVersion = "<latest-version>"
 agp = "8.8.2"
 coilCompose = "2.1.0"
 credentials = "<latest version>"
@@ -51,6 +52,7 @@ firebase-storage-ktx = { module = "com.google.firebase:firebase-storage-ktx", ve
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
 gms-play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
 google-accompanist-navigation-animation = { module = "com.google.accompanist:accompanist-navigation-animation", version.ref = "accompanistNavigationAnimation" }
+google-accompanist-scrollbar = { module = "com.google.accompanist:accompanist-scrollbar", version.ref = "accompanistScrollbarVersion" }
 googleid = { module = "com.google.android.libraries.identity.googleid:googleid", version.ref = "googleid" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
