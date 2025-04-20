@@ -22,6 +22,7 @@ import java.util.Date
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CardDefaults
 import androidx.compose.ui.graphics.Color
+import com.example.fugitive.components.cards.NotificationCard
 
 @Composable
 fun NotificationsScreen(navController: NavController) {
@@ -37,13 +38,15 @@ fun NotificationsScreen(navController: NavController) {
                 .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Box(
-                modifier = Modifier.fillMaxWidth(),
-                contentAlignment = Alignment.TopStart
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 15.dp, vertical = 15.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 BackButton(
                     modifier = Modifier
-                        .padding(start = 15.dp, top = 15.dp)
                         .zIndex(2f) // Ensures it's above other content
                 ) {
                     navController.popBackStack()
@@ -51,7 +54,10 @@ fun NotificationsScreen(navController: NavController) {
 
                 if (notifications.isNotEmpty()) {
                     Button(onClick = { NotificationStore.clear() }) {
-                        Text("Clear All")
+                        Text(
+                            text = "Clear All",
+                            color = FugitiveColors.buttonText
+                        )
                     }
                 }
             }
@@ -70,52 +76,15 @@ fun NotificationsScreen(navController: NavController) {
                 )
             } else {
                 LazyColumn(
-                    modifier = Modifier.fillMaxSize().padding(horizontal = 12.dp)
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 12.dp)
                 ) {
                     items(notifications) { notif ->
-                        Card(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 6.dp),
-                            elevation = CardDefaults.cardElevation(8.dp)
-                        ) {
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(16.dp),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Column(
-                                    modifier = Modifier.weight(1f)
-                                ) {
-                                    Text(
-                                        text = notif.title ?: "No Title",
-                                        fontWeight = FontWeight.Bold,
-                                        style = MaterialTheme.typography.titleMedium
-                                    )
-                                    Text(
-                                        text = notif.body ?: "No Content",
-                                        style = MaterialTheme.typography.bodyMedium
-                                    )
-                                    Text(
-                                        text = DateFormat.getDateTimeInstance().format(Date(notif.timestamp)),
-                                        style = MaterialTheme.typography.bodySmall,
-                                        color = MaterialTheme.colorScheme.outline
-                                    )
-                                }
-
-                                Spacer(modifier = Modifier.width(8.dp))
-
-                                // Delete Button
-                                Button(
-                                    onClick = { NotificationStore.delete(notif) },
-                                    contentPadding = PaddingValues(horizontal = 8.dp, vertical = 4.dp)
-                                ) {
-                                    Text("Delete")
-                                }
-                            }
-                        }
+                        NotificationCard(
+                            notification = notif,
+                            onDelete = { NotificationStore.delete(notif) }
+                        )
                     }
                 }
             }
