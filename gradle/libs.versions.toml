@@ -5,6 +5,7 @@ accompanistPlaceholder = "0.32.0"
 accompanistScrollbarVersion = "<latest-version>"
 agp = "8.8.2"
 coilCompose = "2.1.0"
+converterMoshi = "2.9.0"
 credentials = "<latest version>"
 credentialsPlayServicesAuth = "<latest version>"
 firebaseBom = "33.11.0"
@@ -26,6 +27,7 @@ googleGmsGoogleServices = "4.4.2"
 navigationRuntimeKtx = "2.8.9"
 navigationCompose = "2.8.9"
 playServicesAuth = "21.3.0"
+retrofit = "2.9.0"
 roomRuntime = "2.6.1"
 runtimeLivedata = "<compose_version>"
 ui = "1.7.8"
@@ -44,9 +46,11 @@ androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "
 androidx-runtime-livedata = { module = "androidx.compose.runtime:runtime-livedata", version.ref = "runtimeLivedata" }
 androidx-ui-text-google-fonts = { module = "androidx.compose.ui:ui-text-google-fonts", version.ref = "uiTextGoogleFonts" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
+converter-moshi = { module = "com.squareup.retrofit2:converter-moshi", version.ref = "converterMoshi" }
 credentials-play-services-auth = { module = "androidx.credentials:credentials-play-services-auth", version.ref = "credentialsPlayServicesAuth" }
 firebase-auth-ktx = { module = "com.google.firebase:firebase-auth-ktx" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
+firebase-messaging = { module = "com.google.firebase:firebase-messaging" }
 firebase-perf = { module = "com.google.firebase:firebase-perf" }
 firebase-storage-ktx = { module = "com.google.firebase:firebase-storage-ktx", version.ref = "firebaseStorageKtx" }
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
@@ -77,6 +81,7 @@ readium-navigator = { module = "org.readium.kotlin-toolkit:readium-navigator" }
 readium-opds = { module = "org.readium.kotlin-toolkit:readium-opds" }
 readium-shared = { module = "org.readium.kotlin-toolkit:readium-shared" }
 readium-streamer = { module = "org.readium.kotlin-toolkit:readium-streamer" }
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 ui = { module = "androidx.compose.ui:ui", version.ref = "ui" }
 firebase-firestore-ktx = { group = "com.google.firebase", name = "firebase-firestore-ktx", version.ref = "firebaseFirestoreKtx" }
 androidx-tools-core = { group = "androidx.privacysandbox.tools", name = "tools-core", version.ref = "toolsCore" }

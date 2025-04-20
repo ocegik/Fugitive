@@ -64,6 +64,7 @@ dependencies {
     implementation(libs.firebase.auth.ktx)
     implementation(libs.firebase.firestore.ktx) // Firestore database integration
     implementation(libs.firebase.storage.ktx) // Firebase Storage for EPUB files
+    implementation(libs.firebase.messaging) // Crashlytics for error tracking
 
     // Fonts & Styling
     implementation(libs.androidx.ui.text.google.fonts) // Google Fonts integration
@@ -108,6 +109,9 @@ dependencies {
     implementation(libs.androidx.credentials)
     implementation(libs.credentials.play.services.auth)
     implementation(libs.googleid)
+
+    implementation(libs.retrofit)
+    implementation(libs.converter.moshi)
 
 
 
