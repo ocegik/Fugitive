@@ -10,6 +10,7 @@ import com.example.fugitive.data.models.BookTextFetcher
 import com.example.fugitive.data.remote.Chapter
 import com.example.fugitive.data.repository.BookRepository
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class BookViewModel(private val bookRepository: BookRepository) : ViewModel() {
 
@@ -85,20 +86,20 @@ class BookViewModel(private val bookRepository: BookRepository) : ViewModel() {
         }
     }
 
-        fun loadMultipleBooks(bookIds: List<String>) {
-            _books.value = emptyList()  // Clear previous books
+    fun loadMultipleBooks(bookIds: List<String>) {
+        _books.value = emptyList()  // Clear previous books
 
-            viewModelScope.launch {
-                val fetchedBooks = mutableListOf<BookDetails>()
-                bookIds.forEach { bookId ->
-                    val result = bookRepository.getBookDetails(bookId)
-                    result.fold(
-                        onSuccess = { book -> fetchedBooks.add(book) },
-                        onFailure = { Log.e("BookViewModel", "Error fetching book: $bookId") }
-                    )
-                }
-                _books.postValue(fetchedBooks)  // ✅ Update the UI with multiple books
+        viewModelScope.launch {
+            val fetchedBooks = mutableListOf<BookDetails>()
+            bookIds.forEach { bookId ->
+                val result = bookRepository.getBookDetails(bookId)
+                result.fold(
+                    onSuccess = { book -> fetchedBooks.add(book) },
+                    onFailure = { Log.e("BookViewModel", "Error fetching book: $bookId") }
+                )
             }
+            _books.postValue(fetchedBooks)  // ✅ Update the UI with multiple books
         }
     }
+}
 

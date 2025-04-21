@@ -1,11 +1,9 @@
 package com.example.fugitive.screens.home
 
-import android.icu.text.DateFormat
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,9 +16,7 @@ import androidx.navigation.NavController
 import com.example.fugitive.components.button.BackButton
 import com.example.fugitive.data.models.NotificationStore
 import com.example.fugitive.ui.theme.FugitiveColors
-import java.util.Date
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.CardDefaults
 import androidx.compose.ui.graphics.Color
 import com.example.fugitive.components.cards.NotificationCard
 

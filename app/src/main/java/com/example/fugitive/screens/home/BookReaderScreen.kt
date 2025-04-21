@@ -10,6 +10,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,11 +27,19 @@ import com.example.fugitive.components.VerticalScrollbar
 import com.example.fugitive.components.button.BackButton
 import com.example.fugitive.ui.theme.FugitiveColors
 import com.example.fugitive.viewmodels.BookViewModel
+import com.example.fugitive.viewmodels.UserViewModel
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.first
 
+@OptIn(FlowPreview::class)
 @Composable
 fun BookReaderScreen(
     navController: NavController,
     bookViewModel: BookViewModel,
+    userViewModel: UserViewModel,
     bookId: String,
     chapterNumber: Int
 ) {
@@ -35,19 +48,46 @@ fun BookReaderScreen(
     val chapters by bookViewModel.bookChapters.observeAsState(emptyList())
     val chapterText by bookViewModel.selectedChapterText.observeAsState()
 
-    LaunchedEffect(bookId, chapterNumber) {
+    val scrollState = rememberScrollState()
+    var restoredScroll by remember { mutableStateOf(false) }
+    var currentChapter by remember { mutableIntStateOf(chapterNumber) }
+
+    LaunchedEffect(bookId) {
+        val (savedChapter, savedScroll) = userViewModel.getReadingProgress(bookId)
+        currentChapter = savedChapter
+
         bookViewModel.loadBookData(bookId)
         bookViewModel.loadBookChapters(bookId)
+
+        snapshotFlow { chapters }
+            .filter { it.isNotEmpty() }
+            .first()
+            .let {
+                val targetChapter = chapters.getOrNull(currentChapter - 1)
+                targetChapter?.let { bookViewModel.loadChapterText(it.content) }
+                scrollState.scrollTo(savedScroll)
+                restoredScroll = true
+            }
     }
 
-    LaunchedEffect(chapters) {
-        if (chapters.isNotEmpty()) {
-            val targetChapter = chapters.getOrNull(chapterNumber - 1)
-            targetChapter?.let { bookViewModel.loadChapterText(it.content) }
-        }
+    LaunchedEffect(scrollState, restoredScroll) {
+        if (!restoredScroll) return@LaunchedEffect
+
+        var lastSavedScroll = scrollState.value
+
+        snapshotFlow { scrollState.value }
+            .distinctUntilChanged()
+            .debounce(1000) // Only emit scroll value if user stopped for 1 sec
+            .collect { scrollY ->
+                val scrollDelta = kotlin.math.abs(scrollY - lastSavedScroll)
+                if (scrollDelta > 100) { // Save only if user scrolled at least 100 pixels
+                    lastSavedScroll = scrollY
+                    userViewModel.saveReadingProgress(bookId, currentChapter, scrollY)
+                }
+            }
     }
 
-    val scrollState = rememberScrollState()
+
 
     Box(
         modifier = Modifier
@@ -75,6 +115,7 @@ fun BookReaderScreen(
                 }
 
                 chapterText == null -> {
+                    CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
                     Text(
                         text = "Loading chapter...",
                         modifier = Modifier.align(Alignment.Center),

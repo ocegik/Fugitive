@@ -1,8 +1,11 @@
 package com.example.fugitive.data.remote
 
 import android.util.Log
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
+import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.tasks.await
 
 class FirestoreService(private val firestore: FirebaseFirestore) {
@@ -65,6 +68,63 @@ class FirestoreService(private val firestore: FirebaseFirestore) {
             .set(userMetadata, SetOptions.merge())
             .await()
     }
+
+    fun saveReadingProgress(userId: String, bookId: String, chapter: Int, scroll: Int) {
+
+        val isRead = scroll >= 98
+
+        val chapterData = mapOf(
+            "scrollValue" to scroll,
+            "isRead" to isRead,
+            "timestamp" to FieldValue.serverTimestamp()
+        )
+
+        val bookRef = Firebase.firestore.collection("users")
+            .document(userId)
+            .collection("reading_status")
+            .document(bookId)
+
+        bookRef.collection("chapters")
+            .document("$chapter")
+            .set(chapterData, SetOptions.merge())
+
+        // Save book-level state
+        val bookData = mapOf(
+            "currentChapter" to chapter,
+            "timestamp" to FieldValue.serverTimestamp()
+        )
+
+        bookRef.set(bookData, SetOptions.merge())
+    }
+
+    suspend fun getReadingProgress(userId: String, bookId: String): Result<Pair<Int, Int>> {
+        return try {
+            val bookRef = Firebase.firestore.collection("users")
+                .document(userId)
+                .collection("reading_status")
+                .document(bookId)
+                .get()
+                .await()
+
+            val currentChapter = bookRef.getLong("currentChapter")?.toInt() ?: 1
+            val chapterRef = Firebase.firestore.collection("users")
+                .document(userId)
+                .collection("reading_status")
+                .document(bookId)
+                .collection("chapters")
+                .document("$currentChapter")
+                .get()
+                .await()
+
+            val scroll = chapterRef.getLong("scrollValue")?.toInt() ?: 0
+
+            Result.success(currentChapter to scroll)
+
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
 }
 
 

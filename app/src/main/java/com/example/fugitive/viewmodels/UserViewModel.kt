@@ -50,4 +50,17 @@ class UserViewModel(private val userRepository: UserRepository) : ViewModel() {
             }
         }
     }
+
+    fun saveReadingProgress(bookId: String, chapter: Int, scroll: Int) {
+        val uid = _user.value?.uid ?: return
+        viewModelScope.launch {
+            userRepository.saveReadingProgress(uid, bookId, chapter, scroll)
+        }
+    }
+
+    suspend fun getReadingProgress(bookId: String): Pair<Int, Int> {
+        val uid = _user.value?.uid ?: return 1 to 0
+        return userRepository.getReadingProgress(uid, bookId).getOrElse { 1 to 0 }
+    }
+
 }

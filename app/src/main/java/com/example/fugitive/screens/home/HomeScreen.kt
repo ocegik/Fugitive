@@ -205,34 +205,38 @@ fun HomeScreen( navController: NavController,
 
             Spacer(modifier = Modifier.height(60.dp))
 
-            // Top Readers Section
-            HeadingText("Top Readers")
+        HeadingText("New Arrivals")
 
-            Spacer(modifier = Modifier.height(40.dp))
+        Spacer(modifier = Modifier.height(60.dp))
 
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
-                TopReaderItem(
-                    name = "Naruto",
-                    pagesRead = 451,
-                    imageRes = R.drawable.dog
-                )
-                TopReaderItem(
-                    name = "Goku",
-                    pagesRead = 231,
-                    imageRes = R.drawable.camel
-                )
-                TopReaderItem(
-                    name = "Ichigo",
-                    pagesRead = 201,
-                    imageRes = R.drawable.sale
-                )
-            }
-            Spacer(modifier = Modifier.height(40.dp))
+        // Top Readers Section
+        HeadingText("Top Readers")
+
+        Spacer(modifier = Modifier.height(40.dp))
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+            TopReaderItem(
+                name = "Naruto",
+                pagesRead = 451,
+                imageRes = R.drawable.dog
+            )
+            TopReaderItem(
+                name = "Goku",
+                pagesRead = 231,
+                imageRes = R.drawable.camel
+            )
+            TopReaderItem(
+                name = "Ichigo",
+                pagesRead = 201,
+                imageRes = R.drawable.sale
+            )
         }
+        Spacer(modifier = Modifier.height(40.dp))
     }
+}
 
 

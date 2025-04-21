@@ -139,4 +139,12 @@ class UserRepository(
             }
         }
     }
+    fun saveReadingProgress(userId: String, bookId: String, chapter: Int, scroll: Int) {
+        firestoreService.saveReadingProgress(userId, bookId, chapter, scroll)
+    }
+
+    suspend fun getReadingProgress(userId: String, bookId: String): Result<Pair<Int, Int>> {
+        return firestoreService.getReadingProgress(userId, bookId)
+    }
+
 }
