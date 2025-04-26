@@ -10,6 +10,18 @@ import kotlinx.coroutines.tasks.await
 
 class FirestoreService(private val firestore: FirebaseFirestore) {
 
+    suspend fun getAllBookIds(): Result<List<String>> {
+        return try {
+            val snapshot = firestore.collection("books").get().await()
+            val bookIds = snapshot.documents.map { it.id }
+            Result.success(bookIds)
+        } catch (e: Exception) {
+            println("Failed to fetch book IDs: ${e.message}")
+            Result.failure(e)
+        }
+    }
+
+
     suspend fun getBookDetails(bookId: String): Result<BookMetadata> {
         return try {
             val document = firestore.collection("books").document(bookId).get().await()

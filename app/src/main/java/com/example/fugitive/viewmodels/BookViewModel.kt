@@ -9,8 +9,8 @@ import com.example.fugitive.data.models.BookDetails
 import com.example.fugitive.data.models.BookTextFetcher
 import com.example.fugitive.data.remote.Chapter
 import com.example.fugitive.data.repository.BookRepository
+import com.example.fugitive.utils.getShuffledBooks
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 class BookViewModel(private val bookRepository: BookRepository) : ViewModel() {
 
@@ -25,6 +25,17 @@ class BookViewModel(private val bookRepository: BookRepository) : ViewModel() {
 
     private val _selectedChapterText = MutableLiveData<String?>()
     val selectedChapterText: LiveData<String?> get() = _selectedChapterText
+
+    private val _bookIds = MutableLiveData<List<String>>()  // ✅ Added this
+    val bookIds: LiveData<List<String>> get() = _bookIds    // ✅ Exposed LiveData
+
+    private val _errorMessage = MutableLiveData<String>()  // ✅ Added this
+    val errorMessage: LiveData<String> get() = _errorMessage  // ✅ Exposed LiveData
+
+    private val _shuffledBookIds = MutableLiveData<List<String>>()
+    val shuffledBookIds: LiveData<List<String>> = _shuffledBookIds
+
+    private var hasShuffled = false
 
 
     fun loadBookData(bookId: String) {
@@ -101,5 +112,24 @@ class BookViewModel(private val bookRepository: BookRepository) : ViewModel() {
             _books.postValue(fetchedBooks)  // ✅ Update the UI with multiple books
         }
     }
+
+    fun loadBookIds() {
+        viewModelScope.launch {
+            val result = bookRepository.getBookIds()
+            if (result.isSuccess) {
+                // result is successful, get the value (List<String>)
+                _bookIds.value = result.getOrNull() ?: emptyList()
+                if (!hasShuffled){
+                    _shuffledBookIds.value = getShuffledBooks(_bookIds.value ?: emptyList())
+                    hasShuffled = true
+                }
+            } else {
+                // result is a failure, handle it
+                _errorMessage.value =
+                    "Failed to load book IDs: ${result.exceptionOrNull()?.message}"
+            }
+        }
+    }
+
 }
 

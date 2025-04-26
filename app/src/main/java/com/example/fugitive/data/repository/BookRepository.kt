@@ -39,4 +39,7 @@ class BookRepository(private val firestoreService: FirestoreService) {
     suspend fun getBookChapters(bookId: String): Result<List<Chapter>> {
         return firestoreService.getBookChapters(bookId)
     }
+    suspend fun getBookIds(): Result<List<String>> {
+        return firestoreService.getAllBookIds()
+    }
 }
