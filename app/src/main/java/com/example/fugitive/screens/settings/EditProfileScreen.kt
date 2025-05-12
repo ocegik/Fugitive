@@ -5,16 +5,31 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import com.example.fugitive.components.button.BackButton
+import com.example.fugitive.components.inputs.NameInputField
 import com.example.fugitive.ui.theme.FugitiveColors
+import com.example.fugitive.viewmodels.AuthViewModel
+import com.example.fugitive.viewmodels.UserViewModel
 
 @Composable
-fun EditProfileScreen(navController: NavController) {
+fun EditProfileScreen(navController: NavController, userViewModel: UserViewModel, authViewModel: AuthViewModel) {
+
+    val user by userViewModel.user
+    val userId = user?.uid
+
+    LaunchedEffect(Unit) {
+        if (userId != null) {
+            userViewModel.fetchUserDetails(userId)
+        }
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -45,9 +60,11 @@ fun EditProfileScreen(navController: NavController) {
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            Button(onClick = { /* Do something */ }) {
-                Text(text = "Refresh")
-            }
+            Text(text = "Name")
+            Spacer(modifier = Modifier.height(20.dp))
+            NameInputField(name = authViewModel.name, onValueChange = { authViewModel.name = it })
+
+
         }
     }
 }

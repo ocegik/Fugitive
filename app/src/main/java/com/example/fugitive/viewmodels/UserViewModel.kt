@@ -39,15 +39,12 @@ class UserViewModel(private val userRepository: UserRepository) : ViewModel() {
 
     // 🔹 Update both Name & Profile Picture (Firestore)
     fun updateUserData(uid: String, name: String? = null, profilePic: String? = null) {
-        Log.d("UserViewModel", "Updating user data: uid=$uid, Name=$name, PFP=$profilePic")
         viewModelScope.launch {
             userRepository.updateUserData(uid, name, profilePic)
-
-            // ✅ Update UI immediately for smoother UX
-            userRepository.getUserData(uid).onSuccess { userMetadata ->
-                _user.value = userMetadata
-                Log.d("UserViewModel", "User data updated successfully in UI")
-            }
+            _user.value = _user.value?.copy(
+                name = name ?: _user.value?.name ?: "",
+                profilePicture = profilePic ?: _user.value?.profilePicture ?: ""
+            )
         }
     }
 

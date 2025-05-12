@@ -35,7 +35,7 @@ class AuthViewModel(private val authRepository: AuthRepository,
                 val userId = authPreferences.getUserId()
                 if (userId != null) {
                     userRepository.getUserData(userId).onSuccess {
-                        _authState.value = LocalUser(it.uid, it.name, it.email, it.profilePicture)
+                        _authState.value = LocalUser(it.uid, it.name, it.email, it.profilePicture ?: "")
                     }.onFailure {
                         authPreferences.clearLoginState() // 🔥 Clear if invalid
                     }

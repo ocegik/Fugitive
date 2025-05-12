@@ -51,7 +51,7 @@ fun CarouselSelectEffect(
         }
     }
     LaunchedEffect(centerItemIndex) {
-        onSelectionChanged(labels[centerItemIndex % labels.size])
+        onSelectionChanged(labels[centerItemIndex % labels.size].lowercase())
     }
     Column(
         modifier = Modifier.fillMaxWidth(),

@@ -80,7 +80,7 @@ fun AppNavGraph(navController: NavHostController) {
 
         composable(Screen.Notification.route) { NotificationsScreen(navController) }
 
-        composable(Screen.Profile.route) { ProfileScreen(navController, userViewModel) }
+        composable(Screen.Profile.route) { ProfileScreen(navController, userViewModel, authViewModel) }
 
         composable(Screen.Terms.route) { TermsScreen(navController) }
 
@@ -96,7 +96,7 @@ fun AppNavGraph(navController: NavHostController) {
 
         composable(Screen.SavedQuotes.route) { SavedQuotesScreen(navController) }
 
-        composable(Screen.EditProfile.route) { EditProfileScreen(navController) }
+        composable(Screen.EditProfile.route) { EditProfileScreen(navController, userViewModel, authViewModel) }
 
         composable(Screen.Help.route) { HelpScreen(navController) }
 

@@ -54,13 +54,10 @@ fun HomeScreen( navController: NavController,
     val isLoading = books.isEmpty()
 
     val profileImageResId = user?.profilePicture?.let {
+        Log.d("HomeScreen", "Profile Picture String: $it")
         getDrawableResourceId(it)
     } ?: R.drawable.owl
-
-
-    LaunchedEffect(Unit) {
-        bookViewModel.loadBookIds()
-    }
+    
     var isBooksFetched by remember { mutableStateOf(false) }
 
 

@@ -3,7 +3,7 @@ package com.example.fugitive.components
 import com.example.fugitive.R
 
 fun getDrawableResourceId(imageName: String): Int {
-    return when (imageName.lowercase()) {
+    return when (imageName) {
         "lion" -> R.drawable.lion
         "owl" -> R.drawable.owl
         "sale" -> R.drawable.sale

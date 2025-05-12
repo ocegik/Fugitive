@@ -22,6 +22,7 @@ import com.example.fugitive.components.*
 import com.example.fugitive.components.button.BackButton
 import com.example.fugitive.components.button.FugitivePrimaryButton
 import com.example.fugitive.components.inputs.EmailInputField
+import com.example.fugitive.components.inputs.NameInputField
 import com.example.fugitive.components.inputs.PassInputField
 import com.example.fugitive.components.inputs.TermsCheckbox
 import com.example.fugitive.viewmodels.AuthViewModel
@@ -74,18 +75,7 @@ fun SignUpScreen(navController: NavController, authViewModel: AuthViewModel) {
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            OutlinedTextField(
-                value = authViewModel.name,
-                onValueChange = { authViewModel.name = it },
-                label = { Text("Name") },
-                placeholder = { Text("Enter your name") },
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Text,
-                    capitalization = KeyboardCapitalization.Words
-                ),
-                modifier = Modifier.fillMaxWidth()
-            )
+            NameInputField(name = authViewModel.name, onValueChange = { authViewModel.name = it })
 
             Spacer(modifier = Modifier.height(20.dp))
 

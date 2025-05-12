@@ -1,5 +1,6 @@
 package com.example.fugitive.screens.settings
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -38,30 +39,30 @@ import com.example.fugitive.components.button.BackButton
 import com.example.fugitive.ui.theme.FugitiveColors
 import com.example.fugitive.viewmodels.AuthViewModel
 import com.example.fugitive.components.button.FugitivePrimaryButton
+import com.example.fugitive.components.getDrawableResourceId
 import com.example.fugitive.viewmodels.UserViewModel
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun ProfileScreen(navController: NavController, userViewModel: UserViewModel) {
+fun ProfileScreen(navController: NavController, userViewModel: UserViewModel, authViewModel: AuthViewModel) {
 
     val user by userViewModel.user
-    val authViewModel: AuthViewModel = koinViewModel()
     val context = LocalContext.current
+    val userId = user?.uid
 
-    val animalToDrawableMap = mapOf(
-        "Lion" to R.drawable.lion,
-        "Owl" to R.drawable.owl,
-        "Sale" to R.drawable.sale,
-        "Koala" to R.drawable.koala,
-        "Zebra" to R.drawable.zebra,
-        "Dog" to R.drawable.dog,
-        "Camel" to R.drawable.camel,
-        "Hippo" to R.drawable.hippo
-    )
 
-    val profileImage = user?.let {
-        animalToDrawableMap[it.profilePicture]
-    } ?: R.drawable.owl // Fallback to placeholder if user is null
+    val profileImageResId = user?.profilePicture?.let {
+        Log.d("HomeScreen", "Profile Picture String: $it")
+        getDrawableResourceId(it)
+    } ?: R.drawable.owl
+
+    LaunchedEffect(Unit) {
+        if (userId != null) {
+            userViewModel.fetchUserDetails(userId)
+        }
+    }
+
+
 
     Column(
         modifier = Modifier
@@ -91,7 +92,7 @@ fun ProfileScreen(navController: NavController, userViewModel: UserViewModel) {
             horizontalArrangement = Arrangement.spacedBy(20.dp)
         ){
             AsyncImage(
-                model = profileImage,
+                model = profileImageResId,
                 contentDescription = "Profile Picture",
                 modifier = Modifier
                     .size(125.dp)

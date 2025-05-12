@@ -52,7 +52,7 @@ fun PfpSelectScreen(navController: NavController, userViewModel: UserViewModel) 
             FugitivePrimaryButton("Confirm & Continue", onClick = {
                 coroutineScope.launch {
                     user?.let { currentUser -> // ✅ Ensure userId is not null
-                        val profilePicture = selectedPfp ?: "default_pfp"
+                        val profilePicture = selectedPfp ?: "lion"
                         userViewModel.updateUserData(currentUser.uid, profilePic = profilePicture)
                     }
                 }
