@@ -31,10 +31,10 @@ import com.example.fugitive.components.book.BookItem
 import com.example.fugitive.components.book.BookPlaceholder
 import com.example.fugitive.components.book.FeaturedBook
 import com.example.fugitive.components.HeadingText
-import com.example.fugitive.components.inputs.SearchBar
 import com.example.fugitive.components.cards.TopReaderItem
 import com.example.fugitive.components.effects.ShimmerContainer
 import com.example.fugitive.components.getDrawableResourceId
+import com.example.fugitive.components.inputs.SearchBarPlaceholder
 import com.example.fugitive.ui.theme.FugitiveColors
 import com.example.fugitive.viewmodels.BookViewModel
 import com.example.fugitive.viewmodels.UserViewModel
@@ -74,8 +74,11 @@ fun HomeScreen( navController: NavController,
             isBooksFetched = true
         }
     }
-
-
+    LaunchedEffect(user) {
+        user?.let {
+            Log.d("HomeUserCheck", "User data fetched: UID=${it.uid}, Name=${it.name}, Email=${it.email}, PFP=${it.profilePicture}")
+        } ?: Log.d("HomeUserCheck", "User is null or not yet fetched")
+    }
 
 
     Column(
@@ -126,7 +129,7 @@ fun HomeScreen( navController: NavController,
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        SearchBar(onClick = { navController.navigate(Screen.Profile.route) })
+        SearchBarPlaceholder(onClick = { navController.navigate(Screen.Profile.route) })
 
         Spacer(modifier = Modifier.height(32.dp))
 

@@ -37,6 +37,12 @@ class BookViewModel(private val bookRepository: BookRepository) : ViewModel() {
 
     private var hasShuffled = false
 
+    private val _searchResults = MutableLiveData<List<BookDetails>>()
+    val searchResults: LiveData<List<BookDetails>> get() = _searchResults
+
+    private val _isSearching = MutableLiveData<Boolean>()
+    val isSearching: LiveData<Boolean> get() = _isSearching
+
 
     fun loadBookData(bookId: String) {
         _bookDetails.value = null
@@ -129,6 +135,67 @@ class BookViewModel(private val bookRepository: BookRepository) : ViewModel() {
                     "Failed to load book IDs: ${result.exceptionOrNull()?.message}"
             }
         }
+    }
+
+    fun searchBooks(query: String) {
+        if (query.isBlank()) {
+            _searchResults.value = emptyList()
+            return
+        }
+
+        _isSearching.value = true
+        viewModelScope.launch {
+            try {
+                val result = bookRepository.searchBooks(query)
+                result.fold(
+                    onSuccess = { books ->
+                        _searchResults.postValue(books)
+                        _isSearching.postValue(false)
+                    },
+                    onFailure = { exception ->
+                        Log.e("BookViewModel", "Search failed: ${exception.message}")
+                        _searchResults.postValue(emptyList())
+                        _isSearching.postValue(false)
+                        _errorMessage.postValue("Search failed: ${exception.message}")
+                    }
+                )
+            } catch (e: Exception) {
+                Log.e("BookViewModel", "Unexpected search error: ${e.message}")
+                _searchResults.postValue(emptyList())
+                _isSearching.postValue(false)
+                _errorMessage.postValue("Unexpected error occurred")
+            }
+        }
+    }
+
+    fun searchBooksByGenre(genre: String) {
+        _isSearching.value = true
+        viewModelScope.launch {
+            try {
+                val result = bookRepository.searchBooksByGenre(genre)
+                result.fold(
+                    onSuccess = { books ->
+                        _searchResults.postValue(books)
+                        _isSearching.postValue(false)
+                    },
+                    onFailure = { exception ->
+                        Log.e("BookViewModel", "Genre search failed: ${exception.message}")
+                        _searchResults.postValue(emptyList())
+                        _isSearching.postValue(false)
+                        _errorMessage.postValue("Genre search failed: ${exception.message}")
+                    }
+                )
+            } catch (e: Exception) {
+                Log.e("BookViewModel", "Unexpected genre search error: ${e.message}")
+                _searchResults.postValue(emptyList())
+                _isSearching.postValue(false)
+                _errorMessage.postValue("Unexpected error occurred")
+            }
+        }
+    }
+
+    fun clearSearchResults() {
+        _searchResults.value = emptyList()
     }
 
 }

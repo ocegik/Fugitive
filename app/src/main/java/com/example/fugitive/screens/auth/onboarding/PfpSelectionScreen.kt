@@ -1,5 +1,6 @@
 package com.example.fugitive.screens.auth.onboarding
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
@@ -53,6 +54,7 @@ fun PfpSelectScreen(navController: NavController, userViewModel: UserViewModel) 
                 coroutineScope.launch {
                     user?.let { currentUser -> // ✅ Ensure userId is not null
                         val profilePicture = selectedPfp ?: "default_pfp"
+                        Log.d("PfpSelectScreen", "Attempting to update PFP: $profilePicture for UID: ${currentUser.uid}") // Add this line
                         userViewModel.updateUserData(currentUser.uid, profilePic = profilePicture)
                     }
                 }
