@@ -19,12 +19,12 @@ import com.example.fugitive.screens.settings.SettingsScreen
 import com.example.fugitive.screens.misc.TermsScreen
 import com.example.fugitive.screens.auth.login.ForgotPassScreen
 import com.example.fugitive.screens.auth.login.ResetPassScreen
-import com.example.fugitive.screens.find.SearchScreen
 import com.example.fugitive.data.remote.FirebaseAuthService
 import com.example.fugitive.screens.auth.onboarding.OnBoardingIntroScreen
 import com.example.fugitive.screens.auth.onboarding.OnBoardingFeaturesScreen
 import com.example.fugitive.screens.auth.onboarding.OnBoardingFinalScreen
 import com.example.fugitive.screens.auth.onboarding.PfpSelectScreen
+import com.example.fugitive.screens.home.SearchScreen
 import com.example.fugitive.screens.settings.AboutUsScreen
 import com.example.fugitive.screens.settings.EditProfileScreen
 import com.example.fugitive.screens.settings.HelpScreen
@@ -88,7 +88,7 @@ fun AppNavGraph(navController: NavHostController) {
 
         composable(Screen.ResetPass.route) { ResetPassScreen(navController) }
 
-        composable(Screen.Search.route) { SearchScreen(navController) }
+        composable(Screen.Search.route) { SearchScreen(navController, bookViewModel) }
 
         composable(Screen.MyStats.route) { MyStatsScreen(navController) }
 

@@ -129,7 +129,7 @@ fun HomeScreen( navController: NavController,
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        SearchBarPlaceholder(onClick = { navController.navigate(Screen.Profile.route) })
+        SearchBarPlaceholder(onClick = { navController.navigate(Screen.Search.route) })
 
         Spacer(modifier = Modifier.height(32.dp))
 
