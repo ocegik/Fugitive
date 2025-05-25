@@ -137,6 +137,71 @@ class FirestoreService(private val firestore: FirebaseFirestore) {
         }
     }
 
+    suspend fun searchBooks(query: String, limit: Int = 20): Result<List<BookMetadata>> {
+        return try {
+            if (query.isBlank()) {
+                return Result.success(emptyList())
+            }
+
+            val normalizedQuery = query.trim().lowercase()
+
+            // Create multiple queries for different search approaches
+            val titleQuery = firestore.collection("books")
+                .whereGreaterThanOrEqualTo("title", query)
+                .whereLessThanOrEqualTo("title", query + '\uf8ff')
+                .limit(limit.toLong())
+                .get()
+                .await()
+
+            val authorQuery = firestore.collection("books")
+                .whereGreaterThanOrEqualTo("author", query)
+                .whereLessThanOrEqualTo("author", query + '\uf8ff')
+                .limit(limit.toLong())
+                .get()
+                .await()
+
+            // Combine results from both queries
+            val allDocuments = (titleQuery.documents + authorQuery.documents).distinctBy { it.id }
+
+            val books = allDocuments.mapNotNull { document ->
+                document.toObject(BookMetadata::class.java)?.copy(bookId = document.id)
+            }
+
+            // Additional client-side filtering for better search results
+            val filteredBooks = books.filter { book ->
+                book.title.contains(normalizedQuery, ignoreCase = true) ||
+                        book.author.contains(normalizedQuery, ignoreCase = true) ||
+                        book.genres.any { genre -> genre.contains(normalizedQuery, ignoreCase = true) } ||
+                        book.description.contains(normalizedQuery, ignoreCase = true)
+            }.take(limit)
+
+            Result.success(filteredBooks)
+
+        } catch (e: Exception) {
+            println("Failed to search books: ${e.message}")
+            Result.failure(e)
+        }
+    }
+
+    suspend fun searchBooksByGenre(genre: String, limit: Int = 20): Result<List<BookMetadata>> {
+        return try {
+            val snapshot = firestore.collection("books")
+                .whereArrayContains("genres", genre)
+                .limit(limit.toLong())
+                .get()
+                .await()
+
+            val books = snapshot.documents.mapNotNull { document ->
+                document.toObject(BookMetadata::class.java)?.copy(bookId = document.id)
+            }
+
+            Result.success(books)
+        } catch (e: Exception) {
+            println("Failed to search books by genre: ${e.message}")
+            Result.failure(e)
+        }
+    }
+
 }
 
 

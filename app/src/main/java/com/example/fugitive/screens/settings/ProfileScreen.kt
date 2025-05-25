@@ -1,5 +1,6 @@
 package com.example.fugitive.screens.settings
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -62,6 +63,12 @@ fun ProfileScreen(navController: NavController, userViewModel: UserViewModel) {
     val profileImage = user?.let {
         animalToDrawableMap[it.profilePicture]
     } ?: R.drawable.owl // Fallback to placeholder if user is null
+
+    LaunchedEffect(user) {
+        user?.let {
+            Log.d("ProfileUserCheck", "User data fetched: UID=${it.uid}, Name=${it.name}, Email=${it.email}, PFP=${it.profilePicture}")
+        } ?: Log.d("ProfileUserCheck", "User is null or not yet fetched")
+    }
 
     Column(
         modifier = Modifier
