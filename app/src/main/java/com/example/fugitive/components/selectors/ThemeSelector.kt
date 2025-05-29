@@ -1,4 +1,4 @@
-package com.example.fugitive.components
+package com.example.fugitive.components.selectors
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState

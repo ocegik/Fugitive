@@ -13,10 +13,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import com.example.fugitive.navigation.Screen
-import com.example.fugitive.components.*
 import com.example.fugitive.components.button.BackButton
 import com.example.fugitive.components.button.FugitivePrimaryButton
 import com.example.fugitive.components.inputs.PassInputField
+import com.example.fugitive.components.text.HeadingText
+import com.example.fugitive.components.text.SubheadingText
 import com.example.fugitive.ui.theme.*
 
 

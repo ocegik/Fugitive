@@ -1,4 +1,4 @@
-package com.example.fugitive.data.remote
+package com.example.fugitive.data.remote.firebase
 
 import android.util.Log
 import com.google.firebase.Firebase

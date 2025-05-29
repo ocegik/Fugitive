@@ -5,7 +5,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.fugitive.data.remote.UserMetadata
+import com.example.fugitive.data.remote.firebase.UserMetadata
 import com.example.fugitive.data.repository.UserRepository
 import kotlinx.coroutines.launch
 

@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import com.example.fugitive.data.dictionary.DictionaryResponse
+import com.example.fugitive.data.remote.api.dictionary.DictionaryResponse
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -32,6 +32,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import com.example.fugitive.ui.theme.FugitiveColors
 
 
 // Dictionary popup component
@@ -110,7 +111,7 @@ fun DictionaryPopup(
                                     style = TextStyle(
                                         fontSize = 14.sp,
                                         fontWeight = FontWeight.Bold,
-                                        color = Color.Cyan
+                                        color = FugitiveColors.button
                                     ),
                                     modifier = Modifier.padding(vertical = 4.dp)
                                 )

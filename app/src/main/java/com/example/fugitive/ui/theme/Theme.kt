@@ -4,7 +4,7 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import org.koin.compose.koinInject
-import com.example.fugitive.data.local.UserPreferences
+import com.example.fugitive.data.local.preferences.UserPreferences
 
 @Composable
 fun FugitiveTheme(content: @Composable () -> Unit) {

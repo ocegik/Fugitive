@@ -12,10 +12,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.fugitive.components.FontSelector
-import com.example.fugitive.components.FontSizeSelector
-import com.example.fugitive.components.ReaderThemeSelector
-import com.example.fugitive.components.ThemeSelector
+import com.example.fugitive.components.selectors.FontSelector
+import com.example.fugitive.components.selectors.FontSizeSelector
+import com.example.fugitive.components.selectors.ReaderThemeSelector
+import com.example.fugitive.components.selectors.ThemeSelector
 import com.example.fugitive.components.button.BackButton
 import com.example.fugitive.components.layout.ScreenTitle
 import com.example.fugitive.components.layout.SectionHeader

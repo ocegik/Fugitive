@@ -30,7 +30,7 @@ import com.example.fugitive.navigation.Screen
 import com.example.fugitive.components.book.BookItem
 import com.example.fugitive.components.book.BookPlaceholder
 import com.example.fugitive.components.book.FeaturedBook
-import com.example.fugitive.components.HeadingText
+import com.example.fugitive.components.text.HeadingText
 import com.example.fugitive.components.cards.TopReaderItem
 import com.example.fugitive.components.effects.ShimmerContainer
 import com.example.fugitive.components.getDrawableResourceId

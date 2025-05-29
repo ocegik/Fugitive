@@ -6,11 +6,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.fugitive.components.CarouselEffect
+import com.example.fugitive.components.effects.CarouselEffect
 import com.example.fugitive.navigation.Screen
-import com.example.fugitive.components.HeadingText
+import com.example.fugitive.components.text.HeadingText
 import com.example.fugitive.components.button.FugitivePrimaryButton
-import com.example.fugitive.components.SubheadingText
+import com.example.fugitive.components.text.SubheadingText
 import com.example.fugitive.ui.theme.FugitiveColors
 
 @Composable

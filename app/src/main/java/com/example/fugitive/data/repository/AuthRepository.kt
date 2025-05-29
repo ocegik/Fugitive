@@ -1,10 +1,10 @@
 package com.example.fugitive.data.repository
 
 import android.content.Context
-import com.example.fugitive.data.local.AuthPreferences
-import com.example.fugitive.data.local.LocalUser
-import com.example.fugitive.data.local.UserDao
-import com.example.fugitive.data.remote.FirebaseAuthService
+import com.example.fugitive.data.local.preferences.AuthPreferences
+import com.example.fugitive.data.local.database.LocalUser
+import com.example.fugitive.data.local.database.UserDao
+import com.example.fugitive.data.remote.firebase.FirebaseAuthService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 

@@ -1,4 +1,4 @@
-package com.example.fugitive.utils
+package com.example.fugitive.utils.managers
 
 import android.app.NotificationChannel
 import android.app.NotificationManager

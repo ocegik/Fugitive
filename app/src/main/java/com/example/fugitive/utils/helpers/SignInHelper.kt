@@ -1,8 +1,6 @@
-package com.example.fugitive.utils
+package com.example.fugitive.utils.helpers
 
 import android.content.Context
-import android.content.Intent
-import android.credentials.GetCredentialException
 import android.os.Build
 import android.util.Log
 import androidx.activity.ComponentActivity

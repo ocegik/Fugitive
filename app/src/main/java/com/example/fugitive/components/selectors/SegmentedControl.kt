@@ -1,4 +1,4 @@
-package com.example.fugitive.components
+package com.example.fugitive.components.selectors
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement

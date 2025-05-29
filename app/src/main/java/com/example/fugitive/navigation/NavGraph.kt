@@ -19,7 +19,7 @@ import com.example.fugitive.screens.settings.SettingsScreen
 import com.example.fugitive.screens.misc.TermsScreen
 import com.example.fugitive.screens.auth.login.ForgotPassScreen
 import com.example.fugitive.screens.auth.login.ResetPassScreen
-import com.example.fugitive.data.remote.FirebaseAuthService
+import com.example.fugitive.data.remote.firebase.FirebaseAuthService
 import com.example.fugitive.screens.auth.onboarding.OnBoardingIntroScreen
 import com.example.fugitive.screens.auth.onboarding.OnBoardingFeaturesScreen
 import com.example.fugitive.screens.auth.onboarding.OnBoardingFinalScreen

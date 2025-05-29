@@ -1,7 +1,7 @@
 package com.example.fugitive.viewmodels
 
 import androidx.lifecycle.ViewModel
-import com.example.fugitive.data.local.UserPreferences
+import com.example.fugitive.data.local.preferences.UserPreferences
 import kotlinx.coroutines.flow.StateFlow
 
 

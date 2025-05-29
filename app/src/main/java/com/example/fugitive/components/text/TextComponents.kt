@@ -1,4 +1,4 @@
-package com.example.fugitive.components
+package com.example.fugitive.components.text
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable

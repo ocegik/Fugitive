@@ -1,8 +1,8 @@
-package com.example.fugitive.data.remote
+package com.example.fugitive.data.remote.firebase
 
 import com.example.fugitive.data.models.AppNotification
 import com.example.fugitive.data.models.NotificationStore
-import com.example.fugitive.utils.NotificationManagerUtil
+import com.example.fugitive.utils.managers.NotificationManagerUtil
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 

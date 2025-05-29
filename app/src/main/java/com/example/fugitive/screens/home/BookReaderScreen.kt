@@ -1,16 +1,12 @@
 package com.example.fugitive.screens.home
 
-import android.graphics.Rect
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.BasicText
-import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -28,9 +24,8 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import com.example.fugitive.components.DictionaryPopup
-import com.example.fugitive.components.LongPressText
+import com.example.fugitive.components.text.LongPressText
 import com.example.fugitive.components.VerticalScrollbar
-import com.example.fugitive.components.WordSelectableText
 import com.example.fugitive.components.button.BackButton
 import com.example.fugitive.ui.theme.FugitiveColors
 import com.example.fugitive.viewmodels.BookViewModel

@@ -1,8 +1,8 @@
-package com.example.fugitive.data.remote
+package com.example.fugitive.data.remote.firebase
 
 import android.content.Context
 import android.util.Log
-import com.example.fugitive.utils.getGoogleSignInClient
+import com.example.fugitive.utils.helpers.getGoogleSignInClient
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider

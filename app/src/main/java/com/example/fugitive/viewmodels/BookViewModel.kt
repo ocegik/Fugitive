@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.fugitive.data.models.BookDetails
 import com.example.fugitive.data.models.BookTextFetcher
-import com.example.fugitive.data.remote.Chapter
+import com.example.fugitive.data.remote.firebase.Chapter
 import com.example.fugitive.data.repository.BookRepository
 import com.example.fugitive.utils.getShuffledBooks
 import kotlinx.coroutines.launch

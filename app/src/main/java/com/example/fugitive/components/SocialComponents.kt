@@ -24,8 +24,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.fugitive.R
 import com.example.fugitive.ui.theme.FugitiveColors
-import com.example.fugitive.utils.handleGoogleSignInResult
-import com.example.fugitive.utils.startGoogleSignIn
+import com.example.fugitive.utils.helpers.handleGoogleSignInResult
+import com.example.fugitive.utils.helpers.startGoogleSignIn
 import com.example.fugitive.viewmodels.AuthViewModel
 
 @Composable

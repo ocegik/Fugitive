@@ -1,4 +1,4 @@
-package com.example.fugitive.components
+package com.example.fugitive.components.effects
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween

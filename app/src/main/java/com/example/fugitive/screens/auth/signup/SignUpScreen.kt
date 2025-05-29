@@ -24,6 +24,7 @@ import com.example.fugitive.components.button.FugitivePrimaryButton
 import com.example.fugitive.components.inputs.EmailInputField
 import com.example.fugitive.components.inputs.PassInputField
 import com.example.fugitive.components.inputs.TermsCheckbox
+import com.example.fugitive.components.text.HeadingText
 import com.example.fugitive.viewmodels.AuthViewModel
 
 @Composable

@@ -1,4 +1,4 @@
-package com.example.fugitive.data.dictionary
+package com.example.fugitive.data.remote.api.dictionary
 
 data class DictionaryResponse(
     val word: String,

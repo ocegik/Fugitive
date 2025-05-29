@@ -30,7 +30,7 @@ import com.example.fugitive.navigation.Screen
 import com.example.fugitive.components.button.BackButton
 import com.example.fugitive.components.BookDetailsRow
 import com.example.fugitive.components.button.FugitivePrimaryButton
-import com.example.fugitive.components.HeadingText
+import com.example.fugitive.components.text.HeadingText
 import com.example.fugitive.components.cards.ChapterList
 import com.example.fugitive.ui.theme.FugitiveColors
 import com.example.fugitive.viewmodels.BookViewModel

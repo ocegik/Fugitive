@@ -5,8 +5,8 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.State
-import com.example.fugitive.data.dictionary.DictionaryResponse
-import com.example.fugitive.data.dictionary.DictionaryRetrofitClient
+import com.example.fugitive.data.remote.api.dictionary.DictionaryResponse
+import com.example.fugitive.data.remote.api.dictionary.DictionaryRetrofitClient
 
 class DictionaryViewModel : ViewModel() {
 

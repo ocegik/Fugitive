@@ -1,4 +1,4 @@
-package com.example.fugitive.data.local
+package com.example.fugitive.data.local.preferences
 
 import android.content.SharedPreferences
 import kotlinx.coroutines.flow.MutableStateFlow

@@ -1,11 +1,11 @@
 package com.example.fugitive.data.repository
 
 import android.util.Log
-import com.example.fugitive.data.local.AuthPreferences
-import com.example.fugitive.data.local.LocalUser
-import com.example.fugitive.data.local.UserDao
-import com.example.fugitive.data.remote.FirestoreService
-import com.example.fugitive.data.remote.UserMetadata
+import com.example.fugitive.data.local.preferences.AuthPreferences
+import com.example.fugitive.data.local.database.LocalUser
+import com.example.fugitive.data.local.database.UserDao
+import com.example.fugitive.data.remote.firebase.FirestoreService
+import com.example.fugitive.data.remote.firebase.UserMetadata
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow

@@ -1,4 +1,4 @@
-package com.example.fugitive.data.local
+package com.example.fugitive.data.local.database
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

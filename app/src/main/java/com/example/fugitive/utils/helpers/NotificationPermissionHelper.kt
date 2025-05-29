@@ -1,4 +1,4 @@
-package com.example.fugitive.utils
+package com.example.fugitive.utils.helpers
 
 import android.Manifest
 import android.content.Context

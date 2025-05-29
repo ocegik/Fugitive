@@ -8,9 +8,9 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
-import com.example.fugitive.data.local.AuthPreferences
+import com.example.fugitive.data.local.preferences.AuthPreferences
 import com.example.fugitive.navigation.Screen
-import com.example.fugitive.data.local.LocalUser
+import com.example.fugitive.data.local.database.LocalUser
 import com.example.fugitive.data.repository.AuthRepository
 import com.example.fugitive.data.repository.UserRepository
 import kotlinx.coroutines.launch

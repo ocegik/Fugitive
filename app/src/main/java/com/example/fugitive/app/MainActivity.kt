@@ -9,7 +9,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import com.example.fugitive.ui.theme.FugitiveTheme
-import com.example.fugitive.utils.NotificationPermissionHelper
+import com.example.fugitive.utils.helpers.NotificationPermissionHelper
 
 
 class MainActivity : ComponentActivity() {

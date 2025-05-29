@@ -1,9 +1,9 @@
 package com.example.fugitive.data.repository
 
 import android.net.Uri
-import com.example.fugitive.data.remote.FirestoreService
+import com.example.fugitive.data.remote.firebase.FirestoreService
 import com.example.fugitive.data.models.BookDetails
-import com.example.fugitive.data.remote.Chapter
+import com.example.fugitive.data.remote.firebase.Chapter
 
 class BookRepository(private val firestoreService: FirestoreService) {
 

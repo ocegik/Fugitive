@@ -1,4 +1,4 @@
-package com.example.fugitive.data.dictionary
+package com.example.fugitive.data.remote.api.dictionary
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

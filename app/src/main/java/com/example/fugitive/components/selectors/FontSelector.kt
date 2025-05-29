@@ -1,4 +1,4 @@
-package com.example.fugitive.components
+package com.example.fugitive.components.selectors
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -6,15 +6,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.example.fugitive.viewmodels.SettingsViewModel
-import com.example.fugitive.viewmodels.UserViewModel
 
 @Composable
-fun FontSizeSelector(settingsViewModel: SettingsViewModel) {
+fun FontSelector(settingsViewModel: SettingsViewModel) {
     var selectedSize by remember { mutableStateOf(settingsViewModel.getFontSize().toString()) }
 
     SegmentedControl(
         options = listOf(
-           "Small", "Medium", "Large"
+            "Small", "Medium", "Large"
         ),
         selectedOption = selectedSize,
         onOptionSelected = { newSize ->
