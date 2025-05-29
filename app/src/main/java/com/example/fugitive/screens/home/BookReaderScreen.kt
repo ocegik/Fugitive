@@ -1,12 +1,16 @@
 package com.example.fugitive.screens.home
 
+import android.graphics.Rect
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.BasicText
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -23,10 +27,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
+import com.example.fugitive.components.DictionaryPopup
+import com.example.fugitive.components.LongPressText
 import com.example.fugitive.components.VerticalScrollbar
+import com.example.fugitive.components.WordSelectableText
 import com.example.fugitive.components.button.BackButton
 import com.example.fugitive.ui.theme.FugitiveColors
 import com.example.fugitive.viewmodels.BookViewModel
+import com.example.fugitive.viewmodels.DictionaryViewModel
 import com.example.fugitive.viewmodels.UserViewModel
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.debounce
@@ -41,16 +49,29 @@ fun BookReaderScreen(
     bookViewModel: BookViewModel,
     userViewModel: UserViewModel,
     bookId: String,
-    chapterNumber: Int
+    chapterNumber: Int,
+    dictionaryViewModel: DictionaryViewModel
 ) {
 
     val bookDetails by bookViewModel.bookDetails.observeAsState()
     val chapters by bookViewModel.bookChapters.observeAsState(emptyList())
     val chapterText by bookViewModel.selectedChapterText.observeAsState()
+    val dictionaryResult by dictionaryViewModel.result
 
     val scrollState = rememberScrollState()
     var restoredScroll by remember { mutableStateOf(false) }
     var currentChapter by remember { mutableIntStateOf(chapterNumber) }
+
+    // State for dictionary popup
+    var showDictionaryPopup by remember { mutableStateOf(false) }
+    var selectedWord by remember { mutableStateOf("") }
+
+    // Handle word long press
+    fun handleWordLongPress(word: String) {
+        selectedWord = word
+        dictionaryViewModel.search(word)
+        showDictionaryPopup = true
+    }
 
     LaunchedEffect(bookId) {
         val (savedChapter, savedScroll) = userViewModel.getReadingProgress(bookId)
@@ -86,8 +107,6 @@ fun BookReaderScreen(
                 }
             }
     }
-
-
 
     Box(
         modifier = Modifier
@@ -137,13 +156,9 @@ fun BookReaderScreen(
                                 top = 8.dp,
                                 bottom = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding())
                     ) {
-                        Text(
+                        LongPressText(
                             text = chapterText ?: "No text available",
-                            style = TextStyle( // <- Custom TextStyle
-                                fontSize = 20.sp, // <- Bigger size (change as needed)
-                                color = Color.White, // <- White color text
-                                lineHeight = 28.sp // Optional: Better spacing for paragraphs
-                            )
+                            onWordLongPress = ::handleWordLongPress
                         )
                     }
                 }
@@ -157,6 +172,12 @@ fun BookReaderScreen(
                 .padding(end = 4.dp) // ensures it's on the right
         )
         Spacer(modifier = Modifier.height(40.dp))
+        if (showDictionaryPopup) {
+            DictionaryPopup(
+                word = selectedWord,
+                dictionaryResult = dictionaryResult,
+                onDismiss = { showDictionaryPopup = false }
+            )
+        }
     }
-
 }

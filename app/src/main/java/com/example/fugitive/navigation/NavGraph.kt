@@ -33,6 +33,7 @@ import com.example.fugitive.screens.settings.PreferencesScreen
 import com.example.fugitive.screens.settings.SavedQuotesScreen
 import com.example.fugitive.viewmodels.AuthViewModel
 import com.example.fugitive.viewmodels.BookViewModel
+import com.example.fugitive.viewmodels.DictionaryViewModel
 import com.example.fugitive.viewmodels.SettingsViewModel
 import com.example.fugitive.viewmodels.UserViewModel
 import org.koin.androidx.compose.koinViewModel
@@ -47,6 +48,7 @@ fun AppNavGraph(navController: NavHostController) {
     val userViewModel: UserViewModel = koinViewModel()
     val bookViewModel: BookViewModel = koinViewModel()
     val settingsViewModel: SettingsViewModel = koinViewModel()
+    val dictionaryViewModel: DictionaryViewModel = koinViewModel()
 
     NavHost(navController = navController,
         startDestination = startDestination,
@@ -75,7 +77,7 @@ fun AppNavGraph(navController: NavHostController) {
             backStackEntry ->
             val bookId = backStackEntry.arguments?.getString("bookId")?: return@composable
             val chapterNumber = backStackEntry.arguments?.getString("chapterNumber")?.toIntOrNull() ?: 1
-            BookReaderScreen(navController, bookViewModel, userViewModel, bookId, chapterNumber)
+            BookReaderScreen(navController, bookViewModel, userViewModel, bookId, chapterNumber, dictionaryViewModel)
         }
 
         composable(Screen.Notification.route) { NotificationsScreen(navController) }

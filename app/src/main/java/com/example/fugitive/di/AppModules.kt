@@ -14,6 +14,7 @@ import com.example.fugitive.data.repository.AuthRepository
 import com.example.fugitive.data.repository.BookRepository
 import com.example.fugitive.viewmodels.AuthViewModel
 import com.example.fugitive.viewmodels.BookViewModel
+import com.example.fugitive.viewmodels.DictionaryViewModel
 import com.example.fugitive.viewmodels.SettingsViewModel
 import com.example.fugitive.viewmodels.UserViewModel
 import com.google.firebase.auth.FirebaseAuth
@@ -69,6 +70,7 @@ val viewModelModule = module {
     viewModel { BookViewModel(get()) } // ViewModel for handling book-related functionality
     viewModel { UserViewModel(get()) }  // ViewModel for handling user profile data (user data like name, email, etc.)
     viewModel { SettingsViewModel(get()) }  // ViewModel for handling user preferences (themes, fonts, etc.)
+    viewModel { DictionaryViewModel() }
 }
 
 
