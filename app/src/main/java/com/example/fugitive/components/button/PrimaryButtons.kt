@@ -38,6 +38,9 @@ fun FugitiveOutlineButton(
 
 @Composable
 fun FugitivePrimaryButton(
+    modifier: Modifier = Modifier
+        .fillMaxWidth()  // Full width
+        .height(60.dp),   // Bigger button
     text: String,
     colors: ButtonColors = ButtonDefaults.buttonColors(
         containerColor = FugitiveColors.button,
@@ -45,9 +48,6 @@ fun FugitivePrimaryButton(
     ),
     shape: Shape = RoundedCornerShape(12.dp),
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
-        .fillMaxWidth()  // Full width
-        .height(60.dp)   // Bigger button
 ) {
     Button(
         onClick = onClick,

@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">Fugitive</string>
-    <string name="web_client_id">515146991718-5rko02pji7rq1ukbov1e1n70vn4ldtmv.apps.googleusercontent.com</string>
+    <string name="default_web_client_id">515146991718-5rko02pji7rq1ukbov1e1n70vn4ldtmv.apps.googleusercontent.com</string>
 </resources>

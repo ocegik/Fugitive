@@ -1,4 +1,3 @@
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -18,7 +17,6 @@ android {
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -42,80 +40,76 @@ android {
         compose = true
     }
 }
-dependencies {
-    // Core Android & Jetpack Components
-    implementation(libs.androidx.core.ktx) // Core KTX for Android utilities
-    implementation(libs.androidx.lifecycle.runtime.ktx) // Lifecycle management
-    implementation(libs.androidx.activity.compose) // Activity support for Compose
-    implementation(platform(libs.androidx.compose.bom)) // Compose BOM for version alignment
 
-    // Jetpack Compose UI
-    implementation(libs.androidx.ui) // Core UI components
-    implementation(libs.androidx.ui.graphics) // Graphics utilities for UI
-    implementation(libs.androidx.ui.tooling.preview) // Preview support in Compose
-    implementation(libs.androidx.material3) // Material Design 3 components
-    implementation(libs.ui) // Additional UI components
+dependencies {
+    // Core Android
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.appcompat)                     // fixes ContextThemeWrapper ASM warning
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.activity.compose)
+
+    // Compose BOM — controls all androidx.compose.* versions
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.ui)
+    implementation(libs.androidx.ui.graphics)
+    implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.androidx.material3)
+    implementation(libs.androidx.ui.text.google.fonts)
+    implementation(libs.androidx.runtime.livedata)
 
     // Navigation
-    implementation(libs.androidx.navigation.runtime.ktx) // Navigation runtime support
-    implementation(libs.androidx.navigation.compose) // Jetpack Compose navigation
-
-    // Firebase Services
-    implementation(libs.firebase.auth.ktx)
-    implementation(libs.firebase.firestore.ktx) // Firestore database integration
-    implementation(libs.firebase.storage.ktx) // Firebase Storage for EPUB files
-    implementation(libs.firebase.messaging) // Crashlytics for error tracking
-
-    // Fonts & Styling
-    implementation(libs.androidx.ui.text.google.fonts) // Google Fonts integration
-    implementation(libs.accompanist.flowlayout) // Accompanist Flow Layout for Compose
-
-    // Coroutines for Asynchronous Tasks
-    implementation(libs.kotlinx.coroutines.android) // Kotlin coroutines for background operations
-
-    // Local Storage (Optional)
-    implementation(libs.androidx.room.runtime) // Room Database for local storage
-
-    // Testing Dependencies
-    testImplementation(libs.junit) // JUnit for unit testing
-    androidTestImplementation(libs.androidx.junit) // Android JUnit support
-    androidTestImplementation(libs.androidx.espresso.core) // Espresso UI testing
-    androidTestImplementation(platform(libs.androidx.compose.bom)) // Compose BOM for tests
-    androidTestImplementation(libs.androidx.ui.test.junit4) // UI testing in Compose
-
-    // Debugging Tools
-    debugImplementation(libs.androidx.ui.tooling) // Compose UI tool for preview/debugging
-    debugImplementation(libs.androidx.ui.test.manifest) // Manifest for UI testing
-
-    // Miscellaneous
-    implementation(libs.androidx.tools.core) // Core tools (unspecified usage, verify necessity)
-    implementation(libs.glide)
-    implementation(libs.coil.compose)
-    implementation(libs.androidx.runtime.livedata)
-    implementation(libs.accompanist.placeholder)
-    implementation(libs.koin.android) // Koin for Android
-    implementation(libs.koin.androidx.compose) // Koin for Jetpack Compose
-
-    implementation(libs.androidx.room.runtime)
-    ksp(libs.androidx.room.compiler)
-    implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.navigation.runtime.ktx)
+    implementation(libs.androidx.navigation.compose)
     implementation(libs.google.accompanist.navigation.animation)
-    implementation(platform(libs.firebase.bom))
 
-    // Add the dependency for the Performance Monitoring library
-    // When using the BoM, you don't specify versions in Firebase library dependencies
+    // Firebase BOM — controls all firebase versions
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.auth.ktx)
+    implementation(libs.firebase.firestore.ktx)
+    implementation(libs.firebase.storage.ktx)
+    implementation(libs.firebase.messaging)
     implementation(libs.firebase.perf)
+
+    // Auth & Sign-In
     implementation(libs.gms.play.services.auth)
     implementation(libs.androidx.credentials)
     implementation(libs.credentials.play.services.auth)
     implementation(libs.googleid)
 
+    // Room
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
+
+    // Networking
     implementation(libs.retrofit)
     implementation(libs.converter.moshi)
     implementation(libs.converter.gson)
 
+    // Image Loading
+    implementation(libs.glide)
+    implementation(libs.coil.compose)
 
+    // Accompanist
+    implementation(libs.accompanist.flowlayout)
+    implementation(libs.accompanist.placeholder)
 
+    // DI
+    implementation(libs.koin.android)
+    implementation(libs.koin.androidx.compose)
+
+    // Coroutines
+    implementation(libs.kotlinx.coroutines.android)
+
+    // Testing
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.ui.test.junit4)
+
+    // Debug
+    debugImplementation(libs.androidx.ui.tooling)
+    debugImplementation(libs.androidx.ui.test.manifest)
+    debugImplementation(libs.androidx.animation.tooling)        // fixes ComposeAnimatedProperty ASM warning
 }
-
-

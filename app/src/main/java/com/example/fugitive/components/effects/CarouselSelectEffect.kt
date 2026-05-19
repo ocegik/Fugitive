@@ -87,6 +87,7 @@ fun CarouselSelectEffect(
                                 shape = CircleShape
                             ),
                         contentAlignment = Alignment.Center
+
                     ) {
                         Image(
                             painter = painterResource(id = images[actualIndex]),
